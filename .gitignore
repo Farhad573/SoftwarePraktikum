@@ -1,29 +1,11 @@
-*.iml
-.gradle
 .DS_Store
 .DS_Store/*
 .cxx
 
 
-# Gradle files
-.gradle/
-build/
-
-
-# Local configuration file (sdk path, etc)
-local.properties
-
 
 # Log/OS Files
 *.log
-
-
-# IntelliJ
-*.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
 
 # Keystore files
 *.jks
