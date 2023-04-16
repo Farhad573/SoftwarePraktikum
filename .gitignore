@@ -1,12 +1,2 @@
 .DS_Store
 .DS_Store/*
-.cxx
-
-
-
-# Log/OS Files
-*.log
-
-# Keystore files
-*.jks
-*.keystore
