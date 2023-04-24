@@ -85,10 +85,13 @@ public class Main {
                 }
             }
             list.add(person);
+            if(person.getKitchen() == null){
+                person.setKitchen(kitchen);
+            }
         }
 
         for (Participant person : list){
-            person.toString();
+            System.out.println(person.toString());
         }
 
     }
