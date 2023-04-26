@@ -12,9 +12,6 @@ public class Location {
         this.latitude = latitude;
     }
 
-    public Location() {
-    }
-
 
     /**
      *  to calculate the distance between two positions using latitude and longitude, with the Haversine formula.
@@ -36,10 +33,10 @@ public class Location {
     }
 
 
-
     public double getLongitude() {
         return longitude;
     }
+
     public double getLatitude() {
         return latitude;
     }
@@ -47,7 +44,6 @@ public class Location {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
