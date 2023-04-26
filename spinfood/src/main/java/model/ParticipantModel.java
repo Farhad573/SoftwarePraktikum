@@ -36,11 +36,8 @@ public class ParticipantModel {
             int age = Integer.parseInt(fields[4]);
             Sex sex = Sex.valueOf(fields[5]);
             HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
-            int kitchen_story = 0 ;
-            if (!fields[7].isEmpty()){
-                 kitchen_story = Integer.parseInt(fields[7]);
-            }
-            participants.add(new Participant(id, name, age, hasKitchen,foodPreference, sex, kitchen_story));
+
+            participants.add(new Participant(id, name, age, hasKitchen,foodPreference, sex));
         }
         scanner.close();
     }
@@ -70,7 +67,12 @@ public class ParticipantModel {
             HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
 
             //++++++++++++++++++++++++++++++++
-            int kitchen_story = Integer.parseInt(fields[7]);
+            int kitchen_story = 0 ;
+            if (fields.length >= 8 && !fields[7].isEmpty()){
+                kitchen_story = Integer.parseInt(fields[7]);
+            }
+
+
 
             double kitchen_long = Double.parseDouble(fields[8]);
             double kitchen_lat = Double.parseDouble(fields[9]);

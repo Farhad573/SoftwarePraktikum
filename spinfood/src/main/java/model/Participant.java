@@ -17,7 +17,7 @@ public class Participant {
     private Sex sex_2;
 
     // for test
-    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, int kitchen_Story) {
+    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -51,8 +51,7 @@ public class Participant {
                 ", age='" + age + '\'' +
                 ", has this person kitchen= " + hasKitchen + '\'' +
                 ", Food preference= " + foodPreference + '\'' +
-                ", Sex= " + sex + '\''+
-                ", kitchen Story = "+ kitchen_Story;
+                ", Sex= " + sex ;
     }
 
 
