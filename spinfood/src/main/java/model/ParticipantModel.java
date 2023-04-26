@@ -19,7 +19,7 @@ public class ParticipantModel {
      * @param csvFileName
      * @throws FileNotFoundException
      */
-    public void readCSVData(String csvFileName) throws FileNotFoundException{
+    public void readCSVData_1(String csvFileName) throws FileNotFoundException{
         File csvFile = new File(csvFileName);
         Scanner scanner = new Scanner(csvFile);
         // skip header row
@@ -66,13 +66,13 @@ public class ParticipantModel {
             Sex sex = Sex.valueOf(fields[5]);
             HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
 
-            //++++++++++++++++++++++++++++++++
             int kitchen_story = 0 ;
             if (fields.length >= 8 && !fields[7].isEmpty()){
                 kitchen_story = Integer.parseInt(fields[7]);
             }
 
 
+            //check long. && lat.
             double kitchen_long = 0;
             if (fields.length >= 10 && !fields[8].isEmpty()){
                 kitchen_long = Double.parseDouble(fields[8]);
@@ -82,13 +82,10 @@ public class ParticipantModel {
                 kitchen_lat = Double.parseDouble(fields[9]);
             }
 
-            // if has kitchen is no ???
-            Location kitchen_location = null;
-            if (fields.length >= 12 && !fields[10].isEmpty() && !fields[11].isEmpty() && !fields[12].isEmpty() && !fields[13].isEmpty()){
-                kitchen_location = new Location(kitchen_long, kitchen_lat);
-            }
+            Location kitchen_location;
+            kitchen_location = new Location(kitchen_long, kitchen_lat);
 
-            // if it has not any id_2 ???
+
             String id_2 = "";
             String name_2 = "";
             int age_2 = 0;
@@ -107,8 +104,18 @@ public class ParticipantModel {
 
 
 
-    @Override
-    public String toString() {
+    public String toString_1() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ParticipantModel{\n");
+        for( Participant participant : participants){
+            sb.append("\t").append(participant.toString_1()).append("\n");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+
+    public String toString_2() {
         StringBuilder sb = new StringBuilder();
         sb.append("ParticipantModel{\n");
         for( Participant participant : participants){
