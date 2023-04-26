@@ -27,4 +27,17 @@ public class ParticipantModel {
         }
         scanner.close();
     }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ParticipantModel{\\n");
+        for( Participant participant : participants){
+            sb.append("\t").append(participant.toString()).append("\n");
+        }
+        sb.append("}");
+        return sb.toString();
+
+    }
 }

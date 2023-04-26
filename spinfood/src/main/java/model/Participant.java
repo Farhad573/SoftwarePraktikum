@@ -10,13 +10,18 @@ public class Participant {
     private FoodPreference foodPreference;
     private Sex sex;
 
+    // for test
     public Participant(String id, String name, String age) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.ageRange = ageRange;
-        this.hasKitchen = hasKitchen;
-        this.foodPreference = foodPreference;
-        this.sex = sex;
+    }
+
+    @Override
+    public String toString() {
+        return "Participant{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", age='" + age ;
     }
 }
