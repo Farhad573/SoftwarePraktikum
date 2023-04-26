@@ -1,7 +1,7 @@
 package model;
 
 public enum AgeRange {
-    YOUNG_ADULT,
-    ADULT,
-    SENIORS
+    young_adult,
+    adult,
+    seniors
 }

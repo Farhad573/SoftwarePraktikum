@@ -14,16 +14,30 @@ public class ParticipantModel {
         this.participants = new ArrayList<>();
     }
 
+
+    /**
+     *
+     * @param csvFileName
+     * @throws FileNotFoundException
+     */
     public void readCSVData(String csvFileName) throws FileNotFoundException{
         File csvFile = new File(csvFileName);
         Scanner scanner = new Scanner(csvFile);
+        // skip header row
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] fields = line.split(",");
             String name = fields[2];
             String id = fields[1];
-            String age = fields[4];
-            participants.add(new Participant(id, name, age)); //name, age, email
+            int age = Integer.parseInt(fields[4]);
+            HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
+            FoodPreference foodPreference = FoodPreference.valueOf(fields[3]);
+            Sex sex = Sex.valueOf(fields[5]);
+
+            participants.add(new Participant(id, name, age, hasKitchen,foodPreference, sex));
         }
         scanner.close();
     }

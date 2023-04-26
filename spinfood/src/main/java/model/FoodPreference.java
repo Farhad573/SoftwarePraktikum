@@ -1,8 +1,8 @@
 package model;
 
 public enum FoodPreference {
-    MEAT,
-    NONE,
-    VEGAN,
-    VEGGIE
+    meat,
+    none,
+    vegan,
+    veggie
 }
