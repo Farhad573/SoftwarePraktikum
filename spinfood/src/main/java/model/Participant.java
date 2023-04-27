@@ -44,6 +44,58 @@ public class Participant {
     }
 
 
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public AgeRange getAgeRange() {
+        return ageRange;
+    }
+
+    public HasKitchen getHasKitchen() {
+        return hasKitchen;
+    }
+
+    public FoodPreference getFoodPreference() {
+        return foodPreference;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public int getKitchen_Story() {
+        return kitchen_Story;
+    }
+
+    public Location getKitchen_Location() {
+        return kitchen_Location;
+    }
+
+    public String getId_2() {
+        return id_2;
+    }
+
+    public String getName_2() {
+        return name_2;
+    }
+
+    public int getAge_2() {
+        return age_2;
+    }
+
+    public Sex getSex_2() {
+        return sex_2;
+    }
+
     public String toString_1() {
         return "Participant{" +
                 "id='" + id + '\'' +

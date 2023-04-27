@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ParticipantModel {
 
-    private List<Participant> participants;
+    public static List<Participant> participants;
 
     public ParticipantModel() {
         this.participants = new ArrayList<>();
@@ -85,7 +85,6 @@ public class ParticipantModel {
             Location kitchen_location;
             kitchen_location = new Location(kitchen_long, kitchen_lat);
 
-
             String id_2 = "";
             String name_2 = "";
             int age_2 = 0;
@@ -103,6 +102,9 @@ public class ParticipantModel {
     }
 
 
+    public static List<Participant> getParticipants() {
+        return participants;
+    }
 
     public String toString_1() {
         StringBuilder sb = new StringBuilder();
