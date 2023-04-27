@@ -31,6 +31,7 @@ public class Participant {
 
 
 
+
     public Kitchen getKitchen() {
         return kitchen;
     }
