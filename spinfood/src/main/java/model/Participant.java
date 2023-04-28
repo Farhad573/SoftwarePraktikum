@@ -97,31 +97,32 @@ public class Participant {
     }
 
     public String toString_1() {
-        return "Participant{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", age='" + age + '\'' +
-                ", has this person kitchen= " + hasKitchen + '\'' +
-                ", Food preference= " + foodPreference + '\'' +
-                ", Sex= " + sex ;
+        return "Participant{" +"\n" +
+                "id='" + id +"\n" +
+                ", name='" + name +"\n" +
+                ", age='" + age +"\n" +
+                ", has this person kitchen= " + hasKitchen +"\n" +
+                ", Food preference= " + foodPreference +"\n" +
+                ", Sex= " + sex +"\n" +" }"+"\n" +
+                "******************";
     }
 
 
     public String toString_2() {
-        return "Participant{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", ageRange=" + ageRange +
-                ", hasKitchen=" + hasKitchen +
-                ", foodPreference=" + foodPreference +
-                ", sex=" + sex +
-                ", kitchen_Story=" + kitchen_Story +
-                ", kitchen_Location=" + kitchen_Location +
-                ", id_2='" + id_2 + '\'' +
-                ", name_2='" + name_2 + '\'' +
-                ", age_2=" + age_2 +
-                ", sex_2=" + sex_2 +
-                '}';
+        return "Person : " +"\n" +
+                "id='" + id  +"\n" +
+                ", name='" + name  +"\n" +
+                ", age=" + age +"\n" +
+                ", ageRange=" + ageRange +"\n" +
+                ", hasKitchen=" + hasKitchen +"\n" +
+                ", foodPreference=" + foodPreference +"\n" +
+                ", sex=" + sex +"\n" +
+                ", kitchen_Story=" + kitchen_Story +"\n" +
+                ", kitchen_Location=" + kitchen_Location +"\n" +
+                ", id_2='" + id_2  +"\n" +
+                ", name_2='" + name_2  +"\n" +
+                ", age_2=" + age_2 +"\n" +
+                ", sex_2=" + sex_2 +" }"+"\n" +
+                "******************";
     }
 }
