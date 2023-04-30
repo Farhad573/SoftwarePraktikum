@@ -22,38 +22,8 @@ public class ParticipantModel extends Service{
         System.out.println("TODO sth. later");
     }
 
-    /**
-     * read csv File till field kitchen_story
-     * @param csvFileName
-     * @throws FileNotFoundException
-     */
-    public void readCSVData_1(String csvFileName) throws FileNotFoundException{
-        File csvFile = new File(csvFileName);
-        Scanner scanner = new Scanner(csvFile);
-        // skip header row
-        if (scanner.hasNextLine()) {
-            scanner.nextLine();
-        }
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            String[] fields = line.split(",");
-
-            String id = fields[1];
-            String name = fields[2];
-            FoodPreference foodPreference = FoodPreference.valueOf(fields[3]);
-            int age = Integer.parseInt(fields[4]);
-            Sex sex = Sex.valueOf(fields[5]);
-            HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
-
-            participants.add(new Participant(id, name, age, hasKitchen,foodPreference, sex));
-        }
-        scanner.close();
-    }
-
-
 
     /**
-     *
      * @param csvFileName
      * @throws FileNotFoundException
      */

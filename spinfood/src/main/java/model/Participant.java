@@ -16,7 +16,15 @@ public class Participant {
     private int age_2;
     private Sex sex_2;
 
-    // for test
+    /**
+     * for all participant
+     * @param id
+     * @param name
+     * @param age
+     * @param hasKitchen
+     * @param foodPreference
+     * @param sex
+     */
     public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
         this.id = id;
         this.name = name;
@@ -43,6 +51,19 @@ public class Participant {
         this.sex_2 = sex_2;
     }
 
+    /**
+     * to show the partner participant
+     * @param id_2
+     * @param name_2
+     * @param age_2
+     * @param sex_2
+     */
+    public Participant(String id_2, String name_2, int age_2, Sex sex_2) {
+        this.id_2 = id_2;
+        this.name_2 = name_2;
+        this.age_2 = age_2;
+        this.sex_2 = sex_2;
+    }
 
     public String getId() {
         return id;
