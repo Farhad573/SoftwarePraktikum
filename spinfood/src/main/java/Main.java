@@ -35,12 +35,12 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("parisa**************************************************");
+        System.out.println("**************************************************");
 
         int participantsLength = participantModel.getParticipants().size();
         System.out.println("Length of participants list is: " + participantsLength);
 
-        System.out.println("parisa**************************************************");
+        System.out.println("************************************************");
 
         int groupsLength = participantModel.getGroups().size();
         System.out.println("Length of group list is: " + groupsLength);
