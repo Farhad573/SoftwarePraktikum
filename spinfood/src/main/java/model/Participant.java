@@ -118,19 +118,19 @@ public class Participant {
     }
 
     public String toString_1() {
-        return "Participant{" +"\n" +
+        return "Person" +"\n" +
                 "id='" + id +"\n" +
                 ", name='" + name +"\n" +
                 ", age='" + age +"\n" +
                 ", has this person kitchen= " + hasKitchen +"\n" +
                 ", Food preference= " + foodPreference +"\n" +
-                ", Sex= " + sex +"\n" +" }"+"\n" +
+                ", Sex= " + sex +"\n" +
                 "******************";
     }
 
 
     public String toString_2() {
-        return "Person : " +"\n" +
+        return "pair : " +"\n" +
                 "id='" + id  +"\n" +
                 ", name='" + name  +"\n" +
                 ", age=" + age +"\n" +

@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 public class Main {
 
     public static void main(String[] args) {
-
+        //new View();
         ParticipantModel participantModel = new ParticipantModel();
 
 /*
