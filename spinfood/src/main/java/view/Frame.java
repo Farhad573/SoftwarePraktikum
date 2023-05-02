@@ -31,7 +31,7 @@ public class Frame extends JFrame {
 
         // Add components to the panel
         JButton button = new JButton("Click me!");
-        button.setPreferredSize(new Dimension(100, 50));
+        button.setPreferredSize(new Dimension(100, 38));
         panel.add(button, BorderLayout.SOUTH);
 
 
@@ -39,7 +39,7 @@ public class Frame extends JFrame {
         setContentPane(panel);
 
         // Set the size and location of the frame
-        setSize(800, 600);
+        setSize(732, 520);
         setLocationRelativeTo(null); // Center the frame on the screen
 
         // Set the default close operation
@@ -47,6 +47,7 @@ public class Frame extends JFrame {
 
         // Show the frame
         setVisible(true);
+        setResizable(false);
     }
 
     public static void main(String[] args) {
