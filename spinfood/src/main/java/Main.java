@@ -1,21 +1,51 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import model.ParticipantModel;
+
+import java.io.FileNotFoundException;
 
 public class Main {
 
+    public static void main(String[] args) {
+        //new View();
+        ParticipantModel participantModel = new ParticipantModel();
 
-    public static void main(String[] args) throws IOException {
-        ParticipantModel model = new ParticipantModel();
-        model.readCSV("src/main/resources/teilnehmerliste.csv");
-
-        for (Participant person : model.participantList){
-            System.out.println(person.toString());
+/*
+        try {
+            participantModel.readCSVData_1("src/main/java/model/teilnehmerliste.csv");
+            System.out.println(participantModel.toString_1());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
+        System.out.println("**************************************************");
+*/
+
+//
+//        try {
+//            participantModel.readCSVData_2("src/main/java/model/teilnehmerliste.csv");
+//            System.out.println(participantModel.toStringParticipants());
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+
+        try {
+            participantModel.readCSVData_2("src/main/java/model/teilnehmerliste.csv");
+            System.out.println(participantModel.toStringGroups());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("**************************************************");
+
+        int participantsLength = participantModel.getParticipants().size();
+        System.out.println("Length of participants list is: " + participantsLength);
+
+        System.out.println("************************************************");
+
+        int groupsLength = participantModel.getGroups().size();
+        System.out.println("Length of group list is: " + groupsLength);
+
 
     }
 }
