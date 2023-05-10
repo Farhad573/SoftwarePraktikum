@@ -17,7 +17,7 @@ public class Participant {
     private Sex sex_2;
 
     /**
-     * for all participant
+     * we need for all single participant:
      * @param id
      * @param name
      * @param age
@@ -35,6 +35,21 @@ public class Participant {
         this.kitchen_Story = kitchen_Story;
     }
 
+    /**
+     * we need for all pair participant:
+     * @param id
+     * @param name
+     * @param age
+     * @param hasKitchen
+     * @param foodPreference
+     * @param sex
+     * @param kitchen_Story
+     * @param kitchen_Location
+     * @param id_2
+     * @param name_2
+     * @param age_2
+     * @param sex_2
+     */
     public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex,int kitchen_Story,
                        Location kitchen_Location, String id_2, String name_2, int age_2, Sex sex_2) {
         this.id = id;
@@ -117,6 +132,10 @@ public class Participant {
         return sex_2;
     }
 
+    /**
+     * The method concatenates various attributes of the Person and return
+     * @return
+     */
     public String toString_1() {
         return "Person" +"\n" +
                 "id='" + id +"\n" +
@@ -129,6 +148,10 @@ public class Participant {
     }
 
 
+    /**
+     * The method concatenates various attributes of the Pair and return
+     * @return
+     */
     public String toString_2() {
         return "pair : " +"\n" +
                 "id='" + id  +"\n" +

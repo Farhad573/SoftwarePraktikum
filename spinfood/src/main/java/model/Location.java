@@ -6,6 +6,11 @@ public class Location {
     private double latitude;
 
 
+    /**
+     * get longitude and latitude as kitchen Location
+     * @param longitude
+     * @param latitude
+     */
     public Location(double longitude, double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
@@ -29,6 +34,10 @@ public class Location {
         this.latitude = latitude;
     }
 
+    /**
+     * return detail of Location
+     * @return
+     */
     @Override
     public String toString() {
         return "Location{ " +
