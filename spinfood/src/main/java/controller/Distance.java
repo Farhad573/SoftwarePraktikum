@@ -1,17 +1,21 @@
 package controller;
 
+/**
+ * The Distance class provides methods for calculating the distance between two positions using latitude and longitude.
+ * It uses the Haversine formula to compute the distance.
+ */
 public class Distance {
 
     private static final double EARTH_RADIUS = 6371.0; // in kilometers
 
-
     /**
-     *  to calculate the distance between two positions using latitude and longitude, with the Haversine formula.
-     * @param lat1
-     * @param lon1
-     * @param lat2
-     * @param lon2
-     * @return
+     * Calculates the distance between two positions using latitude and longitude with the Haversine formula.
+     *
+     * @param lat1 the latitude of the first position
+     * @param lon1 the longitude of the first position
+     * @param lat2 the latitude of the second position
+     * @param lon2 the longitude of the second position
+     * @return the distance between the two positions in kilometers
      */
     public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);

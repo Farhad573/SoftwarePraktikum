@@ -131,11 +131,11 @@ public class ParticipantModel extends ParticipantManager implements FileReader {
      *
      * @return a string representation of the pairs
      */
-    public String toStringGroups() {
+    public String toStringPairs() {
         StringBuilder sb = new StringBuilder();
         sb.append("ParticipantModel{\n");
-        for( Pair participant : pairs){
-            sb.append("\t").append(participant.toString()).append("\n");
+        for( Pair pairs : pairs){
+            sb.append("\t").append(pairs.toString()).append("\n");
         }
         sb.append("}");
         return sb.toString();

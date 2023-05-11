@@ -35,7 +35,7 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair{" +
+        return "Pair {" +
                 "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() +
                 ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +
@@ -63,7 +63,6 @@ public class Pair {
         }
         Pair otherPair = (Pair) obj;
         return person1.equals(otherPair.person1) && person2.equals(otherPair.person2);
-
     }
 
 }

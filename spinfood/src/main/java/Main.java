@@ -32,6 +32,7 @@ public class Main {
         try {
             participantModel.readCSVFile("src/main/java/model/teilnehmerliste.csv");
             System.out.println(participantModel.toStringParticipants());
+            System.out.println(participantModel.toStringPairs());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -43,8 +44,12 @@ public class Main {
 
         System.out.println("************************************************");
 
-        int groupsLength = participantModel.getPairs().size();
-        System.out.println("Length of group list is: " + groupsLength);
+        int pairLength = participantModel.getPairs().size();
+        System.out.println("Length of pair list is: " + pairLength);
+
+        System.out.println("************************************************");
+        int count = participantsLength + pairLength ;
+        System.out.println("the count of all members : " + count);
 
 
     }

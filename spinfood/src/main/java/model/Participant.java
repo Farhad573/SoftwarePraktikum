@@ -145,9 +145,9 @@ public class Participant {
      * @return a string representation of the Participant object
      */
     public String toString() {
-        return "Person" +"\n" +
-                "id='" + id  +"\n" +
-                ", name='" + name  +"\n" +
+        return "Person : " +"\n" +
+                "id=" + id  +"\n" +
+                ", name=" + name  +"\n" +
                 ", age=" + age +"\n" +
                 ", ageRange=" + ageRange +"\n" +
                 ", hasKitchen=" + hasKitchen +"\n" +
