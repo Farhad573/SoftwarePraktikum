@@ -13,7 +13,7 @@ public class ParticipantModel extends Service{
     public ParticipantModel() {
         super();
         participants = new ArrayList<>();
-        groups = new ArrayList<>();
+        pairs = new ArrayList<>();
         successors = new ArrayList<>();
     }
 
@@ -64,12 +64,12 @@ public class ParticipantModel extends Service{
                 name_2 = fields[11];
                 age_2 = Integer.parseInt(fields[12]);
                 sex_2 = Sex.valueOf(fields[13]);
-                Participant personGroup = new Participant(id, name, age, hasKitchen, foodPreference, sex,
+                Pair pair = new Pair(id, name, age, hasKitchen, foodPreference, sex,
                         kitchen_story, kitchen_location, id_2, name_2, age_2, sex_2);
-                groups.add(personGroup);
-            }
+                pairs.add(pair);
+            }else
 
-            participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex));
+                participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex,kitchen_story,kitchen_location));
         }
         scanner.close();
     }
@@ -80,8 +80,8 @@ public class ParticipantModel extends Service{
         return participants;
     }
 
-    public static List<Participant> getGroups() {
-        return groups;
+    public static List<Pair> getPairs() {
+        return pairs;
     }
 
     public static List<Participant> getSuccessor() {
@@ -115,8 +115,8 @@ public class ParticipantModel extends Service{
     public String toStringGroups() {
         StringBuilder sb = new StringBuilder();
         sb.append("ParticipantModel{\n");
-        for( Participant participant : groups){
-            sb.append("\t").append(participant.toString_2()).append("\n");
+        for( Pair participant : pairs){
+            sb.append("\t").append(participant.toString()).append("\n");
         }
         sb.append("}");
         return sb.toString();

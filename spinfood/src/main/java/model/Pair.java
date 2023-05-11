@@ -1,7 +1,6 @@
 package model;
 
-public class Participant {
-
+public class Pair {
     private String id ;
     private String name ;
     private int age ;
@@ -16,16 +15,9 @@ public class Participant {
     private int age_2;
     private Sex sex_2;
 
-    /**
-     * for all participant
-     * @param id
-     * @param name
-     * @param age
-     * @param hasKitchen
-     * @param foodPreference
-     * @param sex
-     */
-    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex,int kitchen_Story, Location kitchen_Location) {
+
+    public Pair(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex,int kitchen_Story,
+                       Location kitchen_Location, String id_2, String name_2, int age_2, Sex sex_2) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -34,16 +26,6 @@ public class Participant {
         this.sex = sex ;
         this.kitchen_Story = kitchen_Story;
         this.kitchen_Location = kitchen_Location;
-    }
-
-    /**
-     * to show the partner participant
-     * @param id_2
-     * @param name_2
-     * @param age_2
-     * @param sex_2
-     */
-    public Participant(String id_2, String name_2, int age_2, Sex sex_2) {
         this.id_2 = id_2;
         this.name_2 = name_2;
         this.age_2 = age_2;
@@ -103,36 +85,20 @@ public class Participant {
     }
 
 
-
-
     @Override
     public boolean equals(Object o){
         if(o == this){
             return true;
         }
-        if(!(o instanceof Participant)){
+        if(!(o instanceof Pair)){
             return false;
         }
-        Participant participant = (Participant) o;
-        return id == participant.id && name == participant.name;
-    }
-
-    public String toString_1() {
-        return "Person" +"\n" +
-                "id='" + id  +"\n" +
-                ", name='" + name  +"\n" +
-                ", age=" + age +"\n" +
-                ", ageRange=" + ageRange +"\n" +
-                ", hasKitchen=" + hasKitchen +"\n" +
-                ", foodPreference=" + foodPreference +"\n" +
-                ", sex=" + sex +"\n" +
-                ", kitchen_Story=" + kitchen_Story +"\n" +
-                ", kitchen_Location=" + kitchen_Location +"\n" +
-                "******************";
+        Pair pair = (Pair) o;
+        return id == pair.id && name == pair.name;
     }
 
 
-    public String toString_2() {
+    public String toString() {
         return "pair : " +"\n" +
                 "id='" + id  +"\n" +
                 ", name='" + name  +"\n" +

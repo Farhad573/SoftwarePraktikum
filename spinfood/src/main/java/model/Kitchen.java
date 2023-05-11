@@ -24,11 +24,22 @@ public class Kitchen {
     public Kitchen() {
     }
 
+
+
     public int getKitchen_story() {
         return kitchen_story;
     }
 
     public Location getKitchen_location() {
         return kitchen_location;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Kitchen{" +
+                "kitchen_story=" + kitchen_story +
+                ", kitchen_location=" + kitchen_location +
+                '}';
     }
 }
