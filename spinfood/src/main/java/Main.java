@@ -30,7 +30,7 @@ public class Main {
 
 
         try {
-            participantModel.readCSVData_2("src/main/java/model/teilnehmerliste.csv");
+            participantModel.readCSVFile("src/main/java/model/teilnehmerliste.csv");
             System.out.println(participantModel.toStringParticipants());
         } catch (FileNotFoundException e) {
             e.printStackTrace();

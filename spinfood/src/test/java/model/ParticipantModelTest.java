@@ -18,7 +18,7 @@ class ParticipantModelTest {
 
         // Call the method that reads CSV data
         try{
-            participantModel.readCSVData_2("src/main/java/model/teilnehmerliste.csv");
+            participantModel.readCSVFile("src/main/java/model/teilnehmerliste.csv");
         }catch (FileNotFoundException e){
             System.out.println("file is not found !!!");
         }
@@ -35,7 +35,7 @@ class ParticipantModelTest {
     @Test
         void testCountOfPairs(){
         try{
-            participantModel.readCSVData_2("src/main/java/model/teilnehmerliste.csv");
+            participantModel.readCSVFile("src/main/java/model/teilnehmerliste.csv");
         }catch (FileNotFoundException e){
             System.out.println("file is not found !!!");
         }
@@ -49,7 +49,7 @@ class ParticipantModelTest {
         void fileNotFoundTest(){
         assertThrows(FileNotFoundException.class,  () -> {
             // code that should throw FileNotFoundException
-            participantModel.readCSVData_2("src/main/java/model/teilnehmerliste_Fake.csv");
+            participantModel.readCSVFile("src/main/java/model/teilnehmerliste_Fake.csv");
         });
     }
 
