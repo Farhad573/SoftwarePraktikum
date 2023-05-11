@@ -13,8 +13,7 @@ public class Participant {
     private HasKitchen hasKitchen;
     private FoodPreference foodPreference;
     private Sex sex;
-    private int kitchen_Story;
-    private Location kitchen_Location;
+    private Kitchen kitchen;
 
     /**
      * Constructs a Participant object with the specified attributes.
@@ -25,18 +24,16 @@ public class Participant {
      * @param hasKitchen     the participant's kitchen availability
      * @param foodPreference the participant's food preference
      * @param sex            the participant's sex
-     * @param kitchen_Story  the participant's kitchen story
-     * @param kitchen_Location the participant's kitchen location
+     * @param kitchen  the participant's kitchen
      */
-    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, int kitchen_Story, Location kitchen_Location) {
+    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.hasKitchen = hasKitchen;
         this.foodPreference = foodPreference ;
         this.sex = sex ;
-        this.kitchen_Story = kitchen_Story;
-        this.kitchen_Location = kitchen_Location;
+        this.kitchen = kitchen;
     }
 
     /**
@@ -107,17 +104,8 @@ public class Participant {
      *
      * @return the participant's kitchen story
      */
-    public int getKitchen_Story() {
-        return kitchen_Story;
-    }
-
-    /**
-     * Returns the participant's kitchen location.
-     *
-     * @return the participant's kitchen location
-     */
-    public Location getKitchen_Location() {
-        return kitchen_Location;
+    public Kitchen getKitchen() {
+        return kitchen;
     }
 
 
@@ -153,8 +141,7 @@ public class Participant {
                 ", hasKitchen=" + hasKitchen +"\n" +
                 ", foodPreference=" + foodPreference +"\n" +
                 ", sex=" + sex +"\n" +
-                ", kitchen_Story=" + kitchen_Story +"\n" +
-                ", kitchen_Location=" + kitchen_Location +"\n" +
+                kitchen.toString() +"\n" +
                 "******************";
     }
 

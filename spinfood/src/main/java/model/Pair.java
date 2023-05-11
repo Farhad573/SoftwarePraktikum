@@ -39,6 +39,7 @@ public class Pair {
                 "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() +
                 ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +
+                ", kitchen : " + person1.getKitchen() +
                 ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() +
                 ", Food Preference : " + person2.getFoodPreference() + ", Sex" + person2.getSex() +
                 ", has kitchen : " + person2.getHasKitchen() +
