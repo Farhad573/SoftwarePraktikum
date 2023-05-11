@@ -1,8 +1,18 @@
 package model;
 
 public enum FoodPreference {
-    meat,
-    none,
-    vegan,
-    veggie
+    none(0),
+    meat(0),
+    veggie(1),
+    vegan(2);
+
+    private int value;
+
+    private FoodPreference(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

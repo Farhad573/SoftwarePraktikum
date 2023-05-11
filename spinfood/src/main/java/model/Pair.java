@@ -36,11 +36,11 @@ public class Pair {
     @Override
     public String toString() {
         return "Pair {" +
-                "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() +
+                "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() + ", Age : " + person1.getAge() + ", AgeRange : "+ person1.getAgeRange() +
                 ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +
                 ", kitchen : " + person1.getKitchen() +
-                ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() +
+                ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() + ", Age : " + person2.getAge() + ", AgeRange : "+ person2.getAgeRange() +
                 ", Food Preference : " + person2.getFoodPreference() + ", Sex" + person2.getSex() +
                 ", has kitchen : " + person2.getHasKitchen() +
                 '}';

@@ -9,7 +9,7 @@ public class Participant {
     private String id ;
     private String name ;
     private int age ;
-    private AgeRange ageRange;
+    private int ageRange;
     private HasKitchen hasKitchen;
     private FoodPreference foodPreference;
     private Sex sex;
@@ -26,10 +26,11 @@ public class Participant {
      * @param sex            the participant's sex
      * @param kitchen  the participant's kitchen
      */
-    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
+    public Participant(String id, String name, int age, int ageRange,HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         this.id = id;
         this.name = name;
         this.age = age;
+        this.ageRange = ageRange;
         this.hasKitchen = hasKitchen;
         this.foodPreference = foodPreference ;
         this.sex = sex ;
@@ -68,7 +69,7 @@ public class Participant {
      *
      * @return the participant's age range
      */
-    public AgeRange getAgeRange() {
+    public int getAgeRange() {
         return ageRange;
     }
 
@@ -107,6 +108,7 @@ public class Participant {
     public Kitchen getKitchen() {
         return kitchen;
     }
+
 
 
     /**

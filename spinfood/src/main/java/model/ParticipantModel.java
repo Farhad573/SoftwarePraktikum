@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class ParticipantModel extends ParticipantManager implements FileReader {
 
 
+
     /**
      * Constructs a ParticipantModel object.
      * Initializes the lists for participants, pairs, and successors.
@@ -47,6 +48,7 @@ public class ParticipantModel extends ParticipantManager implements FileReader {
             int age = Integer.parseInt(fields[4]);
             Sex sex = Sex.valueOf(fields[5]);
             HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
+            int ageRange = calculateAgeRange(age);
 
             // check kitchen attributes
             int kitchen_story = 0;
@@ -75,12 +77,12 @@ public class ParticipantModel extends ParticipantManager implements FileReader {
                 name_2 = fields[11];
                 age_2 = Integer.parseInt(fields[12]);
                 sex_2 = Sex.valueOf(fields[13]);
-                Participant person1 = new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen);
-                Participant person2 = new Participant(id_2, name_2, age_2, hasKitchen, foodPreference, sex_2, kitchen);
+                Participant person1 = new Participant(id, name, age,ageRange ,hasKitchen, foodPreference, sex, kitchen);
+                Participant person2 = new Participant(id_2, name_2, age_2, ageRange,hasKitchen, foodPreference, sex_2, kitchen);
                 Pair pair = new Pair(person1, person2);
                 pairs.add(pair);
             }else
-                participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen));
+                participants.add(new Participant(id, name, age, ageRange,hasKitchen, foodPreference, sex, kitchen));
         }
         scanner.close();
     }
@@ -112,6 +114,30 @@ public class ParticipantModel extends ParticipantManager implements FileReader {
      */
     public static List<Participant> getSuccessor() {
         return successors;
+    }
+
+
+    public static int calculateAgeRange(int age) {
+        if (age <= 17) {
+            return 0;
+        } else if (age >= 18 && age <= 23) {
+            return 1;
+        } else if (age >= 24 && age <= 27) {
+            return 2;
+        } else if (age >= 28 && age <= 30) {
+            return 3;
+        } else if (age >= 31 && age <= 35) {
+            return 4;
+        } else if (age >= 36 && age <= 41) {
+            return 5;
+        } else if (age >= 42 && age <= 46) {
+            return 6;
+        } else if (age >= 47 && age <= 56) {
+            return 7;
+        } else if (age >= 57) {
+            return 8;
+        }
+        return -1;
     }
 
 
