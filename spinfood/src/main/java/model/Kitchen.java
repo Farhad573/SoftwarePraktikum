@@ -71,6 +71,7 @@ public class Kitchen {
      */
     @Override
     public String toString() {
+
         return "Kitchen{" +
                 "kitchen_story = " + kitchen_story +
                 ", kitchen_location= " + kitchen_location +

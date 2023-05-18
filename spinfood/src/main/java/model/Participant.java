@@ -6,9 +6,9 @@ package model;
  */
 public class Participant {
 
-    private String id ;
-    private String name ;
-    private int age ;
+    private String id;
+    private String name;
+    private int age;
     private int ageRange;
     private HasKitchen hasKitchen;
     private FoodPreference foodPreference;
@@ -24,25 +24,36 @@ public class Participant {
      * @param hasKitchen     the participant's kitchen availability
      * @param foodPreference the participant's food preference
      * @param sex            the participant's sex
-     * @param kitchen  the participant's kitchen
+     * @param kitchen        the participant's kitchen
      */
-    public Participant(String id, String name, int age,HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
+    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.ageRange = ageRange;
         this.hasKitchen = hasKitchen;
-        this.foodPreference = foodPreference ;
-        this.sex = sex ;
+        this.foodPreference = foodPreference;
+        this.sex = sex;
         this.kitchen = kitchen;
         this.ageRange = calculateAgeRange(age);
     }
 
-    public Participant(FoodPreference foodPreference){
+    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.ageRange = ageRange;
+        this.hasKitchen = hasKitchen;
+        this.foodPreference = foodPreference;
+        this.sex = sex;
+        this.ageRange = calculateAgeRange(age);
+    }
+
+    public Participant(FoodPreference foodPreference) {
         this.foodPreference = foodPreference;
     }
 
-    public Participant(int age){
+    public Participant(int age) {
         this.age = age;
         this.ageRange = calculateAgeRange(age);
     }
@@ -143,7 +154,6 @@ public class Participant {
     }
 
 
-
     /**
      * Compares this Participant object with another object for equality.
      *
@@ -151,11 +161,11 @@ public class Participant {
      * @return true if the objects are equal, false otherwise
      */
     @Override
-    public boolean equals(Object o){
-        if(o == this){
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
-        if(!(o instanceof Participant)){
+        if (!(o instanceof Participant)) {
             return false;
         }
         Participant participant = (Participant) o;
@@ -168,17 +178,30 @@ public class Participant {
      * @return a string representation of the Participant object
      */
     public String toString() {
-        return "Person : " +"\n" +
-                "id=" + id  +"\n" +
-                ", name=" + name  +"\n" +
-                ", age=" + age +"\n" +
-                ", ageRange=" + ageRange +"\n" +
-                ", hasKitchen=" + hasKitchen +"\n" +
-                ", foodPreference=" + foodPreference +"\n" +
-                ", sex=" + sex +"\n" +
-                kitchen.toString() +"\n" +
-                "******************";
+        if (this.kitchen == null) {
+            return "Person : " + "\n" +
+                    "id=" + id + "\n" +
+                    ", name=" + name + "\n" +
+                    ", age=" + age + "\n" +
+                    ", ageRange=" + ageRange + "\n" +
+                    ", hasKitchen=" + hasKitchen + "\n" +
+                    ", foodPreference=" + foodPreference + "\n" +
+                    ", sex=" + sex + "\n" +
+                    "Kitchen_Null" + "\n" +
+                    "******************";
+        } else {
+            return "Person : " + "\n" +
+                    "id=" + id + "\n" +
+                    ", name=" + name + "\n" +
+                    ", age=" + age + "\n" +
+                    ", ageRange=" + ageRange + "\n" +
+                    ", hasKitchen=" + hasKitchen + "\n" +
+                    ", foodPreference=" + foodPreference + "\n" +
+                    ", sex=" + sex + "\n" +
+                    kitchen.toString() + "\n" +
+                    "******************";
+        }
+
+
     }
-
-
 }

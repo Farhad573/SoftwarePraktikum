@@ -1,28 +1,28 @@
 
-import model.ParticipantModel;
+import model.CSVFileReader;
 
 import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args) {
-        ParticipantModel participantModel = new ParticipantModel();
+        CSVFileReader CSVFileReader = new CSVFileReader();
 
         try {
-            participantModel.readCSVFile("src/main/java/model/teilnehmerliste.csv");
-            System.out.println(participantModel.toStringParticipants());
-            System.out.println(participantModel.toStringPairs());
+            CSVFileReader.readCSVFile("src/main/java/model/teilnehmerliste.csv");
+            System.out.println(CSVFileReader.toStringParticipants());
+            System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         System.out.println("**************************************************");
 
-        int participantsLength = participantModel.getParticipants().size();
+        int participantsLength = CSVFileReader.getParticipants().size();
         System.out.println("Length of participants list is: " + participantsLength);
 
         System.out.println("************************************************");
 
-        int pairLength = participantModel.getPairs().size();
+        int pairLength = CSVFileReader.getPairs().size();
         System.out.println("Length of pair list is: " + pairLength);
 
         System.out.println("************************************************");
