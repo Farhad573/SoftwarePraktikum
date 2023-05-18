@@ -61,13 +61,13 @@ class ParticipantModelTest {
         Participant veggie = new Participant(FoodPreference.veggie);
         Participant vegan = new Participant(FoodPreference.vegan);
 
-        Pair egaliPair = new Pair(egali,egali2);
-        Pair pair1 = new Pair(veggie,fleichi);
-        Pair pair2 = new Pair(vegan,fleichi);
-        Pair pair3 = new Pair(fleichi,egali);
-        Pair pair4 = new Pair(egali,fleichi);
-        Pair pair5 = new Pair(egali,veggie);
-        Pair pair6 = new Pair(egali,vegan);
+        Pair egaliPair = new Pair(egali,egali2,true);
+        Pair pair1 = new Pair(veggie,fleichi,true);
+        Pair pair2 = new Pair(vegan,fleichi,true);
+        Pair pair3 = new Pair(fleichi,egali,true);
+        Pair pair4 = new Pair(egali,fleichi,true);
+        Pair pair5 = new Pair(egali,veggie,true);
+        Pair pair6 = new Pair(egali,vegan,true);
         assertEquals(FoodPreference.none, egaliPair.getMainFoodPreference());
         assertEquals(FoodPreference.vegan, pair1.getMainFoodPreference());
         assertEquals(FoodPreference.vegan, pair2.getMainFoodPreference());
@@ -81,7 +81,7 @@ class ParticipantModelTest {
         void checkPairAgeDifference(){
         Participant person1 = new Participant(26);
         Participant person2 = new Participant(32);
-        Pair pair = new Pair(person1,person2);
+        Pair pair = new Pair(person1,person2,true);
         assertEquals(2,pair.getAgeDifference());
     }
 

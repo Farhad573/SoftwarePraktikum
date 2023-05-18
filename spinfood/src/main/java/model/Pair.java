@@ -10,15 +10,18 @@ public class Pair {
     private FoodPreference mainFoodPreference;
     private int ageDifference;
 
+    private boolean pairSignUp;
+
     /**
      * Constructs a Pair object with the given participants.
      *
      * @param person1 the first participant
      * @param person2 the second participant
      */
-    public Pair(Participant person1, Participant person2) {
+    public Pair(Participant person1, Participant person2,boolean pairSignUp) {
         this.person1 = person1;
         this.person2 = person2;
+        this.pairSignUp = pairSignUp;
         // calculate Main Food Preference of the pair
         calculateMainFoodPreference(person1, person2);
         // calculate the Age difference of the pair
