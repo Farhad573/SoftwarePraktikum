@@ -68,13 +68,22 @@ class ParticipantModelTest {
         Pair pair4 = new Pair(egali,fleichi,true);
         Pair pair5 = new Pair(egali,veggie,true);
         Pair pair6 = new Pair(egali,vegan,true);
+        Pair pair7 = new Pair(fleichi,veggie,true);
+        Pair pair8 = new Pair(fleichi,vegan,true);
+        Pair pair9 = new Pair(egali,fleichi,true);
+        Pair pair10 = new Pair(vegan,egali,true);
         assertEquals(FoodPreference.none, egaliPair.getMainFoodPreference());
-        assertEquals(FoodPreference.vegan, pair1.getMainFoodPreference());
+        assertEquals(FoodPreference.veggie, pair1.getMainFoodPreference());
         assertEquals(FoodPreference.vegan, pair2.getMainFoodPreference());
-        assertEquals(FoodPreference.vegan, pair5.getMainFoodPreference());
-        assertEquals(FoodPreference.vegan, pair6.getMainFoodPreference());
         assertEquals(FoodPreference.meat, pair3.getMainFoodPreference());
         assertEquals(FoodPreference.meat, pair4.getMainFoodPreference());
+        assertEquals(FoodPreference.veggie, pair5.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair6.getMainFoodPreference());
+        assertEquals(FoodPreference.veggie, pair7.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair8.getMainFoodPreference());
+        assertEquals(FoodPreference.meat, pair9.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair10.getMainFoodPreference());
+
     }
 
     @Test

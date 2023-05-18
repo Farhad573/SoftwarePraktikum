@@ -43,15 +43,15 @@ public class Pair {
             this.mainFoodPreference = FoodPreference.vegan;
         }
          // Fleichi/Egali & Veggie/Veganer -> Veganer
-        else if ((person1.getFoodPreference() == FoodPreference.none||
-                  person1.getFoodPreference() == FoodPreference.meat ||
-                  person1.getFoodPreference() == FoodPreference.veggie||
-                  person1.getFoodPreference() == FoodPreference.vegan) &&
-                          (person2.getFoodPreference() == FoodPreference.vegan ||
-                          person2.getFoodPreference() == FoodPreference.veggie ||
-                          person2.getFoodPreference() == FoodPreference.none ||
-                          person2.getFoodPreference() == FoodPreference.meat)) {
-            this.mainFoodPreference = FoodPreference.vegan;
+        else if((person1.getFoodPreference()==FoodPreference.meat || person1.getFoodPreference() == FoodPreference.none)
+                &&(person2.getFoodPreference() == FoodPreference.vegan || person2.getFoodPreference() == FoodPreference.veggie)) {
+
+            this.mainFoodPreference = person2.getFoodPreference();
+        }
+        else if((person2.getFoodPreference()==FoodPreference.meat || person2.getFoodPreference() == FoodPreference.none)
+                &&(person1.getFoodPreference() == FoodPreference.vegan || person1.getFoodPreference() == FoodPreference.veggie)) {
+
+            this.mainFoodPreference = person1.getFoodPreference();
         }
     }
 
