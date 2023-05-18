@@ -26,7 +26,7 @@ public class Participant {
      * @param sex            the participant's sex
      * @param kitchen  the participant's kitchen
      */
-    public Participant(String id, String name, int age, int ageRange,HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
+    public Participant(String id, String name, int age,HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -35,6 +35,16 @@ public class Participant {
         this.foodPreference = foodPreference ;
         this.sex = sex ;
         this.kitchen = kitchen;
+        this.ageRange = calculateAgeRange(age);
+    }
+
+    public Participant(FoodPreference foodPreference){
+        this.foodPreference = foodPreference;
+    }
+
+    public Participant(int age){
+        this.age = age;
+        this.ageRange = calculateAgeRange(age);
     }
 
     /**
@@ -107,6 +117,29 @@ public class Participant {
      */
     public Kitchen getKitchen() {
         return kitchen;
+    }
+
+    private int calculateAgeRange(int age) {
+        if (age <= 17) {
+            return 0;
+        } else if (age >= 18 && age <= 23) {
+            return 1;
+        } else if (age >= 24 && age <= 27) {
+            return 2;
+        } else if (age >= 28 && age <= 30) {
+            return 3;
+        } else if (age >= 31 && age <= 35) {
+            return 4;
+        } else if (age >= 36 && age <= 41) {
+            return 5;
+        } else if (age >= 42 && age <= 46) {
+            return 6;
+        } else if (age >= 47 && age <= 56) {
+            return 7;
+        } else if (age >= 57) {
+            return 8;
+        }
+        return -1;
     }
 
 

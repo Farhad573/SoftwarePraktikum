@@ -53,4 +53,36 @@ class ParticipantModelTest {
         });
     }
 
+    @Test
+        void checkPairFoodPreference(){
+        Participant egali = new Participant(FoodPreference.none);
+        Participant egali2 = new Participant(FoodPreference.none);
+        Participant fleichi = new Participant(FoodPreference.meat);
+        Participant veggie = new Participant(FoodPreference.veggie);
+        Participant vegan = new Participant(FoodPreference.vegan);
+
+        Pair egaliPair = new Pair(egali,egali2);
+        Pair pair1 = new Pair(veggie,fleichi);
+        Pair pair2 = new Pair(vegan,fleichi);
+        Pair pair3 = new Pair(fleichi,egali);
+        Pair pair4 = new Pair(egali,fleichi);
+        Pair pair5 = new Pair(egali,veggie);
+        Pair pair6 = new Pair(egali,vegan);
+        assertEquals(FoodPreference.none, egaliPair.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair1.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair2.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair5.getMainFoodPreference());
+        assertEquals(FoodPreference.vegan, pair6.getMainFoodPreference());
+        assertEquals(FoodPreference.meat, pair3.getMainFoodPreference());
+        assertEquals(FoodPreference.meat, pair4.getMainFoodPreference());
+    }
+
+    @Test
+        void checkPairAgeDifference(){
+        Participant person1 = new Participant(26);
+        Participant person2 = new Participant(32);
+        Pair pair = new Pair(person1,person2);
+        assertEquals(2,pair.getAgeDifference());
+    }
+
 }
