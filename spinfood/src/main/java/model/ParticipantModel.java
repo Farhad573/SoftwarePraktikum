@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class ParticipantModel extends ParticipantManager implements FileReader {
 
 
+
     /**
      * Constructs a ParticipantModel object.
      * Initializes the lists for participants, pairs, and successors.
@@ -75,12 +76,12 @@ public class ParticipantModel extends ParticipantManager implements FileReader {
                 name_2 = fields[11];
                 age_2 = Integer.parseInt(fields[12]);
                 sex_2 = Sex.valueOf(fields[13]);
-                Participant person1 = new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen);
-                Participant person2 = new Participant(id_2, name_2, age_2, hasKitchen, foodPreference, sex_2, kitchen);
-                Pair pair = new Pair(person1, person2);
+                Participant person1 = new Participant(id, name, age,hasKitchen, foodPreference, sex, kitchen);
+                Participant person2 = new Participant(id_2, name_2, age_2,hasKitchen, foodPreference, sex_2, kitchen);
+                Pair pair = new Pair(person1, person2,true);
                 pairs.add(pair);
             }else
-                participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen));
+                participants.add(new Participant(id, name, age,hasKitchen, foodPreference, sex, kitchen));
         }
         scanner.close();
     }
