@@ -2,9 +2,7 @@ package model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * The ParticipantModel class represents a model for managing participants and pairs.
@@ -21,9 +19,6 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
      */
     public CSVFileReader() {
         super();
-        participants = new ArrayList<>();
-        pairs = new ArrayList<>();
-        successors = new ArrayList<>();
     }
 
 
@@ -45,21 +40,21 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             String id = fields[1];
             String name = fields[2];
             FoodPreference foodPreference = FoodPreference.valueOf(fields[3]);
-            int age = Integer.parseInt(fields[4]);
+            double age = Double.parseDouble(fields[4]);
             Sex sex = Sex.valueOf(fields[5]);
             HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
-            int kitchen_story = 0;
+            double kitchen_story = 0;
             double kitchen_long = 0;
             double kitchen_lat = 0;
             String id_2 = "";
             String name_2 = "";
-            int age_2 = 0;
+            double age_2 = 0;
             Sex sex_2 = null;
             if( hasKitchen != HasKitchen.no ){
                 // check kitchen attributes
 
                 if (fields.length >= 8 && !fields[7].isEmpty()) {
-                    kitchen_story = Integer.parseInt(fields[7]);
+                    kitchen_story = Double.parseDouble(fields[7]);
                 }
                 // check kitchen location
                 Location kitchen_location = null;
@@ -69,10 +64,12 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
                     kitchen_location = new Location(kitchen_long, kitchen_lat);
                 }
                 Kitchen kitchen = new Kitchen(kitchen_story, kitchen_location);
+                int count = kitchenCountMap.getOrDefault(kitchen, 0);
+                kitchenCountMap.put(kitchen, count + 1);
                 if (fields.length >= 14) {
                     id_2 = fields[10];
                     name_2 = fields[11];
-                    age_2 = Integer.parseInt(fields[12]);
+                    age_2 = Double.parseDouble(fields[12]);
                     sex_2 = Sex.valueOf(fields[13]);
                     Participant person1 = new Participant(id, name, age,hasKitchen, foodPreference, sex, kitchen);
                     Participant person2 = new Participant(id_2, name_2, age_2,hasKitchen, foodPreference, sex_2, kitchen);
@@ -85,7 +82,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
                 if (fields.length >= 14) {
                     id_2 = fields[10];
                     name_2 = fields[11];
-                    age_2 = Integer.parseInt(fields[12]);
+                    age_2 = Double.parseDouble(fields[12]);
                     sex_2 = Sex.valueOf(fields[13]);
                     Participant person1 = new Participant(id, name, age,hasKitchen, foodPreference, sex);
                     Participant person2 = new Participant(id_2, name_2, age_2,hasKitchen, foodPreference, sex_2);
@@ -99,6 +96,22 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
 
         }
         scanner.close();
+
+        // Update the count field for each person in singles list
+        for (Participant person : participants) {
+            Kitchen kitchen = person.getKitchen();
+            int count = kitchenCountMap.getOrDefault(kitchen, 0);
+            person.setKitchenCount(count);
+        }
+
+        // Update the count field for each person in couples list
+        for (Pair person : pairs) {
+            Kitchen kitchen = person.getPerson1().getKitchen();
+            int count = kitchenCountMap.getOrDefault(kitchen, 0);
+            person.getPerson1().setKitchenCount(count);
+        }
+
+
     }
 
 
@@ -128,6 +141,10 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
      */
     public static List<Participant> getSuccessor() {
         return successors;
+    }
+
+    public static Map<Kitchen,Integer> getKitchenCountMap(){
+        return kitchenCountMap;
     }
 
 

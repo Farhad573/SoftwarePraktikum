@@ -8,12 +8,15 @@ public class Participant {
 
     private String id;
     private String name;
-    private int age;
+
+    private double age;
     private int ageRange;
     private HasKitchen hasKitchen;
     private FoodPreference foodPreference;
     private Sex sex;
     private Kitchen kitchen;
+
+    private int kitchenCount;
 
     /**
      * Constructs a Participant object with the specified attributes.
@@ -26,23 +29,21 @@ public class Participant {
      * @param sex            the participant's sex
      * @param kitchen        the participant's kitchen
      */
-    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
+    public Participant(String id, String name, double age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.ageRange = ageRange;
         this.hasKitchen = hasKitchen;
         this.foodPreference = foodPreference;
         this.sex = sex;
         this.kitchen = kitchen;
-        this.ageRange = calculateAgeRange(age);
+       this.ageRange = calculateAgeRange(age);
     }
 
-    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
+    public Participant(String id, String name, double age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.ageRange = ageRange;
         this.hasKitchen = hasKitchen;
         this.foodPreference = foodPreference;
         this.sex = sex;
@@ -53,9 +54,9 @@ public class Participant {
         this.foodPreference = foodPreference;
     }
 
-    public Participant(int age) {
+    public Participant(double age) {
         this.age = age;
-        this.ageRange = calculateAgeRange(age);
+        //this.ageRange = calculateAgeRange(age);
     }
 
     /**
@@ -81,7 +82,7 @@ public class Participant {
      *
      * @return the participant's age
      */
-    public int getAge() {
+    public double getAge() {
         return age;
     }
 
@@ -130,7 +131,7 @@ public class Participant {
         return kitchen;
     }
 
-    private int calculateAgeRange(int age) {
+    private int calculateAgeRange(double age) {
         if (age <= 17) {
             return 0;
         } else if (age >= 18 && age <= 23) {
@@ -153,6 +154,13 @@ public class Participant {
         return -1;
     }
 
+    public int getKitchenCount() {
+        return kitchenCount;
+    }
+
+    public void setKitchenCount(int kitchenCount) {
+        this.kitchenCount = kitchenCount;
+    }
 
     /**
      * Compares this Participant object with another object for equality.
@@ -188,6 +196,7 @@ public class Participant {
                     ", foodPreference=" + foodPreference + "\n" +
                     ", sex=" + sex + "\n" +
                     "Kitchen_Null" + "\n" +
+                    ", kitchenCount=" + kitchenCount + "\n" +
                     "******************";
         } else {
             return "Person : " + "\n" +
@@ -199,6 +208,7 @@ public class Participant {
                     ", foodPreference=" + foodPreference + "\n" +
                     ", sex=" + sex + "\n" +
                     kitchen.toString() + "\n" +
+                    ", kitchenCount=" + kitchenCount + "\n" +
                     "******************";
         }
 

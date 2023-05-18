@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        CSVFileReader CSVFileReader = new CSVFileReader();
+       CSVFileReader CSVFileReader = new CSVFileReader();
 
         try {
-            CSVFileReader.readCSVFile("src/main/java/model/teilnehmerliste.csv");
+            CSVFileReader.readCSVFile("teilnehmerliste.csv");
             System.out.println(CSVFileReader.toStringParticipants());
             System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {

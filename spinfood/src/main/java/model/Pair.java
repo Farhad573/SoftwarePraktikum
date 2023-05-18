@@ -89,6 +89,14 @@ public class Pair {
         return mainFoodPreference;
     }
 
+    public Participant getPerson1() {
+        return person1;
+    }
+
+    public Participant getPerson2() {
+        return person2;
+    }
+
     /**
      * Returns a string representation of the Pair object.
      *
@@ -101,6 +109,7 @@ public class Pair {
                 ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +
                 ", kitchen : " + person1.getKitchen() +
+                ", kitchenCount=" + person1.getKitchenCount() +
                 ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() + ", Age : " + person2.getAge() + ", AgeRange : "+ person2.getAgeRange() +
                 ", Food Preference : " + person2.getFoodPreference() + ", Sex" + person2.getSex() +
                 ", has kitchen : " + person2.getHasKitchen() +

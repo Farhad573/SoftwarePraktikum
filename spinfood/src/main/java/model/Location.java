@@ -1,4 +1,7 @@
 package model;
+
+import java.util.Objects;
+
 /**
  * The Location class represents a geographical location with longitude and latitude coordinates.
  */
@@ -65,6 +68,11 @@ public class Location {
         }
         Location otherLocation = (Location) o;
         return this.latitude == otherLocation.latitude && this.longitude == otherLocation.longitude;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(longitude, latitude);
     }
 
     /**

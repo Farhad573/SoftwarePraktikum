@@ -1,10 +1,13 @@
 package model;
+
+import java.util.Objects;
+
 /**
  * The Kitchen class represents a kitchen with its associated story and location.
  */
 public class Kitchen {
 
-    private int kitchen_story;
+    private double kitchen_story;
     private Location kitchen_location;
 
 
@@ -14,7 +17,7 @@ public class Kitchen {
      * @param kitchen_story    the story of the kitchen
      * @param kitchen_location the location of the kitchen
      */
-    public Kitchen(int kitchen_story, Location kitchen_location) {
+    public Kitchen(double kitchen_story, Location kitchen_location) {
         this.kitchen_story = kitchen_story;
         this.kitchen_location = kitchen_location;
     }
@@ -33,7 +36,7 @@ public class Kitchen {
      *
      * @param kitchen_story the story of the kitchen
      */
-    public Kitchen(int kitchen_story) {
+    public Kitchen(double kitchen_story) {
         this.kitchen_story = kitchen_story;
     }
 
@@ -50,7 +53,7 @@ public class Kitchen {
      *
      * @return the kitchen story
      */
-    public int getKitchen_story() {
+    public double getKitchen_story() {
         return kitchen_story;
     }
 
@@ -76,6 +79,10 @@ public class Kitchen {
         return kitchen_story == otherKitchen.kitchen_story && kitchen_location.equals(otherKitchen.kitchen_location);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(kitchen_story, kitchen_location);
+    }
 
     /**
      * Returns a string representation of the Kitchen object.
