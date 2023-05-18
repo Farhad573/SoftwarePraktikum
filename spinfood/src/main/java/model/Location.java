@@ -55,6 +55,18 @@ public class Location {
         this.latitude = latitude;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Location)) {
+            return false;
+        }
+        Location otherLocation = (Location) o;
+        return this.latitude == otherLocation.latitude && this.longitude == otherLocation.longitude;
+    }
+
     /**
      * Returns a string representation of the Location object.
      *

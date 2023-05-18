@@ -64,6 +64,19 @@ public class Kitchen {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Kitchen)) {
+            return false;
+        }
+        Kitchen otherKitchen = (Kitchen) o;
+        return kitchen_story == otherKitchen.kitchen_story && kitchen_location.equals(otherKitchen.kitchen_location);
+    }
+
+
     /**
      * Returns a string representation of the Kitchen object.
      *
