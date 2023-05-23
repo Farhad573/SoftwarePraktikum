@@ -12,6 +12,8 @@ public class Pair {
 
     private boolean pairSignUp;
 
+    private int preferenceDeviation;
+
     /**
      * Constructs a Pair object with the given participants.
      *
@@ -26,6 +28,7 @@ public class Pair {
         calculateMainFoodPreference(person1, person2);
         // calculate the Age difference of the pair
         this.ageDifference = calculateAgeDifference(person1,person2);
+        this.preferenceDeviation = calculatePreferenceDeviation();
     }
 
     private void calculateMainFoodPreference(Participant person1, Participant person2) {
@@ -66,6 +69,14 @@ public class Pair {
     }
 
     /**
+     * Preference Deviation of a pair is absolute value of difference of values declared to Food preference of two person in the pair
+     * @return Preference deviation of a pair
+     */
+    private int calculatePreferenceDeviation(){
+        return Math.abs(this.person1.getFoodPreference().getValue() - this.person2.getFoodPreference().getValue());
+    }
+
+    /**
      * Checks if the pair is valid.
      *
      * @return true if the pair is valid, false otherwise
@@ -87,6 +98,10 @@ public class Pair {
      */
     public FoodPreference getMainFoodPreference() {
         return mainFoodPreference;
+    }
+
+    public int getPreferenceDeviation() {
+        return preferenceDeviation;
     }
 
     public Participant getPerson1() {
