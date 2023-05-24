@@ -8,7 +8,7 @@ public enum FoodPreference {
 
     private int value;
 
-    private FoodPreference(int value) {
+    FoodPreference(int value) {
         this.value = value;
     }
 

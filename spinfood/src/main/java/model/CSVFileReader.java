@@ -92,8 +92,6 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
                     participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex));
                 }
             }
-
-
         }
         scanner.close();
 
@@ -110,8 +108,6 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             int count = kitchenCountMap.getOrDefault(kitchen, 0);
             person.getPerson1().setKitchenCount(count);
         }
-
-
     }
 
 
