@@ -26,7 +26,7 @@ public class PairGenerator {
             // Mutation
             if (random.nextDouble() < MUTATION_RATE) {
                 int mutationIndex = random.nextInt(nextGeneration.size());
-                mutate(nextGeneration.get(mutationIndex));
+                mutate(nextGeneration.get(mutationIndex),nextGeneration,currentGeneration,mutationIndex);
             }
         }
 
@@ -60,46 +60,36 @@ public class PairGenerator {
         Participant participant2Parent2 = parent2.getPerson2();
 
         // Perform crossover for food preferences
-        FoodPreference pref1 = crossoverFoodPreference(participant1Parent1.getFoodPreference(), participant1Parent2.getFoodPreference());
-        FoodPreference pref2 = crossoverFoodPreference(participant2Parent1.getFoodPreference(), participant2Parent2.getFoodPreference());
+        Pair pair1 = new Pair(participant1Parent1,participant1Parent2,false);
+        Pair pair2 =  new Pair(participant1Parent1,participant2Parent2,false);
+        Pair pair3 = new Pair(participant2Parent1,participant1Parent2,false);
+        Pair pair4 = new Pair(participant2Parent1,participant2Parent2,false);
 
-        // Perform crossover for other fields
-        // Adjust the crossover logic based on your specific requirements
-        double age1 = (participant1Parent1.getAge() + participant1Parent2.getAge()) / 2.0;
-        double age2 = (participant2Parent1.getAge() + participant2Parent2.getAge()) / 2.0;
+        double fitness1 = FitnessEvaluator.evaluateFitness(pair1);
+        double fitness2 = FitnessEvaluator.evaluateFitness(pair2);
+        double fitness3 = FitnessEvaluator.evaluateFitness(pair3);
+        double fitness4 = FitnessEvaluator.evaluateFitness(pair4);
 
-        // Create the offspring pair with the crossed-over participants
-        //Participant offspringParticipant1 = new Participant(participant1Parent1.getId(), participant1Parent1.getName(), age1, pref1, participant1Parent1.getSex(), participant1Parent1.getKitchenCount());
-        //Participant offspringParticipant2 = new Participant(participant2Parent2.getId(), participant2Parent2.getName(), age2, pref2, participant2Parent2.getSex(), participant2Parent2.getKitchenCount());
-        //Pair offspringPair = new Pair(offspringParticipant1, offspringParticipant2,false);
-
-        //return offspringPair;
-        return null;
-    }
-    private static FoodPreference crossoverFoodPreference(FoodPreference pref1, FoodPreference pref2) {
-        // Perform crossover for food preferences based on the given criteria
-
-        if (pref1 == pref2) {
-            // Same food preferences, no crossover needed
-            return pref1;
-        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) ||
-                (pref1 == FoodPreference.none && pref2 == FoodPreference.meat)) {
-            // Fleischi and Egali, choose Fleischi as crossover
-            return FoodPreference.meat;
-        } else if ((pref1 == FoodPreference.vegan && pref2 == FoodPreference.veggie) ||
-                (pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan)) {
-            // Veganer and Veggie, choose Veganer as crossover
-            return FoodPreference.vegan;
-        } else {
-            // Other combinations, no crossover needed, choose one of the preferences randomly
-            return random.nextBoolean() ? pref1 : pref2;
+        double maxFitness = findMax(fitness1,fitness2,fitness3,fitness4);
+        if(maxFitness == fitness1){
+            return pair1;
+        } else if (maxFitness == fitness2) {
+            return pair2;
+        } else if (maxFitness == fitness3) {
+            return pair3;
         }
+        return pair4;
     }
 
-    private static void mutate(Pair pair) {
-        // Perform mutation operation on the pair
+    private static double findMax(double f1, double f2,double f3,double f4){
+        return Math.max(f1, Math.max(f2, Math.max(f3, f4)));
+    }
 
-        // Implement your mutation logic here
+
+    private static void mutate(Pair pair,List<Pair> nextGeneration,List<Pair> currentGeneration,int mutationIndex) {
+        Pair currentPair = currentGeneration.get(random.nextInt());
+        Pair mutedPair = crossover(pair,currentPair);
+        nextGeneration.set(mutationIndex,mutedPair);
     }
 
     public static List<Pair> generateInitialPopulation(List<Participant> participants) {
