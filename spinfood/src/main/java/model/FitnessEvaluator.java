@@ -15,17 +15,17 @@ public class FitnessEvaluator {
             // Same food preference, assign higher fitness
             fitness += 1.0;
         } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none ) || (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
-            // Fleichi&Egali
+            // meat && none
             fitness += 1.0;
         } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan ) || (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
             //veggie & vegan
             fitness += 1.0;
         } else if (((pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan) && (pref2 == FoodPreference.none)) ||
                 ((pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none))) {
-            // egali & veggie/vegan
-            fitness += 8.0;
+            // none & veggie | vegan
+            fitness += 0.8;
         }else {
-            // fleichi & vegie/vegan
+            // meat & veggie | vegan
             fitness -= 0.5;
         }
 
