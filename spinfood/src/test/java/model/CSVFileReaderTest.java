@@ -3,13 +3,16 @@ package model;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CSVFileReaderTest {
 
     CSVFileReader CSVFileReader = new CSVFileReader();
+    PairGenerator pairGenerator = new PairGenerator();
 
     // check the count of elements in the lists
     @Test
@@ -84,6 +87,32 @@ class CSVFileReaderTest {
         assertEquals(FoodPreference.meat, pair9.getMainFoodPreference());
         assertEquals(FoodPreference.vegan, pair10.getMainFoodPreference());
 
+    }
+
+    @Test
+    void checkDuplicatesOfInitialPopulation(){
+        try{
+            CSVFileReader.readCSVFile("src/main/java/model/teilnehmerliste.csv");
+        }catch (FileNotFoundException e){
+            System.out.println("file is not found !!!");
+        }
+        List<Pair> initialPopulation = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+
+        boolean duplicate = hasNoDuplicates(initialPopulation);
+        assertTrue(duplicate);
+
+    }
+    private <T> boolean hasNoDuplicates(List<T> list) {
+        Set<T> set = new HashSet<>();
+
+        for (T element : list) {
+            if (set.contains(element)) {
+                return false;
+            }
+            set.add(element);
+        }
+
+        return true;
     }
 
     @Test

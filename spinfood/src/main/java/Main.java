@@ -37,12 +37,12 @@ public class Main {
 
         PairGenerator pairGenerator = new PairGenerator();
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-
-        for (Pair pair:
-                pairGenerator.generateNextGeneration(initialPair)
-             ) {
-            System.out.println(pair);
-        }
+        System.out.println(initialPair.size());
+//        for (Pair pair:
+//                pairGenerator.generateNextGeneration(initialPair)
+//             ) {
+//            System.out.println(pair);
+//        }
 
     }
 }
