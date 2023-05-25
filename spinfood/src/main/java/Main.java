@@ -37,12 +37,37 @@ public class Main {
 
         PairGenerator pairGenerator = new PairGenerator();
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+<<<<<<< HEAD
         System.out.println(initialPair.size());
 //        for (Pair pair:
 //                pairGenerator.generateNextGeneration(initialPair)
 //             ) {
 //            System.out.println(pair);
 //        }
+=======
+
+//        System.out.println(initialPair.size());
+//        for (Pair pair:
+//             initialPair) {
+//
+//            System.out.println(pair);
+//
+//        }
+
+        for (Pair pair:
+                pairGenerator.generateNextGeneration(initialPair)
+             ) {
+            System.out.println(pair);
+            System.out.println();
+        }
+>>>>>>> master
+
+        // Test : 1- Kitchen , if no-no-Kitchen are not together
+        //        2- Kitchen Location should be not more than 3 same Obj.
+        //        3- Duplicate from Participant to make pair ->
+        //        4- Food Preferences
+        //        5- Age Rage
+        //        6- make pair same participant
 
     }
 }

@@ -12,9 +12,13 @@ public class PairGenerator {
     private static double generatedFitness = 0;
 
 
-
-    // make pair list randomly -> initial
+    /**
+    Generates the initial population of pairs from a list of participants.
+    @param participants The list of participants from which to generate the initial population.
+     @return The list of pairs representing the initial population.
+     */
     public List<Pair> generateInitialPopulation(List<Participant> participants) {
+    // make pair list randomly -> initial
         List<Pair> population = new ArrayList<>();
 
         // Shuffle the participants randomly
@@ -75,9 +79,14 @@ public class PairGenerator {
         List<Pair> tournamentPool = new ArrayList<>();
 
         // Randomly select pairs for the tournament pool
-        for (int i = 0; i < TOURNAMENT_SIZE; i++) {
+        while (tournamentPool.size() < TOURNAMENT_SIZE) {
             int index = random.nextInt(currentGeneration.size());
-            tournamentPool.add(currentGeneration.get(index));
+            Pair selectedPair = currentGeneration.get(index);
+
+            // Check if the selected pair is already in the tournament pool
+            if (!tournamentPool.contains(selectedPair)) {
+                tournamentPool.add(selectedPair);
+            }
         }
 
         // Find the pair with the highest fitness score in the tournament pool
