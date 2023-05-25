@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * The Pair class represents a pair of participants.
  */
@@ -165,4 +167,8 @@ public class Pair {
         return person1.equals(otherPair.person1) && person2.equals(otherPair.person2);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(person1, person2, mainFoodPreference, ageDifference, pairSignUp, preferenceDeviation);
+    }
 }
