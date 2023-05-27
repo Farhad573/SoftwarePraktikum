@@ -1,6 +1,7 @@
 package model;
 
 public class FitnessEvaluator {
+
     public static double evaluateFitness(Pair pair) {
         double fitness = 0.0;
 
@@ -16,9 +17,6 @@ public class FitnessEvaluator {
     private static double calculateFoodPreferenceFitness(Pair pair) {
         FoodPreference pref1 = pair.getPerson1().getFoodPreference();
         FoodPreference pref2 = pair.getPerson2().getFoodPreference();
-        HasKitchen kitchen1 = pair.getPerson1().getHasKitchen();
-        HasKitchen kitchen2 = pair.getPerson2().getHasKitchen();
-        int preferenceDeviation = pair.getPreferenceDeviation();
 
         if (pref1 == pref2) {
             // Same food preference, assign higher fitness
