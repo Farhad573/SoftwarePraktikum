@@ -34,10 +34,24 @@ class PairGeneratorTest {
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
 
         HashSet<Participant> hashSetParticipant = new HashSet<>();
-        for (int i = 0; i < population.size(); i++) {
-            hashSetParticipant.add(population.get(i).getPerson1());
-            hashSetParticipant.add(population.get(i).getPerson2());
+//        for (int i = 0; i < population.size(); i++) {
+//            hashSetParticipant.add(population.get(i).getPerson1());
+//            hashSetParticipant.add(population.get(i).getPerson2());
+//        }
+
+        for (Pair pair : population) {
+            Participant person1 = pair.getPerson1();
+            Participant person2 = pair.getPerson2();
+
+            // Check for duplicates before adding participants to the set
+            if (hashSetParticipant.contains(person1) || hashSetParticipant.contains(person2)) {
+                Assertions.fail("Duplicate participants found in generated pairs.");
+            }
+
+            hashSetParticipant.add(person1);
+            hashSetParticipant.add(person2);
         }
+
         Assertions.assertEquals(164, hashSetParticipant.size());
     }
 

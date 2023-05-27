@@ -170,7 +170,7 @@ public class Pair {
     @Override
     public int hashCode() {
 
-        return Objects.hash(person1, person2, mainFoodPreference, ageDifference, pairSignUp, preferenceDeviation);
+        return Objects.hash(person1, person2);
 
     }
 }
