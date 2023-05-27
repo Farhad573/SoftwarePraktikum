@@ -67,6 +67,7 @@ public class PairGenerator {
         double average = generatedFitness / nextGeneration.size();
 
         if (average < 4){
+            // lieber keine Rekursion
             return generateNextGeneration(currentGeneration);
         }else{
             return nextGeneration;
@@ -74,7 +75,8 @@ public class PairGenerator {
     }
 
 
-    // make pair list with best fitness
+    // make pair list with the best fitness
+    // mögliche Duplicate
     private static Pair tournamentSelection(List<Pair> currentGeneration) {
         List<Pair> tournamentPool = new ArrayList<>();
 

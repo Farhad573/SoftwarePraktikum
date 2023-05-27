@@ -46,6 +46,8 @@ public class Main {
 //
 //        }
 
+        System.out.println("next generated Generation size -> " + pairGenerator.generateNextGeneration(initialPair).size());
+
         for (Pair pair:
                 pairGenerator.generateNextGeneration(initialPair)
              ) {
