@@ -54,12 +54,14 @@ public class Main {
 //
 //        }
 
-        for (Pair pair:
-                pairGenerator.generateNextGeneration(initialPair)
-             ) {
-            System.out.println(pair);
-            System.out.println();
-        }
+//        for (Pair pair:
+//                pairGenerator.generateNextGeneration(initialPair)
+//             ) {
+//            System.out.println(pair);
+//            System.out.println();
+//        }
+
+
 
         // Test : 1- Kitchen , if no-no-Kitchen are not together
         //        2- Kitchen Location should be not more than 3 same Obj.

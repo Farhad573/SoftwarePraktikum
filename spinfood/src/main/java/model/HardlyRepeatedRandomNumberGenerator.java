@@ -21,6 +21,10 @@ public class HardlyRepeatedRandomNumberGenerator {
         this.random = new Random();
     }
 
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
     public int getNextRandomNumber() {
         if (currentIndex >= shuffledNumbers.size()) {
             // All numbers in the range have been generated
@@ -34,14 +38,21 @@ public class HardlyRepeatedRandomNumberGenerator {
 
     public static void main(String[] args) {
         int rangeStart = 0;
-        int rangeEnd = 81;
+        int rangeEnd = 10;
         int numberOfRandomNumbers = rangeEnd - rangeStart + 1;
 
         HardlyRepeatedRandomNumberGenerator generator =
                 new HardlyRepeatedRandomNumberGenerator(rangeStart, rangeEnd);
+        HardlyRepeatedRandomNumberGenerator generator1 =
+                new HardlyRepeatedRandomNumberGenerator(rangeStart, rangeEnd);
 
         for (int i = 0; i < numberOfRandomNumbers; i++) {
             int randomNumber = generator.getNextRandomNumber();
+            System.out.println(randomNumber);
+        }
+        System.out.println("second generator" + "*".repeat(20));
+        for (int i = 0; i < numberOfRandomNumbers; i++) {
+            int randomNumber = generator1.getNextRandomNumber();
             System.out.println(randomNumber);
         }
     }

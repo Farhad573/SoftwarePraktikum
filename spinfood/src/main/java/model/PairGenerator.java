@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.util.*;
 
 import static model.FitnessEvaluator.*;
@@ -10,7 +11,7 @@ public class PairGenerator {
     private final double CROSSOVER_RATE = 0.8;
     private final double MUTATION_RATE = 0.1;
     private static double generatedFitness = 0;
-    private  static Set<Pair> hashSet = new HashSet<>();
+    private  static Set<Participant> hashSet = new HashSet<>();
     private List<Pair> initialPopulation = new ArrayList<>();
     private static List<Pair> pairsToCheckLater = new ArrayList<>();
     //private  HardlyRepeatedRandomNumberGenerator numberGenerator = new HardlyRepeatedRandomNumberGenerator(0,this.initialPopulation.size() - 1);
@@ -64,6 +65,7 @@ public class PairGenerator {
 //            Pair parent1 = tournamentSelection(currentGeneration);
 //            Pair parent2 = tournamentSelection(currentGeneration);
             Pair parent1 = currentGeneration.get(numberGenerator.getNextRandomNumber());
+
             Pair parent2 = currentGeneration.get(numberGenerator.getNextRandomNumber());
 
             // Crossover
@@ -73,8 +75,16 @@ public class PairGenerator {
                 if(offsprings == null){
                     continue;
                 }
+            if (!hashSet.contains(offsprings[0].getPerson1()) && !hashSet.contains(offsprings[0].getPerson2())) {
+                nextGeneration.add(offsprings[0]);
+            }
+
+            if (!hashSet.contains(offsprings[1].getPerson1()) && !hashSet.contains(offsprings[1].getPerson2())) {
+                nextGeneration.add(offsprings[1]);
+            }
                 generatedFitness += evaluateFitness(offsprings[0]);
                 generatedFitness += evaluateFitness(offsprings[1]);
+
                 nextGeneration.add(offsprings[0]);
                 nextGeneration.add(offsprings[1]);
             //}
@@ -106,7 +116,7 @@ public class PairGenerator {
             // Check if the selected pair is already in the tournament pool
             if (!hashSet.contains(selectedPair)) {
                 tournamentPool.add(selectedPair);
-                hashSet.add(selectedPair);
+//                hashSet.add(selectedPair.);
 //                hashSet.add(selectedPair.getPerson1());
 //                hashSet.add(selectedPair.getPerson2());
                 System.out.println("added");
@@ -135,7 +145,7 @@ public class PairGenerator {
 
 
         // Perform crossover for food preferences
-
+        Set<Participant> hasgset = new HashSet<>();
         Pair pair1 = new Pair(participant1Parent1,participant1Parent2,false);
         Pair pair4 = new Pair(participant2Parent1,participant2Parent2,false);
         Pair pair2 =  new Pair(participant1Parent1,participant2Parent2,false);
@@ -155,26 +165,38 @@ public class PairGenerator {
         }
         if(validPairs.size() <= 1){
             return null;
+        } else if (validPairs.size() == 2) {
+            return new  Pair[] {validPairs.get(0),validPairs.get(1)};
+        } else{
+            for(Pair pair : validPairs){
+                if(!hashSet.contains(pair.getPerson1()) && !hashSet.contains(pair.getPerson2())){
+                    hasgset.add(pair.getPerson1());
+                    hasgset.add(pair.getPerson2());
+                }else {
+                    validPairs.remove(pair);
+                }
+            }
         }
+        return (validPairs.toArray(new Pair[2]));
 
-        Pair[] pairToreturn1 = {pair1,pair4};
-        double fitness1 = Arrays.stream(pairToreturn1)
-                .mapToDouble(FitnessEvaluator::evaluateFitness)
-                .sum();
-
-        Pair[] pairToreturn2 = {pair2,pair3};
-        double fitness2 = Arrays.stream(pairToreturn2)
-                .mapToDouble(FitnessEvaluator::evaluateFitness)
-                .sum();
-        List<Pair[]> list = new ArrayList<>();
-        list.add(pairToreturn1);
-        list.add(pairToreturn2);
-        if(fitness1 == fitness2){
-            return list.get(random.nextInt(2));
-        } else if (fitness1 > fitness2) {
-            return pairToreturn1;
-        }else
-            return pairToreturn2;
+//        Pair[] pairToreturn1 = {pair1,pair4};
+//        double fitness1 = Arrays.stream(pairToreturn1)
+//                .mapToDouble(FitnessEvaluator::evaluateFitness)
+//                .sum();
+//
+//        Pair[] pairToreturn2 = {pair2,pair3};
+//        double fitness2 = Arrays.stream(pairToreturn2)
+//                .mapToDouble(FitnessEvaluator::evaluateFitness)
+//                .sum();
+//        List<Pair[]> list = new ArrayList<>();
+//        list.add(pairToreturn1);
+//        list.add(pairToreturn2);
+//        if(fitness1 == fitness2){
+//            return list.get(random.nextInt(2));
+//        } else if (fitness1 > fitness2) {
+//            return pairToreturn1;
+//        }else
+//            return pairToreturn2;
 
 
 //        double fitness1 = evaluateFitness(pair1);

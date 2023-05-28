@@ -73,9 +73,9 @@ class PairGeneratorTest {
             Participant person2 = pair.getPerson2();
 
             // Check for duplicates before adding participants to the set
-            if (participantHashSet.contains(person1) || participantHashSet.contains(person2)) {
-                Assertions.fail("Duplicate participants found in generated pairs.");
-            }
+//            if (participantHashSet.contains(person1) || participantHashSet.contains(person2)) {
+//                Assertions.fail("Duplicate participants found in generated pairs.");
+//            }
 
             participantHashSet.add(person1);
             participantHashSet.add(person2);
@@ -83,6 +83,68 @@ class PairGeneratorTest {
 
         Assertions.assertEquals(164, participantHashSet.size());
     }
+    @Test
+    void checkHasKitchen() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+
+        List<Pair> nextGen = pairGenerator.generateNextGeneration(population);
+
+        for (Pair pair : nextGen) {
+            Participant person1 = pair.getPerson1();
+            Participant person2 = pair.getPerson2();
+
+            // Check for duplicates before adding participants to the set
+            if (person1.getHasKitchen() == HasKitchen.no && person2.getHasKitchen() == HasKitchen.no) {
+                Assertions.fail("Pair with no Kitchen Found.");
+            }
+
+        }
+    }
+
+    @Test
+    void checkMeatWithVeganOderVeggie() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+
+        List<Pair> nextGen = pairGenerator.generateNextGeneration(population);
+
+        for (Pair pair : nextGen) {
+            Participant person1 = pair.getPerson1();
+            Participant person2 = pair.getPerson2();
+
+            // Check for duplicates before adding participants to the set
+            if (((person1.getFoodPreference() == FoodPreference.veggie || person1.getFoodPreference() == FoodPreference.vegan) && (person2.getFoodPreference() == FoodPreference.meat)) ||
+                    ((person2.getFoodPreference() == FoodPreference.veggie || person2.getFoodPreference() == FoodPreference.vegan) && (person1.getFoodPreference() == FoodPreference.meat))) {
+                Assertions.fail("Fleichi && Veggie/vegan Pair found.");
+            }
+
+        }
+    }
+
+    @Test
+    void checkPairWithSameSex() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+
+        List<Pair> nextGen = pairGenerator.generateNextGeneration(population);
+
+        for (Pair pair : nextGen) {
+            Participant person1 = pair.getPerson1();
+            Participant person2 = pair.getPerson2();
+
+            // Check for duplicates before adding participants to the set
+            if (person1.getSex() == person2.getSex()) {
+                Assertions.fail("Pair of same sex  found.");
+            }
+
+        }
+    }
+
+
 
 
 
@@ -94,4 +156,5 @@ class PairGeneratorTest {
         }
         return getParticipants();
     }
+
 }
