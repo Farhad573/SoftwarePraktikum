@@ -1,11 +1,10 @@
-import model.CSVFileReader;
-import model.Pair;
-import model.PairGenerator;
-import model.Participant;
+import model.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static model.FitnessEvaluator.checkFoodPreferenceFitness;
 import static model.FitnessEvaluator.checkKitchenFitness;
@@ -18,7 +17,7 @@ public class Main {
 
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
-            //System.out.println(CSVFileReader.toStringParticipants());
+            System.out.println(CSVFileReader.toStringParticipants());
             System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -43,10 +42,21 @@ public class Main {
         PairGenerator pairGenerator = new PairGenerator();
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
         System.out.println("number of successor is " + PairGenerator.getSuccessor().size());
-        for (Participant participant: PairGenerator.getSuccessor()
-             ) {
-            System.out.println(participant);
-        }
+
+//        List<Participant> participantsWithKitchen = CSVFileReader.getParticipants().stream()
+//                .filter(p -> p.getKitchen() != null)
+//                .collect(Collectors.toList());
+//
+//        Map<Kitchen, Long> countByAge = participantsWithKitchen.stream()
+//                .collect(Collectors.groupingBy(Participant::getKitchen, Collectors.counting()));
+//        for (Map.Entry<Kitchen, Long> entry : countByAge.entrySet()
+//             ) {
+//            System.out.println(entry.getValue());
+//        }
+//        for (Participant participant: PairGenerator.getSuccessor()
+//             ) {
+//            System.out.println(participant);
+//        }
 
 //        System.out.println(initialPair.size());
 //        for (Pair pair:

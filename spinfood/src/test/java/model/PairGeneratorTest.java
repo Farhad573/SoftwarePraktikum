@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static model.CSVFileReader.getParticipants;
 
@@ -144,7 +145,33 @@ class PairGeneratorTest {
 
         }
     }
+    @Test
+    void checkKitchenCount() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
 
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+        List<Participant> kitchen = participantList.stream().filter(x -> x.getKitchenCount() > 3).collect(Collectors.toList());
+        for (Participant pair: kitchen
+             ) {
+            System.out.println(pair);
+        }
+//        for (Participant participant: kitchen
+//             ) {
+//            Assertions.assertTrue(FitnessEvaluator.checkKitchenCount(participant));
+//        }
+    }
+
+
+    @Test
+    void cehckPreferenceDeviation() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+        for (Pair pair: population
+        ) {
+            Assertions.assertTrue(pair.getPreferenceDeviation() <= 3);
+        }
+    }
 
 
 
