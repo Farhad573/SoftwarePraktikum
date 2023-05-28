@@ -2,6 +2,7 @@ package model;
 
 import java.sql.PreparedStatement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static model.FitnessEvaluator.*;
 
@@ -13,7 +14,7 @@ public class PairGenerator {
     private static double generatedFitness = 0;
     private  static Set<Participant> hashSet = new HashSet<>();
     private List<Pair> initialPopulation = new ArrayList<>();
-    private static List<Pair> pairsToCheckLater = new ArrayList<>();
+    private static List<Participant> successor = new ArrayList<>();
     //private  HardlyRepeatedRandomNumberGenerator numberGenerator = new HardlyRepeatedRandomNumberGenerator(0,this.initialPopulation.size() - 1);
 
 
@@ -24,30 +25,65 @@ public class PairGenerator {
      */
     public List<Pair> generateInitialPopulation(List<Participant> participants) {
     // make pair list randomly -> initial
+       //List<Pair> population = new ArrayList<>();
+//
+//        // Shuffle the participants randomly
+//        List<Participant> shuffledParticipants = new ArrayList<>(participants);
+//        Collections.shuffle(shuffledParticipants, new Random());
+//        // Iterate over the shuffled participants and create pairs
+//        if (shuffledParticipants.size() % 2 == 0) {
+//            for (int i = 0; i < shuffledParticipants.size(); i += 2) {
+//                Participant participant1 = shuffledParticipants.get(i);
+//                Participant participant2 = shuffledParticipants.get(i + 1);
+//                Pair pair = new Pair(participant1, participant2, false);
+//                population.add(pair);
+//            }
+//        } else {
+//            for (int i = 0; i < shuffledParticipants.size() - 1; i += 2) {
+//                Participant participant1 = shuffledParticipants.get(i);
+//                Participant participant2 = shuffledParticipants.get(i + 1);
+//                Pair pair = new Pair(participant1, participant2, false);
+//                population.add(pair);
+//            }
+//
+//        }
+//        this.initialPopulation = population;
+//        return population;
         List<Pair> population = new ArrayList<>();
-
-        // Shuffle the participants randomly
-        List<Participant> shuffledParticipants = new ArrayList<>(participants);
-        Collections.shuffle(shuffledParticipants, new Random());
-        // Iterate over the shuffled participants and create pairs
-        if (shuffledParticipants.size() % 2 == 0) {
-            for (int i = 0; i < shuffledParticipants.size(); i += 2) {
-                Participant participant1 = shuffledParticipants.get(i);
-                Participant participant2 = shuffledParticipants.get(i + 1);
-                Pair pair = new Pair(participant1, participant2, false);
-                population.add(pair);
-            }
-        } else {
-            for (int i = 0; i < shuffledParticipants.size() - 1; i += 2) {
-                Participant participant1 = shuffledParticipants.get(i);
-                Participant participant2 = shuffledParticipants.get(i + 1);
-                Pair pair = new Pair(participant1, participant2, false);
-                population.add(pair);
-            }
-
+        HashSet<Participant> usedParticipants = new HashSet<>();
+        HashMap<Participant,Boolean> hashmap = new HashMap<>();
+        for (Participant participant : participants){
+            hashmap.put(participant,false);
         }
-        this.initialPopulation = population;
-        return population;
+        int limit = participants.size() % 2 == 0? participants.size() : participants.size() - 1;
+        for (int i = 0; i < participants.size(); i++) {
+            Participant participant1 = participants.get(i);
+
+            for (int j = i + 1; j < participants.size(); j++) {
+                Participant participant2 = participants.get(j);
+
+                Pair pair = new Pair(participant1, participant2, false);
+
+                if (checkFoodPreferenceFitness(pair) && checkKitchenFitness(pair) && checkKitchenCount(pair) && !usedParticipants.contains(participant1) && !usedParticipants.contains(participant2) ) {
+                    population.add(pair);
+                    usedParticipants.add(participant1);
+                    hashmap.put(participant1,true);
+                    usedParticipants.add(participant2);
+                    hashmap.put(participant2,true);
+                }
+        }
+        }
+
+//        long num = hashmap.entrySet().stream().filter(x -> x.getValue() == false).count();
+//        System.out.println("amount of  used participants " + usedParticipants.size());
+//        System.out.println("amount of not used participants " + num);
+        //hashmap.entrySet().stream().filter(x-> x.getValue()==false).forEach(System.out::println);
+
+
+        successor = hashmap.entrySet().stream().filter(x-> x.getValue()==false).map(x -> x.getKey()).collect(Collectors.toList());
+
+
+        return this.initialPopulation = population;
     }
 
     //*** make pair list -> new Generation ***
@@ -61,9 +97,7 @@ public class PairGenerator {
             numberOfNewGeneration = currentGeneration.size() - 1;
         }
         while (nextGeneration.size() < numberOfNewGeneration) {
-            // Tournament selection
-//            Pair parent1 = tournamentSelection(currentGeneration);
-//            Pair parent2 = tournamentSelection(currentGeneration);
+
             Pair parent1 = currentGeneration.get(numberGenerator.getNextRandomNumber());
 
             Pair parent2 = currentGeneration.get(numberGenerator.getNextRandomNumber());
@@ -72,16 +106,17 @@ public class PairGenerator {
             //if (random.nextDouble() < CROSSOVER_RATE) {
 
                 Pair[] offsprings = crossover(parent1, parent2);
-                if(offsprings == null){
-                    continue;
-                }
-            if (!hashSet.contains(offsprings[0].getPerson1()) && !hashSet.contains(offsprings[0].getPerson2())) {
-                nextGeneration.add(offsprings[0]);
-            }
-
-            if (!hashSet.contains(offsprings[1].getPerson1()) && !hashSet.contains(offsprings[1].getPerson2())) {
-                nextGeneration.add(offsprings[1]);
-            }
+//                if(offsprings == null){
+//                    numberGenerator = new HardlyRepeatedRandomNumberGenerator(0,currentGeneration.size() - 1);
+//                    continue;
+//                }
+//            if (!hashSet.contains(offsprings[0].getPerson1()) && !hashSet.contains(offsprings[0].getPerson2())) {
+//                nextGeneration.add(offsprings[0]);
+//            }
+//
+//            if (!hashSet.contains(offsprings[1].getPerson1()) && !hashSet.contains(offsprings[1].getPerson2())) {
+//                nextGeneration.add(offsprings[1]);
+//            }
                 generatedFitness += evaluateFitness(offsprings[0]);
                 generatedFitness += evaluateFitness(offsprings[1]);
 
@@ -145,58 +180,58 @@ public class PairGenerator {
 
 
         // Perform crossover for food preferences
-        Set<Participant> hasgset = new HashSet<>();
         Pair pair1 = new Pair(participant1Parent1,participant1Parent2,false);
         Pair pair4 = new Pair(participant2Parent1,participant2Parent2,false);
         Pair pair2 =  new Pair(participant1Parent1,participant2Parent2,false);
         Pair pair3 = new Pair(participant2Parent1,participant1Parent2,false);
         List<Pair> checklist = new ArrayList<>();
-        List<Pair> validPairs = new ArrayList<>();
+//        List<Pair> validPairs = new ArrayList<>();
         checklist.add(pair1);
         checklist.add(pair2);
         checklist.add(pair3);
         checklist.add(pair4);
-        for(Pair pair : checklist){
-            if(FitnessEvaluator.checkFoodPreferenceFitness(pair) && FitnessEvaluator.checkKitchenFitness(pair)){
-                validPairs.add(pair);
-            }else {
-                pairsToCheckLater.add(pair);
-            }
-        }
-        if(validPairs.size() <= 1){
-            return null;
-        } else if (validPairs.size() == 2) {
-            return new  Pair[] {validPairs.get(0),validPairs.get(1)};
-        } else{
-            for(Pair pair : validPairs){
-                if(!hashSet.contains(pair.getPerson1()) && !hashSet.contains(pair.getPerson2())){
-                    hasgset.add(pair.getPerson1());
-                    hasgset.add(pair.getPerson2());
-                }else {
-                    validPairs.remove(pair);
-                }
-            }
-        }
-        return (validPairs.toArray(new Pair[2]));
+//        for(Pair pair : checklist){
+//            if(FitnessEvaluator.checkFoodPreferenceFitness(pair) && FitnessEvaluator.checkKitchenFitness(pair)){
+//                validPairs.add(pair);
+//            }else {
+//                pairsToCheckLater.add(pair);
+//            }
+//        }
+//        if(validPairs.size() <= 1){
+//            return null;
+//        } else if (validPairs.size() == 2) {
+//            return new  Pair[] {validPairs.get(0),validPairs.get(1)};
+//        } else{
+//            for(Pair pair : validPairs){
+//                if(!hashSet.contains(pair.getPerson1()) && !hashSet.contains(pair.getPerson2())){
+//                    hasgset.add(pair.getPerson1());
+//                    hasgset.add(pair.getPerson2());
+//                }else {
+//                    validPairs.remove(pair);
+//                }
+//            }
+//        }
+//        return (validPairs.toArray(new Pair[2]));
+        //checklist.stream().filter(x -> checkKitchenFitness(x) && checkFoodPreferenceFitness(x) && !hashSet.contains(x.getPerson1()) && !hashSet.contains(x.getPerson2())).sorted(Comparator.comparingDouble(FitnessEvaluator::evaluateFitness)).
 
-//        Pair[] pairToreturn1 = {pair1,pair4};
-//        double fitness1 = Arrays.stream(pairToreturn1)
-//                .mapToDouble(FitnessEvaluator::evaluateFitness)
-//                .sum();
-//
-//        Pair[] pairToreturn2 = {pair2,pair3};
-//        double fitness2 = Arrays.stream(pairToreturn2)
-//                .mapToDouble(FitnessEvaluator::evaluateFitness)
-//                .sum();
-//        List<Pair[]> list = new ArrayList<>();
-//        list.add(pairToreturn1);
-//        list.add(pairToreturn2);
-//        if(fitness1 == fitness2){
-//            return list.get(random.nextInt(2));
-//        } else if (fitness1 > fitness2) {
-//            return pairToreturn1;
-//        }else
-//            return pairToreturn2;
+        Pair[] pairToreturn1 = {pair1,pair4};
+        double fitness1 = Arrays.stream(pairToreturn1)
+                .mapToDouble(FitnessEvaluator::evaluateFitness)
+                .sum();
+
+        Pair[] pairToreturn2 = {pair2,pair3};
+        double fitness2 = Arrays.stream(pairToreturn2)
+                .mapToDouble(FitnessEvaluator::evaluateFitness)
+                .sum();
+        List<Pair[]> list = new ArrayList<>();
+        list.add(pairToreturn1);
+        list.add(pairToreturn2);
+        if(fitness1 == fitness2){
+            return list.get(random.nextInt(2));
+        } else if (fitness1 > fitness2) {
+            return pairToreturn1;
+        }else
+            return pairToreturn2;
 
 
 //        double fitness1 = evaluateFitness(pair1);
@@ -219,20 +254,9 @@ public class PairGenerator {
         return Math.max(f1, Math.max(f2, Math.max(f3, f4)));
     }
 
-
-    private static void mutate(Pair pair, List<Pair> nextGeneration, List<Pair> currentGeneration, int mutationIndex) {
-        Pair currentPair;
-        do {
-            int randomNum = random.nextInt(currentGeneration.size());
-            currentPair = currentGeneration.get(randomNum);
-        } while (!hashSet.contains(currentPair));
-
-        //Pair mutatedPair = crossover(pair, currentPair);
-//        generatedFitness -= evaluateFitness(nextGeneration.get(mutationIndex));
-//        generatedFitness += evaluateFitness(mutatedPair);
-//        nextGeneration.set(mutationIndex, mutatedPair);
+    public static List<Participant> getSuccessor() {
+        return successor;
     }
-
 
     public List<Pair> getInitialPopulation() {
         return initialPopulation;

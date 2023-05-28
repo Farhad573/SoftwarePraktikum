@@ -72,10 +72,10 @@ class PairGeneratorTest {
             Participant person1 = pair.getPerson1();
             Participant person2 = pair.getPerson2();
 
-            // Check for duplicates before adding participants to the set
-//            if (participantHashSet.contains(person1) || participantHashSet.contains(person2)) {
-//                Assertions.fail("Duplicate participants found in generated pairs.");
-//            }
+             //Check for duplicates before adding participants to the set
+            if (participantHashSet.contains(person1) || participantHashSet.contains(person2)) {
+                Assertions.fail("Duplicate participants found in generated pairs.");
+            }
 
             participantHashSet.add(person1);
             participantHashSet.add(person2);
@@ -91,7 +91,7 @@ class PairGeneratorTest {
 
         List<Pair> nextGen = pairGenerator.generateNextGeneration(population);
 
-        for (Pair pair : nextGen) {
+        for (Pair pair : population) {
             Participant person1 = pair.getPerson1();
             Participant person2 = pair.getPerson2();
 
@@ -101,6 +101,7 @@ class PairGeneratorTest {
             }
 
         }
+        System.out.println("population size is :" + population.size());
     }
 
     @Test
@@ -111,7 +112,7 @@ class PairGeneratorTest {
 
         List<Pair> nextGen = pairGenerator.generateNextGeneration(population);
 
-        for (Pair pair : nextGen) {
+        for (Pair pair : population) {
             Participant person1 = pair.getPerson1();
             Participant person2 = pair.getPerson2();
 

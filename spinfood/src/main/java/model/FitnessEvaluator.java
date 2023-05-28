@@ -98,6 +98,10 @@ public class FitnessEvaluator {
         }
     }
 
+    public static boolean checkKitchenCount(Pair pair){
+        return pair.getPerson1().getKitchenCount() < 3 && pair.getPerson2().getKitchenCount() < 3;
+    }
+
     private static double calculatePreferenceDeviationFitness(Pair pair) {
         int preferenceDeviation = pair.getPreferenceDeviation();
 

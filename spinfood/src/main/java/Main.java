@@ -1,9 +1,14 @@
 import model.CSVFileReader;
 import model.Pair;
 import model.PairGenerator;
+import model.Participant;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static model.FitnessEvaluator.checkFoodPreferenceFitness;
+import static model.FitnessEvaluator.checkKitchenFitness;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,7 +19,7 @@ public class Main {
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
             //System.out.println(CSVFileReader.toStringParticipants());
-            //System.out.println(CSVFileReader.toStringPairs());
+            System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -37,8 +42,13 @@ public class Main {
 
         PairGenerator pairGenerator = new PairGenerator();
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+        System.out.println("number of successor is " + PairGenerator.getSuccessor().size());
+        for (Participant participant: PairGenerator.getSuccessor()
+             ) {
+            System.out.println(participant);
+        }
 
-        System.out.println(initialPair.size());
+//        System.out.println(initialPair.size());
 //        for (Pair pair:
 //                pairGenerator.generateNextGeneration(initialPair)
 //             ) {
@@ -53,14 +63,24 @@ public class Main {
 //            System.out.println(pair);
 //
 //        }
-
+//
 //        for (Pair pair:
 //                pairGenerator.generateNextGeneration(initialPair)
 //             ) {
 //            System.out.println(pair);
 //            System.out.println();
 //        }
-
+//            List<Integer> list = new ArrayList<>();
+//            for(int i = 1; i<10 ; i++){
+//                list.add(i);
+//            }
+//        System.out.println(list.size());
+//        for (int i = 0; i < list.size(); i++) {
+//
+//            for (int j = i + 1; j < list.size(); j++) {
+//                System.out.println("i is " + i + " and j is " + j);
+//            }
+//        }
 
 
         // Test : 1- Kitchen , if no-no-Kitchen are not together
