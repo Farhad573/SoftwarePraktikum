@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static model.CSVFileReader.getPairs;
 import static model.CSVFileReader.getParticipants;
 import static model.FitnessEvaluator.checkFoodPreferenceFitness;
 import static model.FitnessEvaluator.checkKitchenFitness;
@@ -24,6 +26,7 @@ public class Main {
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
+        List<Pair> csvPairs = getPairs();
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
             partyLocation.readCSVFilePartyLocation("partylocation.csv");
@@ -41,7 +44,7 @@ public class Main {
 
         System.out.println("************************************************");
 
-        int pairLength = CSVFileReader.getPairs().size();
+        int pairLength = getPairs().size();
         System.out.println("Length of pair list is: " + pairLength);
 
         System.out.println("************************************************");
@@ -56,8 +59,12 @@ public class Main {
         System.out.println("number of generated Pairs is " + initialPair.size());
         System.out.println("number of successor is " + CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
+        System.out.println("number of initial pairs from initital population generator is " + initialPair.size() );
+        System.out.println("number of pairs from CSV is " + csvPairs.size());
         System.out.println("###############################################");
-        List<Group> groupList = groupGenerator.generateGroup(initialPair,3);
+        List<Pair> concatenatedlist = Stream.concat(initialPair.stream(),csvPairs.stream()).collect(Collectors.toList());
+        System.out.println("number of mixed Pairs is " + concatenatedlist.size());
+        List<Group> groupList = groupGenerator.generateGroup(concatenatedlist,1);
         System.out.println("Number of generated groups is " + groupList.size());
         System.out.println("number of groupSuccessors is " + getGroupSuccessors().size());
 

@@ -6,8 +6,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GroupGenerator extends ParticipantManager {
+
+    private List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
+        List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
+                .collect(Collectors.toList());
+        this.pairs = pairs;
+        return pairs;
+    }
 
 
     public List<Group> generateGroup(List<Pair> pairs,int radius){
