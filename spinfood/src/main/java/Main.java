@@ -1,4 +1,10 @@
+
 import model.*;
+
+import model.CSVFileReader;
+import model.PairGenerator;
+import model.PartyLocation;
+
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -17,9 +23,11 @@ public class Main {
        CSVFileReader CSVFileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
-
+        PartyLocation partyLocation = new PartyLocation();
         try {
-            CSVFileReader.readCSVFile("src/main/resources/teilnehmerlisteNew.csv");
+            CSVFileReader.readCSVFile("teilnehmerliste.csv");
+            partyLocation.readCSVFilePartyLocation("partylocation.csv");
+            System.out.println(partyLocation.toString());
             //System.out.println(CSVFileReader.toStringParticipants());
             //System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
@@ -47,16 +55,7 @@ public class Main {
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
         System.out.println("number of generated Pairs is " + initialPair.size());
         System.out.println("number of successor is " + CSVFileReader.getSuccessor().size());
-
         System.out.println("###############################################");
-//        for (Participant pair:
-//                CSVFileReader.getParticipants()) {
-//            System.out.println(pair);
-//        }
-//        for (Pair pair:
-//                initialPair) {
-//            System.out.println(pair);
-//        }
         System.out.println("###############################################");
         List<Group> groupList = groupGenerator.generateGroup(initialPair,3);
         System.out.println("Number of generated groups is " + groupList.size());
