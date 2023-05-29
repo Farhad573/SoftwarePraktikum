@@ -60,7 +60,7 @@ class PairGeneratorTest {
 
 
     @Test
-    void checkHasKitchen() throws FileNotFoundException {
+    void checkHasKitchenNo() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
@@ -73,6 +73,46 @@ class PairGeneratorTest {
             // Check for duplicates before adding participants to the set
             if (person1.getHasKitchen() == HasKitchen.no && person2.getHasKitchen() == HasKitchen.no) {
                 Assertions.fail("Pair with no Kitchen Found.");
+            }
+
+        }
+        System.out.println("population size is :" + population.size());
+    }
+
+    @Test
+    void checkHasKitchenYes() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+
+
+        for (Pair pair : population) {
+            Participant person1 = pair.getPerson1();
+            Participant person2 = pair.getPerson2();
+
+            // Check for duplicates before adding participants to the set
+            if (person1.getHasKitchen() == HasKitchen.yes && person2.getHasKitchen() == HasKitchen.yes) {
+                Assertions.fail("Pair with Yes Kitchen Found.");
+            }
+
+        }
+        System.out.println("population size is :" + population.size());
+    }
+
+    @Test
+    void checkHasKitchenYesMaybe() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+
+
+        for (Pair pair : population) {
+            Participant person1 = pair.getPerson1();
+            Participant person2 = pair.getPerson2();
+
+            // Check for duplicates before adding participants to the set
+            if (person1.getHasKitchen() == HasKitchen.yes && person2.getHasKitchen() == HasKitchen.maybe) {
+                Assertions.fail("Pair with Yes - Maybe Kitchen Found.");
             }
 
         }
