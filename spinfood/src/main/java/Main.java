@@ -9,17 +9,19 @@ import java.util.stream.Collectors;
 import static model.CSVFileReader.getParticipants;
 import static model.FitnessEvaluator.checkFoodPreferenceFitness;
 import static model.FitnessEvaluator.checkKitchenFitness;
+import static model.GroupGenerator.*;
+import static model.ParticipantManager.*;
 
 public class Main {
     public static void main(String[] args) {
        CSVFileReader CSVFileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
-
+        GroupGenerator groupGenerator = new GroupGenerator();
 
         try {
             CSVFileReader.readCSVFile("src/main/resources/teilnehmerlisteNew.csv");
-            System.out.println(CSVFileReader.toStringParticipants());
-            System.out.println(CSVFileReader.toStringPairs());
+            //System.out.println(CSVFileReader.toStringParticipants());
+            //System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -41,58 +43,28 @@ public class Main {
         System.out.println("###############################################");
         System.out.println(getParticipants().size());
 
-
+        System.out.println("###############################################");
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+        System.out.println("number of generated Pairs is " + initialPair.size());
         System.out.println("number of successor is " + CSVFileReader.getSuccessor().size());
 
-//        List<Participant> participantsWithKitchen = CSVFileReader.getParticipants().stream()
-//                .filter(p -> p.getKitchen() != null)
-//                .collect(Collectors.toList());
-//
-//        Map<Kitchen, Long> countByAge = participantsWithKitchen.stream()
-//                .collect(Collectors.groupingBy(Participant::getKitchen, Collectors.counting()));
-//        for (Map.Entry<Kitchen, Long> entry : countByAge.entrySet()
-//             ) {
-//            System.out.println(entry.getValue());
-//        }
-//        for (Participant participant: PairGenerator.getSuccessor()
-//             ) {
-//            System.out.println(participant);
-//        }
-
-//        System.out.println(initialPair.size());
-//        for (Pair pair:
-//                pairGenerator.generateNextGeneration(initialPair)
-//             ) {
+        System.out.println("###############################################");
+//        for (Participant pair:
+//                CSVFileReader.getParticipants()) {
 //            System.out.println(pair);
 //        }
+//        for (Pair pair:
+//                initialPair) {
+//            System.out.println(pair);
+//        }
+        System.out.println("###############################################");
+        List<Group> groupList = groupGenerator.generateGroup(initialPair,3);
+        System.out.println("Number of generated groups is " + groupList.size());
+        System.out.println("number of groupSuccessors is " + getGroupSuccessors().size());
 
 
-//        System.out.println(initialPair.size());
-//        for (Pair pair:
-//             initialPair) {
-//
-//            System.out.println(pair);
-//
-//        }
-//
-//        for (Pair pair:
-//                pairGenerator.generateNextGeneration(initialPair)
-//             ) {
-//            System.out.println(pair);
-//            System.out.println();
-//        }
-//            List<Integer> list = new ArrayList<>();
-//            for(int i = 1; i<10 ; i++){
-//                list.add(i);
-//            }
-//        System.out.println(list.size());
-//        for (int i = 0; i < list.size(); i++) {
-//
-//            for (int j = i + 1; j < list.size(); j++) {
-//                System.out.println("i is " + i + " and j is " + j);
-//            }
-//        }
+
+
 
 
     }

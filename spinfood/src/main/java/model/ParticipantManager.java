@@ -14,8 +14,9 @@ public class ParticipantManager {
 
     protected static List<Participant> participants;
     protected static List<Pair> pairs;
-    protected static List<Participant> successors;
+    protected static List<Participant> pairSuccessors;
     protected static List<Group> groups;
+    protected static List<Pair> groupSuccessors;
 
 
     protected static Map<Kitchen,Integer> kitchenCountMap;
@@ -27,10 +28,11 @@ public class ParticipantManager {
      */
     public ParticipantManager(){
         participants = new ArrayList<>();
-        successors = new ArrayList<>();
+        pairSuccessors = new ArrayList<>();
         pairs = new ArrayList<>();
         kitchenCountMap = new HashMap<>();
         groups = new ArrayList<>();
+        groupSuccessors = new ArrayList<>();
     }
 
 }

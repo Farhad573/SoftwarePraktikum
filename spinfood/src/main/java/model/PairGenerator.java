@@ -1,6 +1,5 @@
 package model;
 
-import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,10 +46,6 @@ public class PairGenerator extends ParticipantManager {
 //        return population;
         List<Pair> population = new ArrayList<>();
         HashSet<Participant> usedParticipants = new HashSet<>();
-        HashMap<Participant,Boolean> hashmap = new HashMap<>();
-        for (Participant participant : participants){
-            hashmap.put(participant,false);
-        }
         int limit = participants.size() % 2 == 0? participants.size() : participants.size() - 1;
         for (int i = 0; i < participants.size(); i++) {
             Participant participant1 = participants.get(i);
@@ -63,29 +58,17 @@ public class PairGenerator extends ParticipantManager {
                 if (checkFoodPreferenceFitness(pair) && checkKitchenFitness(pair) && checkKitchenCount(pair) && !usedParticipants.contains(participant1) && !usedParticipants.contains(participant2) ) {
                     population.add(pair);
                     usedParticipants.add(participant1);
-                    hashmap.put(participant1,true);
                     usedParticipants.add(participant2);
-                    hashmap.put(participant2,true);
                 }
         }
         }
 
-//        long num = hashmap.entrySet().stream().filter(x -> x.getValue() == false).count();
-//        System.out.println("amount of  used participants " + usedParticipants.size());
-//        System.out.println("amount of not used participants " + num);
-        //hashmap.entrySet().stream().filter(x-> x.getValue()==false).forEach(System.out::println);
-
-
-        successors = hashmap.entrySet().stream().filter(x-> x.getValue()==false).map(x -> x.getKey()).collect(Collectors.toList());
-        //successors = participants.stream().filter(x-> hashSet.contains(x)).collect(Collectors.toList());
-        //System.out.println("#".repeat(20) + " size of successor is " + successors.size());
-
-
+        pairSuccessors = participants.stream().filter(x-> !usedParticipants.contains(x)).collect(Collectors.toList());
         return this.initialPopulation = population;
     }
 
     public static List<Participant> getSuccessor() {
-        return successors;
+        return pairSuccessors;
     }
 
     public List<Pair> getInitialPopulation() {

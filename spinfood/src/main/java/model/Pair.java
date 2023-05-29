@@ -134,6 +134,8 @@ public class Pair {
         return person2;
     }
 
+    public Kitchen getKitchen(){return person1.getKitchen() != null? person1.getKitchen() : person2.getKitchen(); }
+
     /**
      * Returns a string representation of the Pair object.
      *
