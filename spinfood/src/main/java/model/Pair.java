@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,6 +17,8 @@ public class Pair {
     private boolean pairSignUp;
 
     private final int preferenceDeviation;
+    private boolean haveCooked ;
+    private List<Pair> metPairs ;
 
     /**
      * Constructs a Pair object with the given participants.
@@ -31,6 +35,8 @@ public class Pair {
         // calculate the Age difference of the pair
         this.ageDifference = calculateAgeDifference(person1,person2);
         this.preferenceDeviation = calculatePreferenceDeviation();
+        this.haveCooked = false;
+        this.metPairs = new ArrayList<>();
     }
 
     /**

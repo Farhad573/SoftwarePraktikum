@@ -53,7 +53,7 @@ class PairGeneratorTest {
             hashSetParticipant.add(person2);
         }
 
-        //Assertions.assertEquals(164, hashSetParticipant.size());
+        Assertions.assertEquals(164, hashSetParticipant.size());
     }
 
 

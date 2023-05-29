@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static model.CSVFileReader.getParticipants;
 import static model.FitnessEvaluator.checkFoodPreferenceFitness;
 import static model.FitnessEvaluator.checkKitchenFitness;
 
 public class Main {
     public static void main(String[] args) {
        CSVFileReader CSVFileReader = new CSVFileReader();
-
+        PairGenerator pairGenerator = new PairGenerator();
 
 
         try {
-            CSVFileReader.readCSVFile("teilnehmerliste.csv");
+            CSVFileReader.readCSVFile("src/main/resources/teilnehmerlisteNew.csv");
             System.out.println(CSVFileReader.toStringParticipants());
             System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
@@ -25,7 +26,7 @@ public class Main {
 
         System.out.println("**************************************************");
 
-        int participantsLength = CSVFileReader.getParticipants().size();
+        int participantsLength = getParticipants().size();
         System.out.println("Length of participants list is: " + participantsLength);
 
         System.out.println("************************************************");
@@ -38,10 +39,11 @@ public class Main {
         System.out.println("the count of all members : " + count);
 
         System.out.println("###############################################");
+        System.out.println(getParticipants().size());
 
-        PairGenerator pairGenerator = new PairGenerator();
-        List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        System.out.println("number of successor is " + PairGenerator.getSuccessor().size());
+
+        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+        System.out.println("number of successor is " + CSVFileReader.getSuccessor().size());
 
 //        List<Participant> participantsWithKitchen = CSVFileReader.getParticipants().stream()
 //                .filter(p -> p.getKitchen() != null)

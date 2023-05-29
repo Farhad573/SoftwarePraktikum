@@ -12,9 +12,7 @@ public class PairGenerator extends ParticipantManager {
     private List<Pair> initialPopulation = new ArrayList<>();
 
 
-    public PairGenerator() {
-        super();
-    }
+
 
     /**
     Generates the initial population of pairs from a list of participants.
@@ -79,6 +77,8 @@ public class PairGenerator extends ParticipantManager {
 
 
         successors = hashmap.entrySet().stream().filter(x-> x.getValue()==false).map(x -> x.getKey()).collect(Collectors.toList());
+        //successors = participants.stream().filter(x-> hashSet.contains(x)).collect(Collectors.toList());
+        //System.out.println("#".repeat(20) + " size of successor is " + successors.size());
 
 
         return this.initialPopulation = population;
