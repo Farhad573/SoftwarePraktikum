@@ -58,6 +58,12 @@ public class Group {
             this.mainFoodPreference = pair1.getMainFoodPreference();
         }
     }
+    @Override
+    public String toString() {
+        return "Group {" +
+                "pair1=" + "\n" + pair1 + "\n" + "pair2=" + "\n" + pair2 + "\n" + "pair3=" + "\n" + pair3 + "\n" + "#".repeat(10)
+                ;
+    }
 
     @Override
     public boolean equals(Object o) {

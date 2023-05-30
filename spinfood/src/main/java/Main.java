@@ -67,6 +67,9 @@ public class Main {
         List<Group> groupList = groupGenerator.generateGroup(concatenatedlist,1);
         System.out.println("Number of generated groups is " + groupList.size());
         System.out.println("number of groupSuccessors is " + getGroupSuccessors().size());
+        for (Group group: groupList){
+         System.out.println(group);
+        }
 
 
 
