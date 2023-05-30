@@ -181,4 +181,8 @@ public class Pair {
         return Objects.hash(person1, person2);
 
     }
+
+    public void setHaveCooked(boolean b) {
+        this.haveCooked = b;
+    }
 }
