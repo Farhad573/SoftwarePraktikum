@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * The Participant class represents a participant with registered person attributes.
  * It stores information such as participant's ID, name, age, kitchen details, and preferences.
@@ -178,6 +180,12 @@ public class Participant {
         }
         Participant participant = (Participant) o;
         return id == participant.id && name == participant.name;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 
     /**

@@ -1,16 +1,24 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * The Pair class represents a pair of participants.
  */
 public class Pair {
 
-    private Participant person1;
-    private Participant person2;
+    private final Participant person1;
+    private final Participant person2;
     private FoodPreference mainFoodPreference;
-    private int ageDifference;
+    private final int ageDifference;
 
     private boolean pairSignUp;
+
+    private final int preferenceDeviation;
+    private boolean haveCooked ;
+    private List<Pair> metPairs ;
 
     /**
      * Constructs a Pair object with the given participants.
@@ -26,30 +34,47 @@ public class Pair {
         calculateMainFoodPreference(person1, person2);
         // calculate the Age difference of the pair
         this.ageDifference = calculateAgeDifference(person1,person2);
+        this.preferenceDeviation = calculatePreferenceDeviation();
+        this.haveCooked = false;
+        this.metPairs = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param person1
+     * @param person2
+     */
     private void calculateMainFoodPreference(Participant person1, Participant person2) {
+        // if they have the same Food preferences
         if(person1.getFoodPreference() == person2.getFoodPreference()){
             this.mainFoodPreference = person1.getFoodPreference();
         }
-        // Fleichi & Egali -> Fleichi
-        else if ((person1.getFoodPreference() == FoodPreference.none|| person1.getFoodPreference() == FoodPreference.meat) &&
-                (person2.getFoodPreference() == FoodPreference.none || person2.getFoodPreference() == FoodPreference.meat)) {
+        // (1, 2) meat & none -> meat
+        else if ((person1.getFoodPreference() == FoodPreference.none ||
+                person1.getFoodPreference() == FoodPreference.meat) &&
+                (person2.getFoodPreference() == FoodPreference.none ||
+                        person2.getFoodPreference() == FoodPreference.meat)) {
                 this.mainFoodPreference = FoodPreference.meat;
         }
-        // veggie/ vegan & veggie/vegan -> vegan
-         else if ((person1.getFoodPreference() == FoodPreference.veggie|| person1.getFoodPreference() == FoodPreference.vegan) &&
-                (person2.getFoodPreference() == FoodPreference.vegan || person2.getFoodPreference() == FoodPreference.veggie)) {
+        // (1) veggie|vegan & (2) veggie|vegan -> vegan
+         else if ((person1.getFoodPreference() == FoodPreference.veggie ||
+                person1.getFoodPreference() == FoodPreference.vegan) &&
+                (person2.getFoodPreference() == FoodPreference.vegan ||
+                        person2.getFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = FoodPreference.vegan;
         }
-         // Fleichi/Egali & Veggie/Veganer -> Veganer
-        else if((person1.getFoodPreference()==FoodPreference.meat || person1.getFoodPreference() == FoodPreference.none)
-                &&(person2.getFoodPreference() == FoodPreference.vegan || person2.getFoodPreference() == FoodPreference.veggie)) {
-
+         // (1) meat|none & (2) Veggie|Veganer -> Veganer
+        else if((person1.getFoodPreference() == FoodPreference.meat ||
+                person1.getFoodPreference() == FoodPreference.none)
+                && (person2.getFoodPreference() == FoodPreference.vegan ||
+                person2.getFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = person2.getFoodPreference();
         }
-        else if((person2.getFoodPreference()==FoodPreference.meat || person2.getFoodPreference() == FoodPreference.none)
-                &&(person1.getFoodPreference() == FoodPreference.vegan || person1.getFoodPreference() == FoodPreference.veggie)) {
+        // (2) meat|none && (1) vegan|vegan -> veggie | vwgan
+        else if((person2.getFoodPreference()==FoodPreference.meat ||
+                person2.getFoodPreference() == FoodPreference.none)
+                &&(person1.getFoodPreference() == FoodPreference.vegan ||
+                person1.getFoodPreference() == FoodPreference.veggie)) {
 
             this.mainFoodPreference = person1.getFoodPreference();
         }
@@ -63,6 +88,14 @@ public class Pair {
      */
     private int calculateAgeDifference(Participant person1, Participant person2){
         return Math.abs(person1.getAgeRange() - person2.getAgeRange());
+    }
+
+    /**
+     * Preference Deviation of a pair is absolute value of difference of values declared to Food preference of two person in the pair
+     * @return Preference deviation of a pair
+     */
+    private int calculatePreferenceDeviation(){
+        return Math.abs(this.person1.getFoodPreference().getValue() - this.person2.getFoodPreference().getValue());
     }
 
     /**
@@ -89,6 +122,10 @@ public class Pair {
         return mainFoodPreference;
     }
 
+    public int getPreferenceDeviation() {
+        return preferenceDeviation;
+    }
+
     public Participant getPerson1() {
         return person1;
     }
@@ -96,6 +133,8 @@ public class Pair {
     public Participant getPerson2() {
         return person2;
     }
+
+    public Kitchen getKitchen(){return person1.getKitchen() != null? person1.getKitchen() : person2.getKitchen(); }
 
     /**
      * Returns a string representation of the Pair object.
@@ -136,4 +175,10 @@ public class Pair {
         return person1.equals(otherPair.person1) && person2.equals(otherPair.person2);
     }
 
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(person1, person2);
+
+    }
 }
