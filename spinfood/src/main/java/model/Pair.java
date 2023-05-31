@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * The Pair class represents a pair of participants.
@@ -18,7 +16,11 @@ public class Pair {
 
     private final int preferenceDeviation;
     private boolean haveCooked ;
-    private List<Pair> metPairs ;
+    private Map<Pair,Course> metPairs ;
+
+    public boolean isHaveCooked() {
+        return haveCooked;
+    }
 
     /**
      * Constructs a Pair object with the given participants.
@@ -26,6 +28,7 @@ public class Pair {
      * @param person1 the first participant
      * @param person2 the second participant
      */
+
     public Pair(Participant person1, Participant person2,boolean pairSignUp) {
         this.person1 = person1;
         this.person2 = person2;
@@ -36,7 +39,11 @@ public class Pair {
         this.ageDifference = calculateAgeDifference(person1,person2);
         this.preferenceDeviation = calculatePreferenceDeviation();
         this.haveCooked = false;
-        this.metPairs = new ArrayList<>();
+        this.metPairs = new HashMap<>();
+    }
+
+    public Map<Pair, Course> getMetPairs() {
+        return metPairs;
     }
 
     /**
