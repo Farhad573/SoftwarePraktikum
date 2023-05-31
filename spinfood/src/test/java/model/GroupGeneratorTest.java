@@ -1,12 +1,12 @@
 package model;
 
-import controller.Distance;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import static model.CSVFileReader.getParticipants;
 import static model.ParticipantManager.participants;
@@ -70,7 +70,7 @@ public class GroupGeneratorTest {
         }
         System.out.println("number of elements in starter Hashset is " + usedPairsInStarter.size());
 
-        List<Group> groupGeneration1 = groupGenerator.makeMainDishGroups(concate);
+        List<Group> groupGeneration1 = groupGenerator.makeMainDishGroups(concate , 1);
         //HashSet<Pair> usedParisInMainDish = new HashSet<>();
 //        for (int i = 0; i < population.size(); i++) {
 //            hashSetParticipant.add(population.get(i).getPerson1());
@@ -155,7 +155,7 @@ public class GroupGeneratorTest {
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
         List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVFileReader.getPairs());
 
-        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate);
+        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate, 1);
         //HashSet<Pair> usedParisInMainDish = new HashSet<>();
 //        for (int i = 0; i < population.size(); i++) {
 //            hashSetParticipant.add(population.get(i).getPerson1());
@@ -194,7 +194,7 @@ public class GroupGeneratorTest {
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
         List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVFileReader.getPairs());
 
-        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate);
+        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate, 1);
         for (Group group : groupGeneration) {
             FoodPreference pref1 = group.pair1.getMainFoodPreference();
             FoodPreference pref2 = group.pair2.getMainFoodPreference();

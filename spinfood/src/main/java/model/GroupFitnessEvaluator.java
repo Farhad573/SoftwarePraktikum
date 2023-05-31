@@ -1,44 +1,22 @@
 package model;
 
 public class GroupFitnessEvaluator {
-    public static double evaluateFitnessForStarter(Group group) {
-        double fitness = 0.0;
-
-//        fitness += calculateFoodPreferenceFitness(pair);
-////        fitness += calculateAgeDifferenceFitness(pair);
-////        fitness += calculateGenderDiversityFitness(pair);
-////        fitness += calculateKitchenFitness(pair);
-////        fitness += calculatePreferenceDeviationFitness(pair);
-        fitness +=  didPairsMeet(group.pair1,group.pair2,group.pair3);
-        fitness +=  checkIfAllPairsDidntCook(group.pair1,group.pair2,group.pair3);
-        fitness +=  checkIfTwoOfPairsHaveCooked(group.pair1,group.pair2,group.pair3);
 
 
-        return fitness;
-    }
+
     public static double evaluateFitnessForMainDish(Group group) {
         double fitness = 0.0;
 
-//        fitness += calculateFoodPreferenceFitness(pair);
-////        fitness += calculateAgeDifferenceFitness(pair);
-////        fitness += calculateGenderDiversityFitness(pair);
-////        fitness += calculateKitchenFitness(pair);
-////        fitness += calculatePreferenceDeviationFitness(pair);
         fitness +=  didPairsMeet(group.pair1,group.pair2,group.pair3);
         fitness +=  checkIfAllPairsDidntCook(group.pair1,group.pair2,group.pair3);
-        //fitness +=  checkIfTwoOfPairsHaveCooked(group.pair1,group.pair2,group.pair3);
-
+        fitness +=  checkIfOneOfPairsHaveCooked(group.pair1,group.pair2,group.pair3);
 
         return fitness;
     }
+
     public static double evaluateFitnessForDessert(Group group) {
         double fitness = 0.0;
 
-//        fitness += calculateFoodPreferenceFitness(pair);
-////        fitness += calculateAgeDifferenceFitness(pair);
-////        fitness += calculateGenderDiversityFitness(pair);
-////        fitness += calculateKitchenFitness(pair);
-////        fitness += calculatePreferenceDeviationFitness(pair);
         fitness +=  didPairsMeet(group.pair1,group.pair2,group.pair3);
         fitness +=  checkIfAllPairsDidntCook(group.pair1,group.pair2,group.pair3);
         fitness +=  checkIfTwoOfPairsHaveCooked(group.pair1,group.pair2,group.pair3);
@@ -47,29 +25,18 @@ public class GroupFitnessEvaluator {
         return fitness;
     }
 
-//    private static double calculateFoodPreferenceFitness(Group pair) {
-//        FoodPreference pref1 = pair.pair1().getFoodPreference();
-//        FoodPreference pref2 = pair.pair2().getFoodPreference();
-//        FoodPreference pref3 = pair.pair3().getFoodPreference();
-//
-//        if (pref1 == pref2) {
-//            // Same food preference, assign higher fitness
-//            return 1.0;
-//        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) || (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
-//            // meat && none
-//            return 1.0;
-//        } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) || (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
-//            // veggie & vegan
-//            return 1.0;
-//        } else if (((pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan) && (pref2 == FoodPreference.none)) ||
-//                ((pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none))) {
-//            // none & veggie | vegan
-//            return 0.8;
-//        } else {
-//            // meat & veggie | vegan
-//            return -0.5;
-//        }
-//    }
+
+    private static double checkIfOneOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
+        if((pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) ||
+                (!pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) ||
+                (pair2.isHaveCooked() && !pair3.isHaveCooked() && !pair1.isHaveCooked())){
+            return 1.0 ;
+        }
+        return -8.0;
+    }
+
+
+
 
     private static double checkIfTwoOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
         if ((pair1.isHaveCooked() && pair2.isHaveCooked() && !pair3.isHaveCooked()) || (pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) || (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked())){
