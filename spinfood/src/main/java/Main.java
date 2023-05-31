@@ -52,10 +52,11 @@ public class Main {
         groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
         List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
+//        System.out.println(groupList);
      System.out.println("Number of generated groups in starter is " + groupList.size());
         List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
      System.out.println("Number of generated groups in Maindish is " + groupList1.size());
-        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
+//        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
 
 
 

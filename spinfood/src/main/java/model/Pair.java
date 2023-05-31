@@ -16,7 +16,7 @@ public class Pair {
 
     private final int preferenceDeviation;
     private boolean haveCooked ;
-    private Map<Pair,Course> metPairs ;
+    private List<Pair> metPairs ;
 
     /**
      * Constructs a Pair object with the given participants.
@@ -34,7 +34,7 @@ public class Pair {
         this.ageDifference = calculateAgeDifference(person1,person2);
         this.preferenceDeviation = calculatePreferenceDeviation();
         this.haveCooked = false;
-        this.metPairs = new HashMap<>();
+        this.metPairs = new ArrayList<>();
     }
 
     /**
@@ -109,7 +109,7 @@ public class Pair {
         return haveCooked;
     }
 
-    public Map<Pair,Course> getMetPairs() {
+    public List<Pair> getMetPairs() {
         return metPairs;
     }
 
@@ -117,7 +117,7 @@ public class Pair {
         this.haveCooked = haveCooked;
     }
 
-    public void setMetPairs(Map<Pair,Course> metPairs) {
+    public void setMetPairs(List<Pair> metPairs) {
         this.metPairs = metPairs;
     }
 
