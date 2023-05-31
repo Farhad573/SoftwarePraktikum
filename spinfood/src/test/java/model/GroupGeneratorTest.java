@@ -21,22 +21,6 @@ public class GroupGeneratorTest {
     static HashSet<Pair> usedPairsInStarter = new HashSet<>();
     static HashSet<Pair> usedParisInMainDish = new HashSet<>();
     static HashSet<Pair> usedPairsInDessert = new HashSet<>();
-//    static List<Participant> participantList;
-//    static List<Pair> CSVPairs;
-
-
-//    @BeforeAll
-//    static void setup() throws FileNotFoundException {
-//        CSVFileReader = new CSVFileReader();
-//        pairGenerator = new PairGenerator();
-//        groupGenerator = new GroupGenerator();
-//        participantList = createSampleParticipant();
-//        CSVPairs = CSVFileReader.getPairs();
-//        starter = makeStarterGroup(2);
-//        mainDish = makeMainDishGroup();
-//        dessert = makeDessertGroup();
-//
-//    }
 
 
 
@@ -45,14 +29,9 @@ public class GroupGeneratorTest {
         List<Participant> participantList = createSampleParticipant();//read file
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
         List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVFileReader.getPairs());
-//
+
        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate,2);
-        //List<Group> groupGeneration = makeStarterGroup(2);
-        //HashSet<Pair> usedPairsInStarter = new HashSet<>();
-//        for (int i = 0; i < population.size(); i++) {
-//            hashSetParticipant.add(population.get(i).getPerson1());
-//            hashSetParticipant.add(population.get(i).getPerson2());
-//        }
+
 
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
@@ -71,11 +50,7 @@ public class GroupGeneratorTest {
         System.out.println("number of elements in starter Hashset is " + usedPairsInStarter.size());
 
         List<Group> groupGeneration1 = groupGenerator.makeMainDishGroups(concate , 1);
-        //HashSet<Pair> usedParisInMainDish = new HashSet<>();
-//        for (int i = 0; i < population.size(); i++) {
-//            hashSetParticipant.add(population.get(i).getPerson1());
-//            hashSetParticipant.add(population.get(i).getPerson2());
-//        }
+
 
         for (Group group : groupGeneration1) {
             Pair pair1 = group.pair1;
@@ -95,13 +70,7 @@ public class GroupGeneratorTest {
 
     }
 
-//    private static List<Group> makeStarterGroup(int radius) {
-//        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
-//        List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVPairs);
-//
-//        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate,radius);
-//        return groupGeneration;
-//    }
+
 
     @Test
     void checkMeatWithVeganOderVeggieInStarter() throws FileNotFoundException {
@@ -156,11 +125,7 @@ public class GroupGeneratorTest {
         List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVFileReader.getPairs());
 
         List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate, 1);
-        //HashSet<Pair> usedParisInMainDish = new HashSet<>();
-//        for (int i = 0; i < population.size(); i++) {
-//            hashSetParticipant.add(population.get(i).getPerson1());
-//            hashSetParticipant.add(population.get(i).getPerson2());
-//        }
+
 
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
@@ -179,13 +144,7 @@ public class GroupGeneratorTest {
 
     }
 
-//    private static List<Group> makeMainDishGroup() {
-//        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
-//        List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVPairs);
-//
-//        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate);
-//        return groupGeneration;
-//    }
+
 
 
     @Test
@@ -229,11 +188,7 @@ public class GroupGeneratorTest {
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
         List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeDessertGroups(concate);
-        //HashSet<Pair> usedPairsInDessert = new HashSet<>();
-//        for (int i = 0; i < population.size(); i++) {
-//            hashSetParticipant.add(population.get(i).getPerson1());
-//            hashSetParticipant.add(population.get(i).getPerson2());
-//        }
+
 
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
@@ -252,13 +207,7 @@ public class GroupGeneratorTest {
 
     }
 
-//    private static List<Group> makeDessertGroup() {
-//        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
-//        List<Pair> concate = groupGenerator.makeAllPairsTogether(population,CSVPairs);
-//
-//        List<Group> groupGeneration = groupGenerator.makeDessertGroups(concate);
-//        return groupGeneration;
-//    }
+
 
 
     @Test

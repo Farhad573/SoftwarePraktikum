@@ -15,11 +15,21 @@ public class GroupGenerator extends ParticipantManager {
     List<Group> dessert = new ArrayList<>();
     PartyLocation partyLocation = new PartyLocation();
 
+
+
     public List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
         List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
                 .collect(Collectors.toList());
         this.pairs = pairs;
         return pairs;
+    }
+
+
+    // check method to make it static
+    public void callGroupsGenerator(List<Pair> pairs, double radius){
+        makeStarterGroups(pairs, radius);
+        makeMainDishGroups(pairs,radius);
+        makeDessertGroups(pairs);
     }
 
 

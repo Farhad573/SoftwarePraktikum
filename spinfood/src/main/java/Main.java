@@ -48,6 +48,9 @@ public class Main {
         System.out.println("number of initial pairs from initial population generator is " + initialPair.size() );
         System.out.println("number of pairs from CSV is " + csvPairs.size());
         System.out.println("###############################################");
+
+
+
         List<Pair> concatenatedlist = groupGenerator.makeAllPairsTogether(initialPair,csvPairs);
         groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
