@@ -61,6 +61,7 @@ public class Group {
     @Override
     public String toString() {
         return "Group {" +
+                "did pair1 cooked " + pair1.isHaveCooked() + "did pair2 cooked "  + pair2.isHaveCooked() + "did pair3 cooked " + pair3.isHaveCooked() +
                 "pair1=" + "\n" + pair1 + "\n" + "pair2=" + "\n" + pair2 + "\n" + "pair3=" + "\n" + pair3 + "\n" + "#".repeat(10)
                 ;
     }

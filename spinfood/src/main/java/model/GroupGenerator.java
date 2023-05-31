@@ -2,15 +2,20 @@ package model;
 
 import controller.Distance;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GroupGenerator extends ParticipantManager {
+    Set<Pair> pairsWhoCooked = new HashSet<>();
+    List<Group> groups = new ArrayList<>();
+    List<Group> starter = new ArrayList<>();
+    List<Group> mainDish = new ArrayList<>();
+    List<Group> dessert = new ArrayList<>();
+    PartyLocation partyLocation = new PartyLocation();
 
-    private List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
+    public List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
         List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
                 .collect(Collectors.toList());
         this.pairs = pairs;
@@ -18,13 +23,17 @@ public class GroupGenerator extends ParticipantManager {
     }
 
 
-    public List<Group> generateGroup(List<Pair> pairs,int radius){
+    public List<Group> generateGroup(List<Pair> pairs,int radius) {
+        Set<Pair> usedPairs = new HashSet<>();
+        makeStarterGroups(pairs, radius);
 
-        List<Group> population = new ArrayList<>();
-        HashSet<Pair> usedPairs = new HashSet<>();
-        int pairsSize = pairs.size();
-        int limit = pairsSize % 2 == 0? pairsSize : pairsSize - 1;
+            return null;
 
+    }
+
+    public List<Group> makeStarterGroups(List<Pair> pairs, double radius) {
+        Set<Pair> usedPairs = new HashSet<>();
+        Course course = Course.starter;
 
         for (int i = 0; i < pairs.size(); i++) {
             Pair pair1 = pairs.get(i);
@@ -32,7 +41,7 @@ public class GroupGenerator extends ParticipantManager {
                 Pair pair2 = pairs.get(j);
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
-                    if (checkTwokitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(),radius) &&
+                    if ( checkTwokitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(),radius) &&
                             checkGroupFoodPreference(pair1, pair2, pair3) &&
                             !usedPairs.contains(pair1) &&
                             !usedPairs.contains(pair2) &&
@@ -40,7 +49,9 @@ public class GroupGenerator extends ParticipantManager {
 
                         // Create a valid group
                         Group group = new Group(pair1, pair2, pair3);
-                        population.add(group);
+                        starter.add(group);
+                        findWhichPairToCook(group,pairs);
+                        setPairsWhoMet(group,course);
                         usedPairs.add(pair1);
                         usedPairs.add(pair2);
                         usedPairs.add(pair3);
@@ -48,10 +59,193 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
+        System.out.println("number of elements in starter Hashset is " + usedPairs.size());
+        starterSuccessors = pairs.stream().filter(x-> !usedPairs.contains(x)).collect(Collectors.toList());
+        System.out.println("number of elements in starter Successor is " + starterSuccessors.size());
+        return starter;
+    }
+
+    public List<Group> makeMainDishGroups(List<Pair> pairs) {
+        Set<Pair> usedPairs = new HashSet<>();
+        Course course = Course.maincourse;
+//
+//        for (int i = 0; i < pairs.size(); i++) {
+//            Pair pair1 = pairs.get(i);
+//            for (int j = i + 1; j < pairs.size(); j++) {
+//                Pair pair2 = pairs.get(j);
+//                for (int k = j + 1; k < pairs.size(); k++) {
+//                    Pair pair3 = pairs.get(k);
+//                    if (checkGroupFoodPreference(pair1, pair2, pair3) &&
+//                            !usedPairs.contains(pair1) &&
+//                            !usedPairs.contains(pair2) &&
+//                            !usedPairs.contains(pair3) && checkIfAllPairsDidntCook(pair1,pair2,pair3) && didPairsMeet(pair1,pair2,pair3) ) {
+//                        Group group = new Group(pair1, pair2, pair3);
+//                        mainDish.add(group);
+//                        findWhichPairToCook(group,pairs);
+//                        setPairsWhoMet(group,course);
+//                        usedPairs.add(pair1);
+//                        usedPairs.add(pair2);
+//                        usedPairs.add(pair3);
+//                    }
+//                }
+//            }
+//        }
+//        mainDishSuccessors = pairs.stream().filter(x-> !usedPairs.contains(x)).collect(Collectors.toList());
+//        System.out.println("number of elements in mainDish Hashset is " + usedPairs.size());
+//        System.out.println("number of elements in mainDish Successor is " + mainDishSuccessors.size());
+//
+//        return mainDish;
+        Map<Group,Double> map = new HashMap<>();
+        for (int i = 0; i < pairs.size(); i++) {
+            Pair pair1 = pairs.get(i);
+            for (int j = i + 1; j < pairs.size(); j++) {
+                Pair pair2 = pairs.get(j);
+                for (int k = j + 1; k < pairs.size(); k++) {
+                    Pair pair3 = pairs.get(k);
+                    if (checkGroupFoodPreference(pair1, pair2, pair3)){
+                    Group group = new Group(pair1,pair2,pair3);
+                    map.put(group,GroupFitnessEvaluator.evaluateFitnessForMainDish(group));
+                    }
+                }
+            }
+        }
+//        map = map.entrySet().stream()
+//                .filter(entry -> entry.getValue() > 0)
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).toList();
+        Set<Pair> hashSet = new HashSet<>();
+
+        for(Group group : list){
+
+            if(!hashSet.contains(group.pair1) && !hashSet.contains(group.pair2) && !hashSet.contains(group.pair3) ){
+                findWhichPairToCook(group,pairs);
+                setPairsWhoMet(group,course);
+                hashSet.add(group.pair1);
+                hashSet.add(group.pair2);
+                hashSet.add(group.pair3);
+            }
+        }
+
+        System.out.println("number of validPairs is " + hashSet.size());
 
 
-        groupSuccessors = pairs.stream().filter(x-> !usedPairs.contains(x)).collect(Collectors.toList());
-        return  population;
+
+        return list;
+        }
+
+
+
+    public List<Group> makeDessertGroups(List<Pair> pairs) {
+        Set<Pair> usedPairs = new HashSet<>();
+        Course course = Course.dessert;
+//
+//        for (int i = 0; i < pairs.size(); i++) {
+//            Pair pair1 = pairs.get(i);
+//            for (int j = i + 1; j < pairs.size(); j++) {
+//                Pair pair2 = pairs.get(j);
+//                for (int k = j + 1; k < pairs.size(); k++) {
+//                    Pair pair3 = pairs.get(k);
+//                    if (checkGroupFoodPreference(pair1, pair2, pair3) &&
+//                            !usedPairs.contains(pair1) &&
+//                            !usedPairs.contains(pair2) &&
+//                            !usedPairs.contains(pair3) && checkIfAllPairsDidntCook(pair1,pair2,pair3) && didPairsMeet(pair1,pair2,pair3) && checkIfTwoOfPairsHaveCooked(pair1,pair2,pair3) ) {
+//                        Group group = new Group(pair1, pair2, pair3);
+//                        dessert.add(group);
+//                        findWhichPairToCook(group,pairs);
+//                        setPairsWhoMet(group,course);
+//                        usedPairs.add(pair1);
+//                        usedPairs.add(pair2);
+//                        usedPairs.add(pair3);
+//                    }
+//                }
+//            }
+//        }
+//        dessertSuccessors = pairs.stream().filter(x-> !usedPairs.contains(x)).collect(Collectors.toList());
+//
+//        return dessert;
+        Map<Group,Double> map = new HashMap<>();
+        for (int i = 0; i < pairs.size(); i++) {
+            Pair pair1 = pairs.get(i);
+            for (int j = i + 1; j < pairs.size(); j++) {
+                Pair pair2 = pairs.get(j);
+                for (int k = j + 1; k < pairs.size(); k++) {
+                    Pair pair3 = pairs.get(k);
+                    if (checkGroupFoodPreference(pair1, pair2, pair3)){
+                        Group group = new Group(pair1,pair2,pair3);
+                        map.put(group,GroupFitnessEvaluator.evaluateFitnessForDessert(group));
+                    }
+                }
+            }
+        }
+//        map = map.entrySet().stream()
+//                .filter(entry -> entry.getValue() > 0)
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).toList();
+        System.out.println(" number of groups with fitness higher then 0 is " + list.size());
+        Set<Pair> hashSet = new HashSet<>();
+
+        for(Group group : list){
+            if(!hashSet.contains(group.pair1) && !hashSet.contains(group.pair2) && !hashSet.contains(group.pair3) ){
+                hashSet.add(group.pair1);
+                hashSet.add(group.pair2);
+                hashSet.add(group.pair3);
+            }
+        }
+
+        System.out.println("number of validPairs in desert Hashset is " + hashSet.size());
+
+
+
+        return list;
+    }
+    private boolean checkIfTwoOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
+        return (pair1.isHaveCooked() && pair2.isHaveCooked() && !pair3.isHaveCooked()) || (pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) || (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked());
+    }
+
+    private boolean checkIfAllPairsDidntCook(Pair pair1,Pair pair2,Pair pair3){
+        return (!pair1.isHaveCooked()) && (!pair2.isHaveCooked()) && (!pair3.isHaveCooked());
+    }
+
+
+
+    public List<Pair> pairsSortedBasedOnDistance(List<Pair> pairs) throws FileNotFoundException {
+        this.partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
+        double partyLongitude = this.partyLocation.getLongitude();
+        double partylatitude = this.partyLocation.getLatitude();
+        Collections.sort(pairs, new Comparator<Pair>() {
+            @Override
+            public int compare(Pair pair1, Pair pair2) {
+                double distance1 = Distance.calculateDistance(pair1.getKitchen().getKitchen_location().getLatitude(),
+                        pair1.getKitchen().getKitchen_location().getLongitude(), partylatitude, partyLongitude);
+                double distance2 = Distance.calculateDistance(pair2.getKitchen().getKitchen_location().getLatitude(),
+                        pair2.getKitchen().getKitchen_location().getLongitude(), partylatitude, partyLongitude);
+                return Double.compare(distance2, distance1);  // Reverse the order of comparison
+            }
+        });
+        return pairs;
+
+    }
+
+
+
+
+
+    private boolean didPairsMeet(Pair pair1,Pair pair2,Pair pair3){
+        return (!pair1.getMetPairs().containsKey(pair2) && !pair1.getMetPairs().containsKey(pair3))
+                && (!pair2.getMetPairs().containsKey(pair1) && !pair2.getMetPairs().containsKey(pair3))
+                && (!pair3.getMetPairs().containsKey(pair1) && !pair3.getMetPairs().containsKey(pair2));
+    }
+
+    private void setPairsWhoMet(Group group,Course course){
+        Pair pair1 = group.pair1;
+        Pair pair2 = group.pair2;
+        Pair pair3 = group.pair3;
+        pair1.getMetPairs().put(pair2,course);
+        pair1.getMetPairs().put(pair3,course);
+        pair2.getMetPairs().put(pair1,course);
+        pair2.getMetPairs().put(pair3,course);
+        pair3.getMetPairs().put(pair1,course);
+        pair3.getMetPairs().put(pair2,course);
     }
 
     public boolean checkGroupFoodPreference(Pair pair1,Pair pair2,Pair pair3){
@@ -78,7 +272,30 @@ public class GroupGenerator extends ParticipantManager {
         return !(hasMeat && hasVeggieOrVegan);
     }
 
-    public boolean checkTwokitchenWithin(Kitchen kithcen1,Kitchen kitchen2,Kitchen kitchen3,int radius){
+    private void findWhichPairToCook(Group group, List<Pair> pairs){
+        Pair pair1 = group.pair1;
+        Pair pair2 = group.pair2;
+        Pair pair3 = group.pair3;
+
+        int index1 = pairs.indexOf(group.pair1);
+        int index2 = pairs.indexOf(group.pair2);
+        int index3 = pairs.indexOf(group.pair3);
+
+        int minIndex = Math.min(index1, Math.min(index2, index3));
+        if (minIndex == index1 && !pair1.isHaveCooked()) {
+            group.pair1.setHaveCooked(true);
+            pairsWhoCooked.add(group.pair1);
+        } else if (minIndex == index2 && !pair2.isHaveCooked()) {
+            group.pair2.setHaveCooked(true);
+            pairsWhoCooked.add(group.pair2);
+        } else {
+            group.pair3.setHaveCooked(true);
+            pairsWhoCooked.add(group.pair3);
+        }
+    }
+
+
+    public boolean checkTwokitchenWithin(Kitchen kithcen1,Kitchen kitchen2,Kitchen kitchen3,double radius){
         double long1 = kithcen1.getKitchen_location().getLongitude();
         double lat1 = kithcen1.getKitchen_location().getLatitude();
         double lat2 = kitchen2.getKitchen_location().getLatitude();
@@ -93,7 +310,9 @@ public class GroupGenerator extends ParticipantManager {
         return (distance1 < radius) && (distance2 < radius) && (distance3 < radius);
     }
 
-        public static List<Pair> getGroupSuccessors(){return groupSuccessors;}
+        public static List<Pair> getstarterSuccessors(){return starterSuccessors;}
+        public static List<Pair> getMainDishSuccessors(){return mainDishSuccessors;}
+        public static List<Pair> getdessertSuccessors(){return dessertSuccessors;}
 
 
 
