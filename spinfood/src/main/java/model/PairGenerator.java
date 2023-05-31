@@ -43,12 +43,6 @@ public class PairGenerator extends ParticipantManager {
         return population;
     }
 
-    public static List<Participant> getSuccessor() {
-        return pairSuccessors;
-    }
 
-    public List<Pair> getInitialPopulation() {
-        return initialPopulation;
-    }
 
 }

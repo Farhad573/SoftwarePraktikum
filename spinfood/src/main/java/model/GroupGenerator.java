@@ -17,6 +17,13 @@ public class GroupGenerator extends ParticipantManager {
 
 
 
+    /**
+     * Combines two lists of pairs into a single list of pairs.
+     *
+     * @param l1   The first list of pairs.
+     * @param l2   The second list of pairs.
+     * @return     The combined list of pairs.
+     */
     public List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
         List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
                 .collect(Collectors.toList());
@@ -25,7 +32,12 @@ public class GroupGenerator extends ParticipantManager {
     }
 
 
-    // check method to make it static
+    /**
+     * Generates groups by calling specific methods for generating starter, main dish, and dessert groups.
+     *
+     * @param pairs   The list of pairs to generate groups from.
+     * @param radius  The radius within which the pairs' kitchens should be located.
+     */
     public void callGroupsGenerator(List<Pair> pairs, double radius){
         makeStarterGroups(pairs, radius);
         makeMainDishGroups(pairs,radius);
@@ -34,7 +46,13 @@ public class GroupGenerator extends ParticipantManager {
 
 
 
-
+    /**
+     * Generates groups for the starter course based on the given pairs and radius.
+     *
+     * @param pairs   The list of pairs to generate groups from.
+     * @param radius  The radius within which the pairs' kitchens should be located.
+     * @return        The list of generated groups for the starter course.
+     */
     public List<Group> makeStarterGroups(List<Pair> pairs, double radius) {
         Course course = Course.starter;
 
@@ -75,9 +93,13 @@ public class GroupGenerator extends ParticipantManager {
 
 
 
-
-
-
+    /**
+     * Generates groups for the main dish course based on the given pairs and radius.
+     *
+     * @param pairs   The list of pairs to generate groups from.
+     * @param radius  The radius within which the pairs' kitchens should be located.
+     * @return        The list of generated groups for the main dish course.
+     */
     public List<Group> makeMainDishGroups(List<Pair> pairs, double radius) {
         Course course = Course.maincourse;
         List<Group> resGroup = new ArrayList<>();
@@ -115,6 +137,12 @@ public class GroupGenerator extends ParticipantManager {
 
 
 
+    /**
+     * Generates groups for the dessert course based on the given pairs.
+     *
+     * @param pairs   The list of pairs to generate groups from.
+     * @return        The list of generated groups for the dessert course.
+     */
     public List<Group> makeDessertGroups(List<Pair> pairs) {
         Set<Pair> usedPairs = new HashSet<>();
         Course course = Course.dessert;
@@ -154,6 +182,14 @@ public class GroupGenerator extends ParticipantManager {
         return resGroup;
     }
 
+    /**
+     * Checks if one of the pairs in a group has cooked.
+     *
+     * @param pair1   The first pair.
+     * @param pair2   The second pair.
+     * @param pair3   The third pair.
+     * @return        True if one of the pairs has cooked, false otherwise.
+     */
     private boolean checkIfOneOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
         return (pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) ||
                 (!pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) ||
@@ -161,10 +197,26 @@ public class GroupGenerator extends ParticipantManager {
     }
 
 
+    /**
+     * Checks if two of the pairs in a group have cooked.
+     *
+     * @param pair1   The first pair.
+     * @param pair2   The second pair.
+     * @param pair3   The third pair.
+     * @return        True if two of the pairs have cooked, false otherwise.
+     */
     private boolean checkIfTwoOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
         return (pair1.isHaveCooked() && pair2.isHaveCooked() && !pair3.isHaveCooked()) || (pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) || (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked());
     }
 
+    /**
+     * Checks if none of the pairs in a group have cooked.
+     *
+     * @param pair1   The first pair.
+     * @param pair2   The second pair.
+     * @param pair3   The third pair.
+     * @return        True if none of the pairs have cooked, false otherwise.
+     */
     private boolean checkIfAllPairsDidntCook(Pair pair1,Pair pair2,Pair pair3){
         return (!pair1.isHaveCooked()) && (!pair2.isHaveCooked()) && (!pair3.isHaveCooked());
     }
@@ -199,6 +251,14 @@ public class GroupGenerator extends ParticipantManager {
                 && (!pair3.getMetPairs().contains(pair1) && !pair3.getMetPairs().contains(pair2));
     }
 
+    /**
+     * Checks if the food preferences of three pairs in a group match.
+     *
+     * @param pair1   The first pair.
+     * @param pair2   The second pair.
+     * @param pair3   The third pair.
+     * @return        True if the food preferences match, false otherwise.
+     */
     public boolean checkGroupFoodPreference(Pair pair1,Pair pair2,Pair pair3){
         FoodPreference pref1 = pair1.getMainFoodPreference();
         FoodPreference pref2 = pair2.getMainFoodPreference();
@@ -223,6 +283,12 @@ public class GroupGenerator extends ParticipantManager {
         return !(hasMeat && hasVeggieOrVegan);
     }
 
+    /**
+     * Finds which pair should cook for a given group based on their kitchen distances to the party location.
+     *
+     * @param group   The group for which to determine the cooking pair.
+     * @param pairs   The list of pairs.
+     */
     private void findWhichPairToCook(Group group, List<Pair> pairs){
         Pair pair1 = group.pair1;
         Pair pair2 = group.pair2;
@@ -246,6 +312,15 @@ public class GroupGenerator extends ParticipantManager {
     }
 
 
+    /**
+     * Checks if the kitchens of two pairs and the party location are within a given radius.
+     *
+     * @param kithcen1    The kitchen of the first pair.
+     * @param kitchen2    The kitchen of the second pair.
+     * @param kitchen3    The kitchen of the third pair.
+     * @param radius      The radius within which the kitchens should be located.
+     * @return            True if the kitchens are within the radius, false otherwise.
+     */
     public boolean checkTwoKitchenWithin(Kitchen kithcen1, Kitchen kitchen2, Kitchen kitchen3, double radius){
         double long1 = kithcen1.getKitchen_location().getLongitude();
         double lat1 = kithcen1.getKitchen_location().getLatitude();
