@@ -40,24 +40,28 @@ public class GroupFitnessEvaluator {
 
 
     private static double checkIfTwoOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
-        if ((pair1.isHaveCooked() && pair2.isHaveCooked() && !pair3.isHaveCooked()) || (pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) || (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked())){
+        if ((pair1.isHaveCooked() && pair2.isHaveCooked() && !pair3.isHaveCooked())
+                || (pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked())
+                || (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked())){
             return 1.0;
         }else
             return - 8.0;
     }
+
+
+    private static double checkIfAllPairsDidntCook(Pair pair1,Pair pair2,Pair pair3){
+        if (!pair1.isHaveCooked() && (!pair2.isHaveCooked()) && (!pair3.isHaveCooked())){
+          return -8.0;
+        }else
+            return 1.0;
+    }
+
 
     private static double didPairsMeet(Pair pair1,Pair pair2,Pair pair3){
         if (!pair1.getMetPairs().contains(pair2) && !pair1.getMetPairs().contains(pair3)
                 && (!pair2.getMetPairs().contains(pair1) && !pair2.getMetPairs().contains(pair3))
                 && (!pair3.getMetPairs().contains(pair1) && !pair3.getMetPairs().contains(pair2))){
             return 1.0;
-        }else
-            return - 8.0;
-    }
-
-    private static double checkIfAllPairsDidntCook(Pair pair1,Pair pair2,Pair pair3){
-        if (!pair1.isHaveCooked() && (!pair2.isHaveCooked()) && (!pair3.isHaveCooked())){
-          return 1.0;
         }else
             return - 8.0;
     }

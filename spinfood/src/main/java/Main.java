@@ -56,7 +56,8 @@ public class Main {
      System.out.println("Number of generated groups in starter is " + groupList.size());
         List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
      System.out.println("Number of generated groups in Maindish is " + groupList1.size());
-//        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
+        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
+        System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
 
 
 
