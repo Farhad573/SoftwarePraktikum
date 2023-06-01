@@ -80,9 +80,13 @@ public class Main {
 //        }
 
 
-
-
-
+        // tests
+        // diagramm -> klassen , Gannt
+        // who cook in which course
+        // all did cook
+        // kitchen count
+        // if they get to the after party location
+        // kitchen count of 3 do not cook at the same time
 
     }
 }

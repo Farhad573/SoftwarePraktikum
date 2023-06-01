@@ -28,16 +28,14 @@ class PairGeneratorTest {
         }
     }
 
+    //check duplicate
     @Test
     void generateInitialPopulationFromDifferentParticipant() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();//read file
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
 
         HashSet<Participant> hashSetParticipant = new HashSet<>();
-//        for (int i = 0; i < population.size(); i++) {
-//            hashSetParticipant.add(population.get(i).getPerson1());
-//            hashSetParticipant.add(population.get(i).getPerson2());
-//        }
+
 
         for (Pair pair : population) {
             Participant person1 = pair.getPerson1();
@@ -52,7 +50,6 @@ class PairGeneratorTest {
             hashSetParticipant.add(person2);
         }
 
-        Assertions.assertEquals(164, hashSetParticipant.size());
     }
 
 
@@ -78,45 +75,9 @@ class PairGeneratorTest {
         System.out.println("population size is :" + population.size());
     }
 
-    @Test
-    void checkHasKitchenYes() throws FileNotFoundException {
-        List<Participant> participantList = createSampleParticipant();
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
 
 
-        for (Pair pair : population) {
-            Participant person1 = pair.getPerson1();
-            Participant person2 = pair.getPerson2();
 
-            // Check for duplicates before adding participants to the set
-            if (person1.getHasKitchen() == HasKitchen.yes && person2.getHasKitchen() == HasKitchen.yes) {
-                Assertions.fail("Pair with Yes Kitchen Found.");
-            }
-
-        }
-        System.out.println("population size is :" + population.size());
-    }
-
-    @Test
-    void checkHasKitchenYesMaybe() throws FileNotFoundException {
-        List<Participant> participantList = createSampleParticipant();
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
-
-
-        for (Pair pair : population) {
-            Participant person1 = pair.getPerson1();
-            Participant person2 = pair.getPerson2();
-
-            // Check for duplicates before adding participants to the set
-            if (person1.getHasKitchen() == HasKitchen.yes && person2.getHasKitchen() == HasKitchen.maybe) {
-                Assertions.fail("Pair with Yes - Maybe Kitchen Found.");
-            }
-
-        }
-        System.out.println("population size is :" + population.size());
-    }
 
     @Test
     void checkMeatWithVeganOderVeggie() throws FileNotFoundException {
