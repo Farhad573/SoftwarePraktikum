@@ -196,6 +196,17 @@ public class GroupGenerator extends ParticipantManager {
                 (pair2.isHaveCooked() && !pair3.isHaveCooked() && !pair1.isHaveCooked());
     }
 
+    /**
+     * Checks if none of the pairs in a group have cooked.
+     *
+     * @param pair1   The first pair.
+     * @param pair2   The second pair.
+     * @param pair3   The third pair.
+     * @return        True if none of the pairs have cooked, false otherwise.
+     */
+    private boolean checkIfAllPairsDidntCook(Pair pair1,Pair pair2,Pair pair3){
+        return (!pair1.isHaveCooked()) && (!pair2.isHaveCooked()) && (!pair3.isHaveCooked());
+    }
 
     /**
      * Checks if two of the pairs in a group have cooked.
@@ -210,16 +221,18 @@ public class GroupGenerator extends ParticipantManager {
     }
 
     /**
-     * Checks if none of the pairs in a group have cooked.
+     * Checks if all the pairs in a group have cooked.
      *
      * @param pair1   The first pair.
      * @param pair2   The second pair.
      * @param pair3   The third pair.
-     * @return        True if none of the pairs have cooked, false otherwise.
+     * @return        True if two of the pairs have cooked, false otherwise.
      */
-    private boolean checkIfAllPairsDidntCook(Pair pair1,Pair pair2,Pair pair3){
-        return (!pair1.isHaveCooked()) && (!pair2.isHaveCooked()) && (!pair3.isHaveCooked());
+    private boolean checkIfAllOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
+        return pair1.isHaveCooked() && pair2.isHaveCooked() && pair3.isHaveCooked() ;
     }
+
+
 
 
 
