@@ -9,11 +9,8 @@ import java.util.stream.Stream;
 
 public class GroupGenerator extends ParticipantManager {
     Set<Pair> pairsWhoCooked = new HashSet<>();
-    List<Group> groups = new ArrayList<>();
-    List<Group> starter = new ArrayList<>();
-    List<Group> mainDish = new ArrayList<>();
-    List<Group> dessert = new ArrayList<>();
     PartyLocation partyLocation = new PartyLocation();
+    Course course ;
 
 
 
@@ -54,7 +51,6 @@ public class GroupGenerator extends ParticipantManager {
      * @return        The list of generated groups for the starter course.
      */
     public List<Group> makeStarterGroups(List<Pair> pairs, double radius) {
-        Course course = Course.starter;
 
         Map<Group,Double> map = new HashMap<>();
         for (int i = 0; i < pairs.size(); i++) {
@@ -101,7 +97,7 @@ public class GroupGenerator extends ParticipantManager {
      * @return        The list of generated groups for the main dish course.
      */
     public List<Group> makeMainDishGroups(List<Pair> pairs, double radius) {
-        Course course = Course.maincourse;
+        this.course = Course.maincourse;
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
 
@@ -131,7 +127,6 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
 
-        System.out.println("Number of valid pairs for main dish: " + usedPairs.size());
         return resGroup;
     }
 
@@ -144,8 +139,7 @@ public class GroupGenerator extends ParticipantManager {
      * @return        The list of generated groups for the dessert course.
      */
     public List<Group> makeDessertGroups(List<Pair> pairs) {
-        Set<Pair> usedPairs = new HashSet<>();
-        Course course = Course.dessert;
+        this.course = Course.dessert;
 
         Map<Group,Double> map = new HashMap<>();
         for (int i = 0; i < pairs.size(); i++) {
@@ -176,9 +170,6 @@ public class GroupGenerator extends ParticipantManager {
                 hashSet.add(group.pair3);
             }
         }
-
-        System.out.println("number of validPairs in desert Hashset is " + hashSet.size());
-
         return resGroup;
     }
 
@@ -191,9 +182,17 @@ public class GroupGenerator extends ParticipantManager {
      * @return        True if one of the pairs has cooked, false otherwise.
      */
     private boolean checkIfOneOfPairsHaveCooked(Pair pair1,Pair pair2,Pair pair3){
-        return (pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) ||
-                (!pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) ||
-                (pair2.isHaveCooked() && !pair3.isHaveCooked() && !pair1.isHaveCooked());
+        if (pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()){
+            pair1.setCourse(Course.starter);
+            return true;
+        }else if(!pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) {
+            pair3.setCourse(Course.starter);
+            return true;
+        }else if(pair2.isHaveCooked() && !pair3.isHaveCooked() && !pair1.isHaveCooked()){
+            pair2.setCourse(Course.starter);
+            return true;
+        }
+        return false ;
     }
 
     /**

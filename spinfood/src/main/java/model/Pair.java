@@ -17,6 +17,8 @@ public class Pair {
     private final int preferenceDeviation;
     private boolean haveCooked ;
     private List<Pair> metPairs ;
+    private Course course ;
+
 
     /**
      * Constructs a Pair object with the given participants.
@@ -194,5 +196,14 @@ public class Pair {
 
         return Objects.hash(person1, person2);
 
+    }
+
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

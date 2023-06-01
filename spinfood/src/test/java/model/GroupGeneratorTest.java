@@ -157,8 +157,8 @@ public class GroupGeneratorTest {
     @Test
     void MainGroupHasTwoPairCookTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concate = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
-        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concate, 2);
+        List<Pair> concat = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concat, 2);
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
