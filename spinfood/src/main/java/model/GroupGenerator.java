@@ -51,7 +51,7 @@ public class GroupGenerator extends ParticipantManager {
      * @return        The list of generated groups for the starter course.
      */
     public List<Group> makeStarterGroups(List<Pair> pairs, double radius) {
-
+        Course course = Course.starter;
         Map<Group,Double> map = new HashMap<>();
         for (int i = 0; i < pairs.size(); i++) {
             Pair pair1 = pairs.get(i);
@@ -73,7 +73,7 @@ public class GroupGenerator extends ParticipantManager {
         List<Group> resGroup = new ArrayList<>();
         for(Group group : list){
             if(!hashSet.contains(group.pair1) && !hashSet.contains(group.pair2) && !hashSet.contains(group.pair3) ){
-                findWhichPairToCook(group,pairs);
+                findWhichPairToCook(group,pairs,course);
                 group.setPairsWhoMet(group);
                 resGroup.add(group);
                 hashSet.add(group.pair1);
@@ -97,7 +97,7 @@ public class GroupGenerator extends ParticipantManager {
      * @return        The list of generated groups for the main dish course.
      */
     public List<Group> makeMainDishGroups(List<Pair> pairs, double radius) {
-        this.course = Course.maincourse;
+        Course course = Course.maincourse;
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
 
@@ -115,7 +115,7 @@ public class GroupGenerator extends ParticipantManager {
                         Group group = new Group(pair1, pair2, pair3);
                         double fitness = GroupFitnessEvaluator.evaluateFitnessForMainDish(group);
                         if (fitness > 0) {
-                            findWhichPairToCook(group, pairs);
+                            findWhichPairToCook(group, pairs,course);
                             group.setPairsWhoMet(group);
                             resGroup.add(group);
                             usedPairs.add(pair1);
@@ -301,7 +301,7 @@ public class GroupGenerator extends ParticipantManager {
      * @param group   The group for which to determine the cooking pair.
      * @param pairs   The list of pairs.
      */
-    private void findWhichPairToCook(Group group, List<Pair> pairs){
+    private void findWhichPairToCook(Group group, List<Pair> pairs,Course course){
         Pair pair1 = group.pair1;
         Pair pair2 = group.pair2;
         Pair pair3 = group.pair3;
@@ -313,12 +313,15 @@ public class GroupGenerator extends ParticipantManager {
         int minIndex = Math.min(index1, Math.min(index2, index3));
         if (minIndex == index1 && !pair1.isHaveCooked()) {
             pair1.setHaveCooked(true);
+            pair1.setCourse(course);
             pairsWhoCooked.add(pair1);
         } else if (minIndex == index2 && !pair2.isHaveCooked()) {
             group.pair2.setHaveCooked(true);
+            pair2.setCourse(course);
             pairsWhoCooked.add(pair2);
         } else {
             pair3.setHaveCooked(true);
+            pair3.setCourse(course);
             pairsWhoCooked.add(pair3);
         }
     }

@@ -1,11 +1,14 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Group {
     Pair pair1;
     Pair pair2;
     Pair pair3;
+
 
     private FoodPreference mainFoodPreference;
     private final int ageDifference;
@@ -121,5 +124,13 @@ public class Group {
         pair2.getMetPairs().add(pair3);
         pair3.getMetPairs().add(pair1);
         pair3.getMetPairs().add(pair2);
+    }
+
+    public List<Pair> getPairsInGroup(){
+        List<Pair> list = new ArrayList<>();
+        list.add(pair1);
+        list.add(pair2);
+        list.add(pair3);
+        return list;
     }
 }
