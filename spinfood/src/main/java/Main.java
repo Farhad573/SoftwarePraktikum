@@ -3,8 +3,7 @@ import model.*;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import static model.CSVFileReader.getPairs;
-import static model.CSVFileReader.getParticipants;
+import static model.CSVFileReader.*;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
@@ -42,11 +41,12 @@ public class Main {
 
         System.out.println("###############################################");
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
-        System.out.println("number of generated Pairs is " + initialPair.size());
+        System.out.println("number of generated Pairs is " + getGeneratedPairs().size());
         System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
         System.out.println("number of initial pairs from initial population generator is " + initialPair.size() );
         System.out.println("number of pairs from CSV is " + csvPairs.size());
+        System.out.println("pair kenZahl is -> " + pairGenerator.makeIndicatorForPairsList(initialPair));
         System.out.println("###############################################");
 
 
@@ -62,10 +62,10 @@ public class Main {
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
 //        System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
 
-        for (Pair pair: initialPair
-             ) {
-            System.out.println(pair);
-        }
+//        for (Pair pair: initialPair
+//             ) {
+//            System.out.println(pair);
+//        }
 
     }
 }

@@ -19,6 +19,7 @@ public class ParticipantManager {
     protected static List<Pair> starterSuccessors;
     protected static List<Pair> mainDishSuccessors;
     protected static List<Pair> dessertSuccessors;
+    protected static List<Pair> generatedPairs;
 
 
 
@@ -33,6 +34,7 @@ public class ParticipantManager {
         participants = new ArrayList<>();
         pairSuccessors = new ArrayList<>();
         pairs = new ArrayList<>();
+        generatedPairs = new ArrayList<>();
         kitchenCountMap = new HashMap<>();
         groups = new ArrayList<>();
         starterSuccessors = new ArrayList<>();
