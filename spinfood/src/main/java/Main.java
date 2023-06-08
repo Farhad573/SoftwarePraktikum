@@ -9,6 +9,33 @@ import java.util.stream.Collectors;
 import static model.CSVFileReader.*;
 
 public class Main {
+    public static boolean checkDuplicatesinAllSteps(List<Group> starter,List<Group> main,List<Group> dessert){
+        List<Pair> pairsWhoCookInStarter = starter.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Set<Pair> hashsetForStarter = new HashSet<>(pairsWhoCookInStarter);
+        //System.out.println("check if we dont have duplicates in list of pairs who cook in starter");
+        Boolean starterChecker = pairsWhoCookInStarter.size() == hashsetForStarter.size();
+        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInStarter.size());
+
+        List<Pair> pairsWhoCookInMain = main.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Set<Pair> hashsetForMain = new HashSet<>(pairsWhoCookInMain);
+        //System.out.println("check if we dont have duplicates in list of pairs who cook in Main");
+        Boolean mainChecker = pairsWhoCookInMain.size() == hashsetForMain.size();
+        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInMain.size());
+
+        List<Pair> pairsWhoCookInDessert = dessert.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Set<Pair> hashsetForDessert = new HashSet<>(pairsWhoCookInDessert);
+        //System.out.println("check if we dont have duplicates in list of pairs who cook in Dessert");
+        Boolean dessertChecker = pairsWhoCookInDessert.size() == hashsetForDessert.size();
+        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInDessert.size());
+        return starterChecker && mainChecker && dessertChecker;
+
+    }
     public static void main(String[] args) throws FileNotFoundException {
        CSVFileReader CSVFileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
@@ -59,22 +86,13 @@ public class Main {
         groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
         List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
-//        System.out.println(groupList);
-        List<Pair> pairsWhoCookInStarter = groupList.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Set<Pair> hashsetForStarter = new HashSet<>(pairsWhoCookInStarter);
-        System.out.println("check if we have duplicates in list of pairs who cook");
-        System.out.println(pairsWhoCookInStarter.size() == hashsetForStarter.size());
-        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInStarter.size());
+
      System.out.println("Number of generated groups in starter is " + groupList.size());
         List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
-        List<Pair> pairsWhoCookInMainDish = groupList1.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
      System.out.println("Number of generated groups in Maindish is " + groupList1.size());
         List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
         System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
+        System.out.println("check if we dont have duplicates in pairs who cook in all Steps -> " + checkDuplicatesinAllSteps(groupList,groupList1,desertGroups));
 //        for (Pair pair: concatenatedlist
 
 //        groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
