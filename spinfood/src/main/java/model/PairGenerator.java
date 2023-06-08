@@ -2,6 +2,7 @@ package model;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static model.FitnessEvaluator.*;
 
@@ -9,9 +10,6 @@ public class PairGenerator extends ParticipantManager {
 
     private  static Set<Participant> hashSet = new HashSet<>();
     private static List<Pair> initialPopulation = new ArrayList<>();
-
-
-
 
     /**
     Generates the initial population of pairs from a list of participants.
@@ -30,7 +28,7 @@ public class PairGenerator extends ParticipantManager {
 
                 Pair pair = new Pair(participant1, participant2, false);
 
-                if (checkFoodPreferenceFitness(pair) && checkKitchenFitness(pair) && checkKitchenCount(pair) && !usedParticipants.contains(participant1) && !usedParticipants.contains(participant2) ) {
+                if (checkFoodPreferenceFitness(pair) && checkSexDifference(pair) && checkKitchenFitness(pair) && checkKitchenCount(pair) && !usedParticipants.contains(participant1) && !usedParticipants.contains(participant2) ) {
                     population.add(pair);
                     usedParticipants.add(participant1);
                     usedParticipants.add(participant2);
@@ -41,6 +39,37 @@ public class PairGenerator extends ParticipantManager {
         pairSuccessors = participants.stream().filter(x-> !usedParticipants.contains(x)).collect(Collectors.toList());
         initialPopulation = population;
         return population;
+    }
+
+    /**
+     * Combines two lists of pairs into a single list of pairs.
+     *
+     * @param l1   The first list of pairs.
+     * @param l2   The second list of pairs.
+     * @return     The combined list of pairs.
+     */
+    public List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
+        List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
+                .collect(Collectors.toList());
+        this.pairs = pairs;
+        //?
+        makeIndicatorForPairs(pairs);
+        return pairs;
+    }
+
+    /**
+     * it loops through the whole Pairs and calculate their Indicator(Kenzahl)
+     * @param list
+     */
+    public void makeIndicatorForPairs(List<Pair> list){
+        for (Pair pair: list
+             ) {
+            pair.indicator += list.size();
+            pair.indicator += pairSuccessors.size();
+            pair.indicator += pair.getSexDeviation();
+            pair.indicator += pair.getAgeDifference();
+            pair.indicator += pair.getPreferenceDeviation();
+        }
     }
 
 

@@ -18,6 +18,9 @@ public class Pair {
     private boolean haveCooked ;
     private List<Pair> metPairs ;
     private Course course ;
+    //Kenzahl
+    String indicator;
+    double sexDeviation;
 
 
     /**
@@ -37,6 +40,8 @@ public class Pair {
         this.preferenceDeviation = calculatePreferenceDeviation();
         this.haveCooked = false;
         this.metPairs = new ArrayList<>();
+        this.indicator = "";
+        this.sexDeviation = calculateSexDifference();
     }
 
     /**
@@ -97,6 +102,17 @@ public class Pair {
     private int calculatePreferenceDeviation(){
         return Math.abs(this.person1.getFoodPreference().getValue() - this.person2.getFoodPreference().getValue());
     }
+
+    private double calculateSexDifference(){
+        int sexOfPerson1 = this.person1.getSex() == Sex.female? 1 : 0;
+        int sexOfPerson2 = this.person2.getSex() == Sex.female? 1 : 0;
+        return (sexOfPerson1 + sexOfPerson2) / 2;
+    }
+
+    public double getSexDeviation() {
+        return sexDeviation;
+    }
+
 
     /**
      * Checks if the pair is valid.
@@ -159,7 +175,7 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair {" +
+        return "Pair {" + "PairIndicator = " + this.indicator + "," +
                 "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() + ", Age : " + person1.getAge() + ", AgeRange : "+ person1.getAgeRange() +
                 ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +

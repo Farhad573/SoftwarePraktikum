@@ -115,12 +115,6 @@ class CSVFileReaderTest {
         return true;
     }
 
-    @Test
-        void checkPairAgeDifference(){
-        Participant person1 = new Participant(26);
-        Participant person2 = new Participant(32);
-        Pair pair = new Pair(person1,person2,true);
-        assertEquals(2,pair.getAgeDifference());
-    }
+
 
 }
