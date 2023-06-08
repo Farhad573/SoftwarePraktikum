@@ -136,7 +136,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
      * @return the list of successors
      */
     public static List<Participant> getSuccessor() {
-        return successors;
+        return pairSuccessors;
     }
 
     public static Map<Kitchen,Integer> getKitchenCountMap(){
@@ -184,7 +184,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
     public String toStringSuccessors() {
         StringBuilder sb = new StringBuilder();
         sb.append("ParticipantModel{\n");
-        for( Participant participant : successors){
+        for( Participant participant : pairSuccessors){
             sb.append("\t").append(participant.toString()).append("\n");
         }
         sb.append("}");

@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Objects;
+import java.util.*;
 
 /**
  * The Pair class represents a pair of participants.
@@ -15,6 +15,10 @@ public class Pair {
     private boolean pairSignUp;
 
     private final int preferenceDeviation;
+    private boolean haveCooked ;
+    private List<Pair> metPairs ;
+    private Course course ;
+
 
     /**
      * Constructs a Pair object with the given participants.
@@ -31,6 +35,8 @@ public class Pair {
         // calculate the Age difference of the pair
         this.ageDifference = calculateAgeDifference(person1,person2);
         this.preferenceDeviation = calculatePreferenceDeviation();
+        this.haveCooked = false;
+        this.metPairs = new ArrayList<>();
     }
 
     /**
@@ -101,6 +107,22 @@ public class Pair {
         return true;
      }
 
+    public boolean isHaveCooked() {
+        return haveCooked;
+    }
+
+    public List<Pair> getMetPairs() {
+        return metPairs;
+    }
+
+    public void setHaveCooked(boolean haveCooked) {
+        this.haveCooked = haveCooked;
+    }
+
+    public void setMetPairs(List<Pair> metPairs) {
+        this.metPairs = metPairs;
+    }
+
     /**
      *
      * @return Age difference of the pair
@@ -127,6 +149,8 @@ public class Pair {
     public Participant getPerson2() {
         return person2;
     }
+
+    public Kitchen getKitchen(){return person1.getKitchen() != null? person1.getKitchen() : person2.getKitchen(); }
 
     /**
      * Returns a string representation of the Pair object.
@@ -172,5 +196,14 @@ public class Pair {
 
         return Objects.hash(person1, person2);
 
+    }
+
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

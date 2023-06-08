@@ -1,36 +1,36 @@
 import model.*;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import static model.FitnessEvaluator.checkFoodPreferenceFitness;
-import static model.FitnessEvaluator.checkKitchenFitness;
+import static model.CSVFileReader.getPairs;
+import static model.CSVFileReader.getParticipants;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
        CSVFileReader CSVFileReader = new CSVFileReader();
-
-
-
+        PairGenerator pairGenerator = new PairGenerator();
+        GroupGenerator groupGenerator = new GroupGenerator();
+        PartyLocation partyLocation = new PartyLocation();
+        List<Pair> csvPairs = getPairs();
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
-            System.out.println(CSVFileReader.toStringParticipants());
-            System.out.println(CSVFileReader.toStringPairs());
+            partyLocation.readCSVFilePartyLocation("partylocation.csv");
+            System.out.println(partyLocation.toString());
+            //System.out.println(CSVFileReader.toStringParticipants());
+            //System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         System.out.println("**************************************************");
 
-        int participantsLength = CSVFileReader.getParticipants().size();
+        int participantsLength = getParticipants().size();
         System.out.println("Length of participants list is: " + participantsLength);
 
         System.out.println("************************************************");
 
-        int pairLength = CSVFileReader.getPairs().size();
+        int pairLength = getPairs().size();
         System.out.println("Length of pair list is: " + pairLength);
 
         System.out.println("************************************************");
@@ -38,60 +38,55 @@ public class Main {
         System.out.println("the count of all members : " + count);
 
         System.out.println("###############################################");
+        System.out.println(getParticipants().size());
 
-        PairGenerator pairGenerator = new PairGenerator();
-        List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        System.out.println("number of successor is " + PairGenerator.getSuccessor().size());
-
-//        List<Participant> participantsWithKitchen = CSVFileReader.getParticipants().stream()
-//                .filter(p -> p.getKitchen() != null)
-//                .collect(Collectors.toList());
-//
-//        Map<Kitchen, Long> countByAge = participantsWithKitchen.stream()
-//                .collect(Collectors.groupingBy(Participant::getKitchen, Collectors.counting()));
-//        for (Map.Entry<Kitchen, Long> entry : countByAge.entrySet()
-//             ) {
-//            System.out.println(entry.getValue());
-//        }
-//        for (Participant participant: PairGenerator.getSuccessor()
-//             ) {
-//            System.out.println(participant);
-//        }
-
-//        System.out.println(initialPair.size());
-//        for (Pair pair:
-//                pairGenerator.generateNextGeneration(initialPair)
-//             ) {
-//            System.out.println(pair);
-//        }
+        System.out.println("###############################################");
+        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+        System.out.println("number of generated Pairs is " + initialPair.size());
+        System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
+        System.out.println("###############################################");
+        System.out.println("number of initial pairs from initial population generator is " + initialPair.size() );
+        System.out.println("number of pairs from CSV is " + csvPairs.size());
+        System.out.println("###############################################");
 
 
-//        System.out.println(initialPair.size());
-//        for (Pair pair:
-//             initialPair) {
-//
-//            System.out.println(pair);
-//
-//        }
-//
-//        for (Pair pair:
-//                pairGenerator.generateNextGeneration(initialPair)
-//             ) {
-//            System.out.println(pair);
-//            System.out.println();
-//        }
-//            List<Integer> list = new ArrayList<>();
-//            for(int i = 1; i<10 ; i++){
-//                list.add(i);
-//            }
-//        System.out.println(list.size());
-//        for (int i = 0; i < list.size(); i++) {
-//
-//            for (int j = i + 1; j < list.size(); j++) {
-//                System.out.println("i is " + i + " and j is " + j);
-//            }
+
+        List<Pair> concatenatedlist = groupGenerator.makeAllPairsTogether(initialPair,csvPairs);
+        groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
+        System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
+        List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
+//        System.out.println(groupList);
+     System.out.println("Number of generated groups in starter is " + groupList.size());
+        List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
+     System.out.println("Number of generated groups in Maindish is " + groupList1.size());
+        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
+        System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
+
+
+
+
+
+
+
+
+
+      //  System.out.println(groupList1.get(0));
+        //System.out.println("Number of generated groups is " + groupList.size());
+        //System.out.println("number of starterSuccessors is " + getstarterSuccessors().size());
+        //System.out.println("number of mainDishSuccessors is " + getMainDishSuccessors().size());
+        //System.out.println("number of dessertSuccessors is " + getdessertSuccessors().size());
+//        for (Group group: groupList){
+//         System.out.println(group);
 //        }
 
+
+        // tests -> okay
+        // who cook in which course
+        // diagramm -> klassen , Gant
+        // all did cook -> okay
+        // kitchen count
+        // if they get to the after party location
+        // kitchen count of 3 do not cook at the same time
 
     }
 }

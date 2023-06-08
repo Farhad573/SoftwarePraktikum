@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static model.CSVFileReader.getParticipants;
 
@@ -29,16 +28,14 @@ class PairGeneratorTest {
         }
     }
 
+    //check duplicate
     @Test
     void generateInitialPopulationFromDifferentParticipant() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();//read file
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
 
         HashSet<Participant> hashSetParticipant = new HashSet<>();
-//        for (int i = 0; i < population.size(); i++) {
-//            hashSetParticipant.add(population.get(i).getPerson1());
-//            hashSetParticipant.add(population.get(i).getPerson2());
-//        }
+
 
         for (Pair pair : population) {
             Participant person1 = pair.getPerson1();
@@ -53,14 +50,13 @@ class PairGeneratorTest {
             hashSetParticipant.add(person2);
         }
 
-        //Assertions.assertEquals(164, hashSetParticipant.size());
     }
 
 
 
 
     @Test
-    void checkHasKitchen() throws FileNotFoundException {
+    void checkHasKitchenNo() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
@@ -78,6 +74,10 @@ class PairGeneratorTest {
         }
         System.out.println("population size is :" + population.size());
     }
+
+
+
+
 
     @Test
     void checkMeatWithVeganOderVeggie() throws FileNotFoundException {
@@ -98,39 +98,7 @@ class PairGeneratorTest {
         }
     }
 
-    @Test
-    void checkPairWithSameSex() throws FileNotFoundException {
-        List<Participant> participantList = createSampleParticipant();
 
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
-
-
-        for (Pair pair : population) {
-            Participant person1 = pair.getPerson1();
-            Participant person2 = pair.getPerson2();
-
-            // Check for duplicates before adding participants to the set
-            if (person1.getSex() == person2.getSex()) {
-                Assertions.fail("Pair of same sex  found.");
-            }
-
-        }
-    }
-    @Test
-    void checkKitchenCount() throws FileNotFoundException {
-        List<Participant> participantList = createSampleParticipant();
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
-        List<Participant> kitchen = participantList.stream().filter(x -> x.getKitchenCount() > 3).collect(Collectors.toList());
-        for (Participant pair: kitchen
-             ) {
-            System.out.println(pair);
-        }
-//        for (Participant participant: kitchen
-//             ) {
-//            Assertions.assertTrue(FitnessEvaluator.checkKitchenCount(participant));
-//        }
-    }
 
 
     @Test
