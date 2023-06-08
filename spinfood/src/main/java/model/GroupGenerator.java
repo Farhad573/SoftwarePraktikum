@@ -14,19 +14,7 @@ public class GroupGenerator extends ParticipantManager {
 
 
 
-    /**
-     * Combines two lists of pairs into a single list of pairs.
-     *
-     * @param l1   The first list of pairs.
-     * @param l2   The second list of pairs.
-     * @return     The combined list of pairs.
-     */
-    public List<Pair> makeAllPairsTogether(List<Pair> l1, List<Pair> l2) {
-        List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
-                .collect(Collectors.toList());
-        this.pairs = pairs;
-        return pairs;
-    }
+
 
 
     /**

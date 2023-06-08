@@ -54,7 +54,7 @@ public class Main {
 
 
 
-        List<Pair> concatenatedlist = groupGenerator.makeAllPairsTogether(initialPair,csvPairs);
+        List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair,csvPairs);
         groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
         List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
@@ -74,32 +74,10 @@ public class Main {
      System.out.println("Number of generated groups in Maindish is " + groupList1.size());
         List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
         System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
-
-
-
-
-
-
-
-
-
-      //  System.out.println(groupList1.get(0));
-        //System.out.println("Number of generated groups is " + groupList.size());
-        //System.out.println("number of starterSuccessors is " + getstarterSuccessors().size());
-        //System.out.println("number of mainDishSuccessors is " + getMainDishSuccessors().size());
-        //System.out.println("number of dessertSuccessors is " + getdessertSuccessors().size());
-//        for (Group group: groupList){
-//         System.out.println(group);
+//        for (Pair pair: concatenatedlist
+//             ) {
+//            System.out.println(pair);
 //        }
-
-
-        // tests -> okay
-        // who cook in which course
-        // diagramm -> klassen , Gant
-        // all did cook -> okay
-        // kitchen count
-        // if they get to the after party location
-        // kitchen count of 3 do not cook at the same time
 
     }
 }

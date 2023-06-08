@@ -119,6 +119,9 @@ public class FitnessEvaluator {
             return -0.5;
         }
     }
+    public static boolean checkSexDifference(Pair pair){
+        return pair.getSexDeviation() >= 0.5;
+    }
 
 
 

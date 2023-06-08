@@ -47,7 +47,7 @@ public class GroupGeneratorTest {
     @Test
     void StarterGroupDuplicateTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concate = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate, 2);
 
 
@@ -73,7 +73,7 @@ public class GroupGeneratorTest {
     @Test
     void StarterGroupHasOnePairCookTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concate = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate, 2);
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
@@ -94,7 +94,7 @@ public class GroupGeneratorTest {
     void checkMeatWithVeganOderVeggieInStarter() throws FileNotFoundException {
 
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concate = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate, 2);
 
         for (Group group : groupGeneration) {
@@ -131,7 +131,7 @@ public class GroupGeneratorTest {
     @Test
     void MainDishDuplicateTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concate = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate, 2);
 
 
@@ -157,7 +157,7 @@ public class GroupGeneratorTest {
     @Test
     void MainGroupHasTwoPairCookTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concat = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concat, 2);
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
@@ -181,7 +181,7 @@ public class GroupGeneratorTest {
     void checkVeggieVegganFleichiInMainDishGroup() throws FileNotFoundException {
 
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concat = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 2);
 
         for (Group group : groupGeneration) {
@@ -219,7 +219,7 @@ public class GroupGeneratorTest {
     void DessertGroupDuplicateTest() throws FileNotFoundException {
 
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concate = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate, 2);
 
 
@@ -243,7 +243,7 @@ public class GroupGeneratorTest {
     @Test
     void DessertGroupHasOnePairCookTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concat = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeDessertGroups(concat);
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
@@ -265,7 +265,7 @@ public class GroupGeneratorTest {
     void checkVeggieVegganFleichiInDessertGroup() throws FileNotFoundException {
 
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
-        List<Pair> concat = groupGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
         List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 2);;
 
         for (Group group : groupGeneration) {
