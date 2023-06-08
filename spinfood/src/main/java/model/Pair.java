@@ -18,8 +18,7 @@ public class Pair {
     private boolean haveCooked ;
     private List<Pair> metPairs ;
     private Course course ;
-    //Kenzahl
-    String indicator;
+
     double sexDeviation;
 
 
@@ -40,7 +39,6 @@ public class Pair {
         this.preferenceDeviation = calculatePreferenceDeviation();
         this.haveCooked = false;
         this.metPairs = new ArrayList<>();
-        this.indicator = "";
         this.sexDeviation = calculateSexDifference();
     }
 
@@ -75,7 +73,7 @@ public class Pair {
                 person2.getFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = person2.getFoodPreference();
         }
-        // (2) meat|none && (1) vegan|vegan -> veggie | vwgan
+        // (2) meat|none && (1) vegan|vegan -> veggie | vegan
         else if((person2.getFoodPreference()==FoodPreference.meat ||
                 person2.getFoodPreference() == FoodPreference.none)
                 &&(person1.getFoodPreference() == FoodPreference.vegan ||
@@ -106,7 +104,7 @@ public class Pair {
     private double calculateSexDifference(){
         int sexOfPerson1 = this.person1.getSex() == Sex.female? 1 : 0;
         int sexOfPerson2 = this.person2.getSex() == Sex.female? 1 : 0;
-        return (sexOfPerson1 + sexOfPerson2) / 2;
+        return (sexOfPerson1 + sexOfPerson2) / 2.0;
     }
 
     public double getSexDeviation() {
@@ -175,14 +173,14 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair {" + "PairIndicator = " + this.indicator + "," +
+        return "Pair {"  +
                 "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() + ", Age : " + person1.getAge() + ", AgeRange : "+ person1.getAgeRange() +
-                ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
+                ", Food Preference : " + person1.getFoodPreference() + ", Sex : " + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +
                 ", kitchen : " + person1.getKitchen() +
                 ", kitchenCount=" + person1.getKitchenCount() +
                 ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() + ", Age : " + person2.getAge() + ", AgeRange : "+ person2.getAgeRange() +
-                ", Food Preference : " + person2.getFoodPreference() + ", Sex" + person2.getSex() +
+                ", Food Preference : " + person2.getFoodPreference() + ", Sex : " + person2.getSex() +
                 ", has kitchen : " + person2.getHasKitchen() +
                 '}';
     }

@@ -156,6 +156,15 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
     }
 
     /**
+     * Returns the list of pairs.
+     *
+     * @return the list of pairs
+     */
+    public static List<Pair> getGeneratedPairs() {
+        return generatedPairs;
+    }
+
+    /**
      * Returns the list of successors.
      *
      * @return the list of successors

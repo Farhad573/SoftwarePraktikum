@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static model.CSVFileReader.getPairs;
-import static model.CSVFileReader.getParticipants;
+import static model.CSVFileReader.*;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
@@ -45,16 +44,18 @@ public class Main {
 
         System.out.println("###############################################");
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
-        System.out.println("number of generated Pairs is " + initialPair.size());
+        System.out.println("number of generated Pairs is " + getGeneratedPairs().size());
         System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
         System.out.println("number of initial pairs from initial population generator is " + initialPair.size() );
         System.out.println("number of pairs from CSV is " + csvPairs.size());
+        System.out.println("pair kenZahl is -> " + pairGenerator.makeIndicatorForPairsList(initialPair));
         System.out.println("###############################################");
 
 
 
         List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair,csvPairs);
+
         groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
         List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
@@ -75,6 +76,19 @@ public class Main {
         List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
         System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
 //        for (Pair pair: concatenatedlist
+
+//        groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
+//        System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
+//        List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
+////        System.out.println(groupList);
+//     System.out.println("Number of generated groups in starter is " + groupList.size());
+//        List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
+//     System.out.println("Number of generated groups in Maindish is " + groupList1.size());
+//        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
+//        System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
+
+//        for (Pair pair: initialPair
+
 //             ) {
 //            System.out.println(pair);
 //        }
