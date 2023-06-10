@@ -1,0 +1,337 @@
+{
+  "title": "result_schema",
+  "description": "Auto generated JSON schema based on the 'result_schema' file",
+  "type": "object",
+  "properties": {
+    "$defs": {
+      "type": "object",
+      "properties": {
+        "kitchen": {
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "array",
+              "items": {}
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "emergencyKitchen": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "story": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "longitude": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        },
+        "pair": {
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "foodPreference": {
+                  "type": "object",
+                  "properties": {
+                    "enum": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "firstParticipant": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "secondParticipant": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "premade": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        },
+        "participant": {
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "foodPreference": {
+                  "type": "object",
+                  "properties": {
+                    "enum": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "gender": {
+                  "type": "object",
+                  "properties": {
+                    "enum": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "name": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "id": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "kitchen": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "age": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        },
+        "group": {
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "cookingPair": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "foodType": {
+                  "type": "object",
+                  "properties": {
+                    "enum": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "course": {
+                  "type": "object",
+                  "properties": {
+                    "enum": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "thirdPair": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "kitchen": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "secondPair": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "additionalProperties": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "successorParticipants": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "$ref": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "successorPairs": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "$ref": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "groups": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "$ref": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "pairs": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "$ref": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "required": {
+      "type": "array",
+      "items": {}
+    }
+  }
+}
