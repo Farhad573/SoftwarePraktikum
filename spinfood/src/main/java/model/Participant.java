@@ -1,5 +1,7 @@
 package model;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 import java.util.Objects;
 
 /**
@@ -185,6 +187,18 @@ public class Participant {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, age, ageRange, hasKitchen, foodPreference, sex, kitchen, kitchenCount);
+    }
+
+    public JsonObject toJson(){
+        JsonObject participantJson = new JsonObject();
+        participantJson.put("id",id);
+        participantJson.put("name",name);
+        participantJson.put("foodPreference",foodPreference.toString());
+        participantJson.put("age",age);
+        participantJson.put("gender",sex.toString());
+        JsonObject kitchen = getKitchen().toJson();
+        participantJson.put("kitchen",kitchen);
+        return participantJson;
     }
 
     /**
