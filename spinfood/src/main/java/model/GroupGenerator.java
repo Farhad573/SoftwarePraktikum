@@ -47,7 +47,7 @@ public class GroupGenerator extends ParticipantManager {
                     if (checkGroupFoodPreference(pair1, pair2, pair3)
                              //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
-                        Group group = new Group(pair1, pair2, pair3);
+                        Group group = new Group(pair1, pair2, pair3,Course.first);
                         map.put(group, 1.0);
                     }
                 }
@@ -99,7 +99,7 @@ public class GroupGenerator extends ParticipantManager {
 //                            && !usedPairs.contains(pair2)
 //                            && !usedPairs.contains(pair3)
                     ) { // kitchen check to after party
-                        Group group = new Group(pair1, pair2, pair3);
+                        Group group = new Group(pair1, pair2, pair3,Course.main);
                         double fitness = GroupFitnessEvaluator.evaluateFitnessForMainDish(group);
                         map.put(group,fitness);
 //                        if (fitness > 0) {
@@ -157,7 +157,7 @@ public class GroupGenerator extends ParticipantManager {
 //                            && !usedPairs.contains(pair2)
 //                            && !usedPairs.contains(pair3)
                     ) { // kitchen check to after party
-                        Group group = new Group(pair1, pair2, pair3);
+                        Group group = new Group(pair1, pair2, pair3,Course.dessert);
                         double fitness = GroupFitnessEvaluator.evaluateFitnessForDessert(group);
                         map.put(group,fitness);
 //                        if (fitness > 0) {
@@ -318,7 +318,7 @@ public class GroupGenerator extends ParticipantManager {
         Location location1 = pair1.getKitchen().getKitchen_location();
         Location location2 = pair2.getKitchen().getKitchen_location();
         Location location3 = pair3.getKitchen().getKitchen_location();
-        Course course = Course.starter;
+        Course course = Course.first;
         int index1 = pairs.indexOf(group.pair1);
         int index2 = pairs.indexOf(group.pair2);
         int index3 = pairs.indexOf(group.pair3);
@@ -343,7 +343,7 @@ public class GroupGenerator extends ParticipantManager {
         map.put(pair3,location);
     }
     private void findWhichPairToCookInMainDish(Group group, List<Pair> pairs){
-        Course course = Course.maincourse;
+        Course course = Course.main;
 
         List<Pair> pairsWhoDidntCook = group.getPairsInGroup().stream().filter(x -> !x.isHaveCooked()).toList();
         Pair pair1 = pairsWhoDidntCook.get(0);

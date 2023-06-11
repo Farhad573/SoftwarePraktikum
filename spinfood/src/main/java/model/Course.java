@@ -1,7 +1,7 @@
 package model;
 
 public enum Course {
-    starter,
-    maincourse,
+    first,
+    main,
     dessert
 }

@@ -1,5 +1,7 @@
 package model;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,6 +10,7 @@ public class Group {
     Pair pair1;
     Pair pair2;
     Pair pair3;
+    Pair cookingPair;
 
 
     private FoodPreference mainFoodPreference;
@@ -15,8 +18,10 @@ public class Group {
 
     private final int preferenceDeviation;
     private double sexDeviation;
+    private Course course;
+    private Kitchen kitchen;
 
-    public Group(Pair pair1, Pair pair2, Pair pair3) {
+    public Group(Pair pair1, Pair pair2, Pair pair3,Course course) {
         this.pair1 = pair1;
         this.pair2 = pair2;
         this.pair3 = pair3;
@@ -24,6 +29,21 @@ public class Group {
         this.preferenceDeviation = calculatePreferenceDeviation();
         calculateMainFoodPreference(pair1, pair2, pair3);
         this.sexDeviation = calculateSexDeviation();
+        this.course = course;
+    }
+    public JsonObject toJson(){
+        JsonObject groupJson = new JsonObject();
+        groupJson.put("course",course.toString());
+        groupJson.put("foodType",mainFoodPreference.toString());
+        JsonObject kitchen = this.kitchen.toJson();
+        groupJson.put("kitchen",kitchen);
+        JsonObject cookingPair = this.cookingPair.toJson();
+        JsonObject secondPair = pair2.toJson();
+        JsonObject thirdPair = pair3.toJson();
+        groupJson.put("cookingPair",cookingPair);
+        groupJson.put("secondPair",secondPair);
+        groupJson.put("thirdPair",thirdPair);
+        return groupJson;
     }
 
     private void calculateMainFoodPreference(Pair pair1, Pair pair2, Pair pair3) {
@@ -123,6 +143,19 @@ public class Group {
     private double calculateSexDeviation(){
         return (pair1.getSexDeviation() + pair2.getSexDeviation() + pair3.getSexDeviation()) / 3;
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public Kitchen getKitchen() {
+        return kitchen;
+    }
+
+    public void setKitchen(Kitchen kitchen) {
+        this.kitchen = kitchen;
+    }
+
 
     public void setPairsWhoMetInStarter(Group group) {
         Pair pair1 = group.pair1;
