@@ -50,65 +50,91 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             String name_2 = "";
             double age_2 = 0;
             Sex sex_2 = null;
-            if( hasKitchen != HasKitchen.no ){
+            boolean checkHasKitchen = hasKitchen != HasKitchen.no;
+            boolean checkIfRegisteredAsPair = fields.length >= 14;
+            if(checkHasKitchen){
                 // check kitchen attributes
 
-                if (fields.length >= 8 && !fields[7].isEmpty()) {
+                boolean checkIfKitchenStoryIsGiven = fields.length >= 8 && !fields[7].isEmpty();
+                if (checkIfKitchenStoryIsGiven) {
                     kitchen_story = Double.parseDouble(fields[7]);
                 }
                 // check kitchen location
                 Location kitchen_location = null;
-                if (fields.length >= 10 && !fields[8].isEmpty() && !fields[9].isEmpty()) {
-                    kitchen_long = Double.parseDouble(fields[8]);
-                    kitchen_lat = Double.parseDouble(fields[9]);
-                    kitchen_location = new Location(kitchen_long, kitchen_lat);
+                boolean checkIfKitchenCoordinatesIsGiven = fields.length >= 10 && !fields[8].isEmpty() && !fields[9].isEmpty();
+                if (checkIfKitchenCoordinatesIsGiven) {
+                    kitchen_location = makeLocationObject(fields);
                 }
                 Kitchen kitchen = new Kitchen(kitchen_story, kitchen_location);
                 int count = kitchenCountMap.getOrDefault(kitchen, 0);
                 kitchenCountMap.put(kitchen, count + 1);
-                if (fields.length >= 14) {
+                if (checkIfRegisteredAsPair) {
                     id_2 = fields[10];
                     name_2 = fields[11];
                     age_2 = Double.parseDouble(fields[12]);
                     sex_2 = Sex.valueOf(fields[13]);
-                    Participant person1 = new Participant(id, name, age,hasKitchen, foodPreference, sex, kitchen);
-                    Participant person2 = new Participant(id_2, name_2, age_2,hasKitchen, foodPreference, sex_2, kitchen);
-                    Pair pair = new Pair(person1, person2,true);
-                    pairs.add(pair);
+                    createAndAddParticipantPair(id, name, age, hasKitchen, foodPreference, sex, kitchen, id_2, name_2, age_2, sex_2);
                 }else {
-                    participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen));
+                    createAndAddParticipant(id, name, age, hasKitchen, foodPreference, sex, kitchen);
                 }
             }else {
-                if (fields.length >= 14) {
+                if (checkIfRegisteredAsPair) {
                     id_2 = fields[10];
                     name_2 = fields[11];
                     age_2 = Double.parseDouble(fields[12]);
                     sex_2 = Sex.valueOf(fields[13]);
-                    Participant person1 = new Participant(id, name, age,hasKitchen, foodPreference, sex);
-                    Participant person2 = new Participant(id_2, name_2, age_2,hasKitchen, foodPreference, sex_2);
-                    Pair pair = new Pair(person1, person2,true);
-                    pairs.add(pair);
+                    createAndAddParticipantPair(id, name, age, hasKitchen, foodPreference, sex, null, id_2, name_2, age_2, sex_2);
                 }else {
-                    participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex));
+                    createAndAddParticipant(id, name, age, hasKitchen, foodPreference, sex, null);
                 }
             }
         }
         scanner.close();
 
         // Update the count field for each person in singles list
-        for (Participant person : participants) {
-            Kitchen kitchen = person.getKitchen();
-            int count = kitchenCountMap.getOrDefault(kitchen, 0);
-            person.setKitchenCount(count);
-        }
+        updateKitchenCountInParticipantsList();
 
         // Update the count field for each person in couples list
+            updateKitchenCountInPairsList();
+    }
+
+    private static void updateKitchenCountInPairsList() {
         for (Pair person : pairs) {
             Kitchen kitchen = person.getPerson1().getKitchen();
             int count = kitchenCountMap.getOrDefault(kitchen, 0);
             person.getPerson1().setKitchenCount(count);
         }
     }
+
+    private static void updateKitchenCountInParticipantsList() {
+        for (Participant person : participants) {
+            Kitchen kitchen = person.getKitchen();
+            int count = kitchenCountMap.getOrDefault(kitchen, 0);
+            person.setKitchenCount(count);
+        }
+    }
+
+    private static Location makeLocationObject(String[] fields) {
+        double kitchen_lat;
+        double kitchen_long;
+        Location kitchen_location;
+        kitchen_long = Double.parseDouble(fields[8]);
+        kitchen_lat = Double.parseDouble(fields[9]);
+        kitchen_location = new Location(kitchen_long, kitchen_lat);
+        return kitchen_location;
+    }
+
+    private void createAndAddParticipant(String id, String name, double age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
+        participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen));
+    }
+
+    private void createAndAddParticipantPair(String id1, String name1, double age1, HasKitchen hasKitchen1, FoodPreference foodPreference1,
+                                             Sex sex1, Kitchen kitchen, String id2, String name2, double age2, Sex sex2) {
+        Participant person1 = new Participant(id1, name1, age1, hasKitchen1, foodPreference1, sex1, kitchen);
+        Participant person2 = new Participant(id2, name2, age2, hasKitchen1, foodPreference1, sex2, kitchen);
+        pairs.add(new Pair(person1, person2, true));
+    }
+
 
 
 
@@ -128,6 +154,15 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
      */
     public static List<Pair> getPairs() {
         return pairs;
+    }
+
+    /**
+     * Returns the list of pairs.
+     *
+     * @return the list of pairs
+     */
+    public static List<Pair> getGeneratedPairs() {
+        return generatedPairs;
     }
 
     /**

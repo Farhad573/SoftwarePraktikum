@@ -4,11 +4,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * The PartyLocation class represents the location of the party.
+ */
 public class PartyLocation {
 
     private double longitude;
     private double latitude;
 
+    /**
+     * Reads the party location data from a CSV file.
+     *
+     * @param csvFileName The name of the CSV file.
+     * @throws FileNotFoundException if the specified file is not found.
+     */
     public void readCSVFilePartyLocation(String csvFileName) throws FileNotFoundException {
         File csvFile = new File(csvFileName);
         Scanner scanner = new Scanner(csvFile);
@@ -31,14 +40,29 @@ public class PartyLocation {
         scanner.close();
     }
 
+    /**
+     * Gets the longitude of the party location.
+     *
+     * @return The longitude value.
+     */
     public double getLongitude() {
         return longitude;
     }
 
+    /**
+     * Gets the latitude of the party location.
+     *
+     * @return The latitude value.
+     */
     public double getLatitude() {
         return latitude;
     }
 
+    /**
+     * Returns a string representation of the PartyLocation object.
+     *
+     * @return A string representation of the object.
+     */
     @Override
     public String toString() {
         return "PartyLocation{" +

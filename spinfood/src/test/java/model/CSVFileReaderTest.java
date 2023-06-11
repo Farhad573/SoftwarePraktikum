@@ -3,13 +3,16 @@ package model;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CSVFileReaderTest {
 
     CSVFileReader CSVFileReader = new CSVFileReader();
+    PairGenerator pairGenerator = new PairGenerator();
 
     // check the count of elements in the lists
     @Test
@@ -87,11 +90,31 @@ class CSVFileReaderTest {
     }
 
     @Test
-        void checkPairAgeDifference(){
-        Participant person1 = new Participant(26);
-        Participant person2 = new Participant(32);
-        Pair pair = new Pair(person1,person2,true);
-        assertEquals(2,pair.getAgeDifference());
+    void checkDuplicatesOfInitialPopulation(){
+        try{
+            CSVFileReader.readCSVFile("src/main/java/model/teilnehmerliste.csv");
+        }catch (FileNotFoundException e){
+            System.out.println("file is not found !!!");
+        }
+        List<Pair> initialPopulation = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+
+        boolean duplicate = hasNoDuplicates(initialPopulation);
+        assertTrue(duplicate);
+
     }
+    private <T> boolean hasNoDuplicates(List<T> list) {
+        Set<T> set = new HashSet<>();
+
+        for (T element : list) {
+            if (set.contains(element)) {
+                return false;
+            }
+            set.add(element);
+        }
+
+        return true;
+    }
+
+
 
 }

@@ -1,5 +1,8 @@
 package model;
 
+import controller.Distance;
+
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -7,20 +10,24 @@ import java.util.*;
  */
 public class Pair {
 
-    private final Participant person1;
-    private final Participant person2;
+    private  Participant person1;
+    private  Participant person2;
     private FoodPreference mainFoodPreference;
-    private final int ageDifference;
+    private  int ageDifference;
 
     private boolean pairSignUp;
 
-    private final int preferenceDeviation;
+    private  int preferenceDeviation;
     private boolean haveCooked ;
-    private Map<Pair,Course> metPairs ;
+    private List<Pair> metPairsInStarter;
+    private List<Pair> metPairsInMainDish;
+    private List<Pair> metPairsInDessert;
+    private Course course ;
 
-    public boolean isHaveCooked() {
-        return haveCooked;
-    }
+    double sexDeviation;
+
+    public double pathLength;
+
 
     /**
      * Constructs a Pair object with the given participants.
@@ -28,7 +35,6 @@ public class Pair {
      * @param person1 the first participant
      * @param person2 the second participant
      */
-
     public Pair(Participant person1, Participant person2,boolean pairSignUp) {
         this.person1 = person1;
         this.person2 = person2;
@@ -39,12 +45,15 @@ public class Pair {
         this.ageDifference = calculateAgeDifference(person1,person2);
         this.preferenceDeviation = calculatePreferenceDeviation();
         this.haveCooked = false;
-        this.metPairs = new HashMap<>();
+        this.metPairsInStarter = new ArrayList<>();
+        this.metPairsInMainDish = new ArrayList<>();
+        this.metPairsInDessert = new ArrayList<>();
+        this.sexDeviation = calculateSexDifference();
+    }
+    public Pair(Boolean haveCooked){
+        this.haveCooked = haveCooked;
     }
 
-    public Map<Pair, Course> getMetPairs() {
-        return metPairs;
-    }
 
     /**
      *
@@ -77,7 +86,7 @@ public class Pair {
                 person2.getFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = person2.getFoodPreference();
         }
-        // (2) meat|none && (1) vegan|vegan -> veggie | vwgan
+        // (2) meat|none && (1) vegan|vegan -> veggie | vegan
         else if((person2.getFoodPreference()==FoodPreference.meat ||
                 person2.getFoodPreference() == FoodPreference.none)
                 &&(person1.getFoodPreference() == FoodPreference.vegan ||
@@ -105,6 +114,17 @@ public class Pair {
         return Math.abs(this.person1.getFoodPreference().getValue() - this.person2.getFoodPreference().getValue());
     }
 
+    private double calculateSexDifference(){
+        int sexOfPerson1 = this.person1.getSex() == Sex.female? 1 : 0;
+        int sexOfPerson2 = this.person2.getSex() == Sex.female? 1 : 0;
+        return (sexOfPerson1 + sexOfPerson2) / 2.0;
+    }
+
+    public double getSexDeviation() {
+        return sexDeviation;
+    }
+
+
     /**
      * Checks if the pair is valid.
      *
@@ -113,6 +133,20 @@ public class Pair {
      public boolean validPair(){
         return true;
      }
+
+    public boolean isHaveCooked() {
+        return haveCooked;
+    }
+
+    public List<Pair> getMetPairsInStarter() {
+        return metPairsInStarter;
+    }
+
+    public void setHaveCooked(boolean haveCooked) {
+        this.haveCooked = haveCooked;
+    }
+
+
 
     /**
      *
@@ -150,14 +184,14 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair {" +
+        return "Pair {"  + "have cooked: " + this.haveCooked + ", " +
                 "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() + ", Age : " + person1.getAge() + ", AgeRange : "+ person1.getAgeRange() +
-                ", Food Preference : " + person1.getFoodPreference() + ", Sex" + person1.getSex() +
+                ", Food Preference : " + person1.getFoodPreference() + ", Sex : " + person1.getSex() +
                 ", has kitchen : " + person1.getHasKitchen() +
                 ", kitchen : " + person1.getKitchen() +
                 ", kitchenCount=" + person1.getKitchenCount() +
                 ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() + ", Age : " + person2.getAge() + ", AgeRange : "+ person2.getAgeRange() +
-                ", Food Preference : " + person2.getFoodPreference() + ", Sex" + person2.getSex() +
+                ", Food Preference : " + person2.getFoodPreference() + ", Sex : " + person2.getSex() +
                 ", has kitchen : " + person2.getHasKitchen() +
                 '}';
     }
@@ -189,7 +223,59 @@ public class Pair {
 
     }
 
-    public void setHaveCooked(boolean b) {
-        this.haveCooked = b;
+
+    public Course getCourse() {
+        return course;
     }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public List<Pair> getMetPairsInMainDish() {
+        return metPairsInMainDish;
+    }
+
+    public List<Pair> getMetPairsInDessert() {
+        return metPairsInDessert;
+    }
+
+    public void printPairsWhoCooked(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("have Pair cooked: " + this.isHaveCooked() + ", when : " + this.getCourse());
+        System.out.println(builder);
+    }
+
+    public void calculatePathLength(Pair pair) throws FileNotFoundException {
+        Location location1 = GroupGenerator.kitchenLocationsInStarter.get(pair);
+        Location location2 = GroupGenerator.kitchenLocationsInMainDish.get(pair);
+        Location location3 = GroupGenerator.kitchenLocationsInDessert.get(pair);
+        PartyLocation partyLocation = new PartyLocation();
+        partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
+        double partyLat = partyLocation.getLatitude();
+        double partyLon = partyLocation.getLongitude();
+        double distance1 = Distance.calculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());
+        double distance2 = Distance.calculateDistance(location2.getLatitude(),location2.getLongitude(),location3.getLatitude(),location3.getLongitude());
+        double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLat,partyLon);
+        this.pathLength = distance1 + distance2 + distance3;
+    }
+    public void printPairsWhoMet(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Course : Starter" + "\n");
+        for(int i = 0; i< metPairsInStarter.size();i++){
+            builder.append("pair"+i+" have cooked: " + metPairsInStarter.get(i).haveCooked + ", when?: " + metPairsInStarter.get(i).getCourse() + "\n" );
+        }
+        builder.append("Course : MainDish" + "\n");
+        for(int i = 0; i< metPairsInMainDish.size();i++){
+            builder.append("pair"+i+" have cooked: " + metPairsInMainDish.get(i).haveCooked + ", when?: " + metPairsInMainDish.get(i).getCourse() + "\n" );
+        }
+        builder.append("Course : Dessert" + "\n");
+        for(int i = 0; i< metPairsInDessert.size();i++){
+            builder.append("pair"+i+" have cooked: " + metPairsInDessert.get(i).haveCooked + ", when?: " + metPairsInDessert.get(i).getCourse() + "\n" );
+        }
+        System.out.println(builder);
+
+    }
+
+
 }
