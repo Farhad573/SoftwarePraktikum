@@ -24,6 +24,7 @@ public class ParticipantManager {
 
 
     protected static Map<Kitchen,Integer> kitchenCountMap;
+    public static Map<Kitchen,List<Pair>> kitchenMap;
 
 
     /**
@@ -40,6 +41,7 @@ public class ParticipantManager {
         starterSuccessors = new ArrayList<>();
         mainDishSuccessors = new ArrayList<>();
         dessertSuccessors = new ArrayList<>();
+        kitchenMap = new HashMap<>();
     }
 
 

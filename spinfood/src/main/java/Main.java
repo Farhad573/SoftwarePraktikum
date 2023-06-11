@@ -1,9 +1,8 @@
+import com.github.cliftonlabs.json_simple.JsonObject;
 import model.*;
 
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static model.CSVFileReader.*;
@@ -24,7 +23,7 @@ public class Main {
         Set<Pair> hashsetForMain = new HashSet<>(pairsWhoCookInMain);
         //System.out.println("check if we dont have duplicates in list of pairs who cook in Main");
         Boolean mainChecker = pairsWhoCookInMain.size() == hashsetForMain.size();
-        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInMain.size());
+        System.out.println(" number of pairs who cook in main -> " + pairsWhoCookInMain.size());
 
         List<Pair> pairsWhoCookInDessert = dessert.stream()
                 .flatMap(x -> x.getPairsInGroup().stream())
@@ -32,7 +31,7 @@ public class Main {
         Set<Pair> hashsetForDessert = new HashSet<>(pairsWhoCookInDessert);
         //System.out.println("check if we dont have duplicates in list of pairs who cook in Dessert");
         Boolean dessertChecker = pairsWhoCookInDessert.size() == hashsetForDessert.size();
-        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInDessert.size());
+        System.out.println(" number of pairs who cook in dessert -> " + pairsWhoCookInDessert.size());
         return starterChecker && mainChecker && dessertChecker;
 
     }
@@ -68,6 +67,13 @@ public class Main {
 
         System.out.println("###############################################");
         System.out.println(getParticipants().size());
+//        pairGenerator.calculateWGCount();
+//        for (Map.Entry<Kitchen, List<Pair>> entry : ParticipantManager.kitchenMap.entrySet()) {
+//            Kitchen kitchen = entry.getKey();
+//            List<Pair> pairList = entry.getValue();
+//            int pairCount = pairList.size();
+//            System.out.println("Kitchen used by " + pairCount + " pair(s)");
+//        }
 
         System.out.println("###############################################");
         List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
@@ -76,40 +82,42 @@ public class Main {
         System.out.println("###############################################");
         System.out.println("number of initial pairs from initial population generator is " + initialPair.size() );
         System.out.println("number of pairs from CSV is " + csvPairs.size());
-        System.out.println("pair kenZahl is -> " + pairGenerator.makeIndicatorForPairsList(initialPair));
         System.out.println("###############################################");
 
 
-
         List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair,csvPairs);
+        System.out.println("pair kenZahl is -> " + pairGenerator.makeIndicatorForPairsList(concatenatedlist));
 
         groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
-        List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
-
-     System.out.println("Number of generated groups in starter is " + groupList.size());
-        List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
-     System.out.println("Number of generated groups in Maindish is " + groupList1.size());
-        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
+        List<Group> starterGroups = groupGenerator.makeStarterGroups(concatenatedlist,1);
+        List<Pair> pairsInStarter = starterGroups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
+        System.out.println("number of pairs in starter is " + pairsInStarter.size());
+        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
+        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
+        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
+        System.out.println("Number of generated groups in starter is " + starterGroups.size());
+        System.out.println("Number of generated groups in Maindish is " + mainDishGroup.size());
         System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
-        System.out.println("check if we dont have duplicates in pairs who cook in all Steps -> " + checkDuplicatesinAllSteps(groupList,groupList1,desertGroups));
-//        for (Pair pair: concatenatedlist
+        //System.out.println("check if we dont have duplicates in pairs who cook in all Steps -> " + checkDuplicatesinAllSteps(starterGroups,mainDishGroup,desertGroups));
+        System.out.println("number of pairs in starterMap is " + GroupGenerator.kitchenLocationsInStarter.keySet().size());
+        System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
+        System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
-//        groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
-//        System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
-//        List<Group> groupList = groupGenerator.makeStarterGroups(concatenatedlist,1);
-////        System.out.println(groupList);
-//     System.out.println("Number of generated groups in starter is " + groupList.size());
-//        List<Group> groupList1 = groupGenerator.makeMainDishGroups(concatenatedlist, 1);
-//     System.out.println("Number of generated groups in Maindish is " + groupList1.size());
-//        List<Group> desertGroups = groupGenerator.makeDessertGroups(concatenatedlist);
-//        System.out.println("Number of generated groups in dessert -> " + desertGroups.size());
+        Pair pair1 = new Pair(true);
+        Pair pair2 = new Pair(false);
+        Pair pair3 = new Pair(false);
+        System.out.println(GroupFitnessEvaluator.checkIfOneOfPairsHaveCooked(pair1,pair2,pair3));
 
-//        for (Pair pair: initialPair
-
+//        for (Pair pair:pairsInStarter
 //             ) {
-//            System.out.println(pair);
+//            pair.calculatePathLength(pair);
+//            System.out.println(pair.pathLength);
 //        }
+        HashMap<Integer,String> map = new HashMap<>();
+        map.put(1,"A");
+        map.put(1,"B");
+        System.out.println(map.entrySet());
 
     }
 }

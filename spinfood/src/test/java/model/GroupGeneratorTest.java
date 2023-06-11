@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static model.CSVFileReader.getParticipants;
 import static model.ParticipantManager.participants;
@@ -246,13 +247,18 @@ public class GroupGeneratorTest {
     void DessertGroupHaveAllPairCookTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
         List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
-        List<Group> groupGeneration0 = groupGenerator.makeStarterGroups(concat, 2);
-        List<Group> groupGeneration1 = groupGenerator.makeMainDishGroups(concat, 2);
+        List<Group> groupGeneration0 = groupGenerator.makeStarterGroups(concat, 1);
+        List<Group> groupGeneration1 = groupGenerator.makeMainDishGroups(concat, 1);
         List<Group> groupGeneration = groupGenerator.makeDessertGroups(concat);
+
         for (Group group : groupGeneration) {
             Pair pair1 = group.pair1;
+            //pair1.printPairsWhoMet();
             Pair pair2 = group.pair2;
+            //pair2.printPairsWhoMet();
             Pair pair3 = group.pair3;
+            //pair3.printPairsWhoMet();
+            //group.printPairsWhoCooked();
 
             // Check for duplicates before adding participants to the set
             if (!checkIfAllPairsHaveCooked(pair1, pair2, pair3)) {
@@ -300,6 +306,100 @@ public class GroupGeneratorTest {
 
         }
     }
+
+    @Test
+    void checkNumberOfPairsWhoCookedInStarter() throws FileNotFoundException {
+        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        groupGenerator.pairsSortedBasedOnDistance(concat);
+        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 1);
+        List<Pair> pairsWhoCookInStarter = groupGeneration.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Assertions.assertEquals(groupGeneration.size(),pairsWhoCookInStarter.size());
+
+        for (Group group : groupGeneration) {
+            group.printPairsWhoCooked();
+        }
+    }
+
+    @Test
+    void checkNumberOfPairsWhoCookedInMainDish() throws FileNotFoundException {
+        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        groupGenerator.pairsSortedBasedOnDistance(concat);
+        List<Group> starterGroups = groupGenerator.makeStarterGroups(concat, 2);
+        List<Pair> pairsWhoCookInStarter = starterGroups.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Assertions.assertEquals(starterGroups.size() ,pairsWhoCookInStarter.size());
+        for (Group group : starterGroups) {
+            group.printPairsWhoCooked();
+        }
+        System.out.println("#".repeat(30));
+        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(concat, 1);
+        List<Pair> pairsWhoCookInMainDish = mainDishGroup.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Assertions.assertEquals(mainDishGroup.size() * 2,pairsWhoCookInMainDish.size());
+
+        for (Group group : mainDishGroup) {
+            group.printPairsWhoCooked();
+        }
+    }
+    @Test
+    void checkNumberOfPairsWhoCookedInDessert() throws FileNotFoundException {
+        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getPairs());
+        groupGenerator.pairsSortedBasedOnDistance(concat);
+        List<Group> starterGroups = groupGenerator.makeStarterGroups(concat, 2);
+        List<Pair> pairsWhoCookInStarter = starterGroups.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Assertions.assertEquals(starterGroups.size() ,pairsWhoCookInStarter.size());
+        List<Pair> pairsInStarter = starterGroups.stream().flatMap(x-> x.getPairsInGroup().stream()).collect(Collectors.toList());
+        System.out.println("number of Pairs in starter is " + pairsInStarter.size());
+
+
+
+//        for (Group group : starterGroups) {
+//            group.printPairsWhoCooked();
+//        }
+
+        System.out.println("#".repeat(90));
+        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 1);
+        List<Pair> pairsWhoCookInMainDish = mainDishGroup.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Assertions.assertEquals(mainDishGroup.size() * 2,pairsWhoCookInMainDish.size());
+       // List<Pair> pairsInMainDish = mainDishGroup.stream().flatMap(x -> x.getPairsInGroup().stream()).toList();
+
+
+//        for (Group group : mainDishGroup) {
+//            group.printPairsWhoCooked();
+//        }
+
+        System.out.println("#".repeat(30));
+        List<Group> dessertGroup = groupGenerator.makeDessertGroups(pairsInStarter);
+        List<Pair> pairsWhoCookInDessert = dessertGroup.stream()
+                .flatMap(x -> x.getPairsInGroup().stream())
+                .filter(Pair::isHaveCooked).toList();
+        Assertions.assertEquals(dessertGroup.size() * 3,pairsWhoCookInDessert.size());
+        System.out.println("number of pairs in starterMap is " + GroupGenerator.kitchenLocationsInStarter.keySet().size());
+        System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
+        System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
+
+//        for (Group group : dessertGroup) {
+//            group.printPairsWhoCooked();
+//        }
+//        for (Pair pair: concat
+//             ) {
+//            pair.printPairsWhoMet();
+//        }
+        System.out.println("#".repeat(30));
+
+    }
+
 
 @Test
     void checkNumberOfStarterWithMainDish(){

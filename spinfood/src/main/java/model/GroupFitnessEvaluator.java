@@ -29,7 +29,7 @@ public class GroupFitnessEvaluator {
     public static double evaluateFitnessForDessert(Group group) {
         // Calculate fitness based on different criteria
         double fitness = 0.0;
-        fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
+        fitness += didPairsMeetInMainDish(group.pair1, group.pair2, group.pair3);
         fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
         fitness += checkIfTwoOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
         return fitness;
@@ -43,7 +43,7 @@ public class GroupFitnessEvaluator {
      * @param pair3 The third pair.
      * @return 1.0 if at least one pair has cooked, -8.0 otherwise.
      */
-    private static double checkIfOneOfPairsHaveCooked(Pair pair1, Pair pair2, Pair pair3) {
+    public static double checkIfOneOfPairsHaveCooked(Pair pair1, Pair pair2, Pair pair3) {
         if ((pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) ||
                 (!pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) ||
                 (pair2.isHaveCooked() && !pair3.isHaveCooked() && !pair1.isHaveCooked())) {
@@ -63,7 +63,7 @@ public class GroupFitnessEvaluator {
     private static double checkIfTwoOfPairsHaveCooked(Pair pair1, Pair pair2, Pair pair3) {
         if ((pair1.isHaveCooked() && pair2.isHaveCooked() && !pair3.isHaveCooked()) ||
                 (pair1.isHaveCooked() && pair3.isHaveCooked() && !pair2.isHaveCooked()) ||
-                (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked())) {
+                (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked() )) {
             return 1.0;
         } else {
             return -8.0;
@@ -78,7 +78,7 @@ public class GroupFitnessEvaluator {
      * @param pair3 The third pair.
      * @return -8.0 if all pairs haven't cooked, 1.0 otherwise.
      */
-    private static double checkIfAllPairsDidntCook(Pair pair1, Pair pair2, Pair pair3) {
+    public static double checkIfAllPairsDidntCook(Pair pair1, Pair pair2, Pair pair3) {
         if (!pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) {
             return -8.0;
         } else {
@@ -94,10 +94,22 @@ public class GroupFitnessEvaluator {
      * @param pair3 The third pair.
      * @return 1.0 if pairs haven't met, -8.0 otherwise.
      */
-    private static double didPairsMeet(Pair pair1, Pair pair2, Pair pair3) {
-        if (!pair1.getMetPairs().contains(pair2) && !pair1.getMetPairs().contains(pair3) &&
-                !pair2.getMetPairs().contains(pair1) && !pair2.getMetPairs().contains(pair3) &&
-                !pair3.getMetPairs().contains(pair1) && !pair3.getMetPairs().contains(pair2)) {
+    public static double didPairsMeet(Pair pair1, Pair pair2, Pair pair3) {
+        if (!pair1.getMetPairsInStarter().contains(pair2) && !pair1.getMetPairsInStarter().contains(pair3) &&
+                !pair2.getMetPairsInStarter().contains(pair1) && !pair2.getMetPairsInStarter().contains(pair3) &&
+                !pair3.getMetPairsInStarter().contains(pair1) && !pair3.getMetPairsInStarter().contains(pair2)) {
+            return 1.0;
+        } else {
+            return -8.0;
+        }
+    }
+    public static double didPairsMeetInMainDish(Pair pair1, Pair pair2, Pair pair3) {
+        if (!pair1.getMetPairsInStarter().contains(pair2) && !pair1.getMetPairsInStarter().contains(pair3) &&
+                !pair1.getMetPairsInMainDish().contains(pair2) && !pair1.getMetPairsInMainDish().contains(pair3) &&
+                !pair2.getMetPairsInStarter().contains(pair1) && !pair2.getMetPairsInStarter().contains(pair3) &&
+                !pair2.getMetPairsInMainDish().contains(pair1) && !pair2.getMetPairsInMainDish().contains(pair3) &&
+                !pair3.getMetPairsInStarter().contains(pair1) && !pair3.getMetPairsInStarter().contains(pair2) &&
+                !pair3.getMetPairsInMainDish().contains(pair1) && !pair3.getMetPairsInMainDish().contains(pair2) ) {
             return 1.0;
         } else {
             return -8.0;

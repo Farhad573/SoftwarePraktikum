@@ -1,12 +1,8 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+public class FitnessEvaluator {
 
-public class PairFitnessEvaluator {
-
-    public static double evaluateFitness(Pair pair, Map<Kitchen, List<Pair>> map) {
+    public static double evaluateFitness(Pair pair) {
         double fitness = 0.0;
 
         fitness += calculateFoodPreferenceFitness(pair);
@@ -14,18 +10,8 @@ public class PairFitnessEvaluator {
         fitness += calculateGenderDiversityFitness(pair);
         fitness += calculateKitchenFitness(pair);
         fitness += calculatePreferenceDeviationFitness(pair);
-        fitness += pair.getSexDeviation();
-        fitness += calculateWGCountFitness(pair,map);
 
         return fitness;
-    }
-    private static double calculateWGCountFitness(Pair pair,Map<Kitchen, List<Pair>> map){
-        Kitchen kitchen = pair.getKitchen();
-        int kitchenCount = map.getOrDefault(kitchen,new ArrayList<>()).size();
-        if(kitchenCount >= 3){
-            return - 8.0;
-        }else
-            return 1.0;
     }
 
     private static double calculateFoodPreferenceFitness(Pair pair) {
@@ -35,24 +21,19 @@ public class PairFitnessEvaluator {
         if (pref1 == pref2) {
             // Same food preference, assign higher fitness
             return 1.0;
-        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) ||
-                (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
+        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) || (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
             // meat && none
             return 1.0;
-        } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) ||
-                (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
+        } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) || (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
             // veggie & vegan
             return 1.0;
-        } else if (((pref1 == FoodPreference.veggie ||
-                pref1 == FoodPreference.vegan) &&
-                (pref2 == FoodPreference.none)) ||
-                ((pref2 == FoodPreference.veggie ||
-                        pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none))) {
+        } else if (((pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan) && (pref2 == FoodPreference.none)) ||
+                ((pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none))) {
             // none & veggie | vegan
             return 0.8;
         } else {
             // meat & veggie | vegan
-            return -8.0;
+            return -0.5;
         }
     }
 
@@ -63,12 +44,10 @@ public class PairFitnessEvaluator {
         if (pref1 == pref2) {
             // Same food preference, assign higher fitness
             return true;
-        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) ||
-                (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
+        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) || (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
             // meat && none
             return true;
-        } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) ||
-                (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
+        } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) || (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
             // veggie & vegan
             return true;
         } else if (((pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan) && (pref2 == FoodPreference.none)) ||
@@ -105,7 +84,7 @@ public class PairFitnessEvaluator {
             return 0.5;
         } else {
 
-            return -8.0;
+            return -0.5;
         }
     }
 
@@ -137,13 +116,8 @@ public class PairFitnessEvaluator {
         } else if (preferenceDeviation == 1) {
             return 0.5;
         } else {
-            return -8.0;
+            return -0.5;
         }
-    }
-
-
-    public static boolean checkSexDifference(Pair pair){
-        return pair.getSexDeviation() >= 0.5;
     }
 
 

@@ -1,6 +1,7 @@
 package model;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class PairGenerator extends ParticipantManager {
      */
     public static List<Pair> generateInitialPopulation(List<Participant> participants) {
         HashSet<Participant> usedParticipants = new HashSet<>();
+        calculateWGCount();
         for (int i = 0; i < participants.size(); i++) {
             Participant participant1 = participants.get(i);
 
@@ -29,7 +31,7 @@ public class PairGenerator extends ParticipantManager {
                         !usedParticipants.contains(participant2)) {
                     Pair pair = new Pair(participant1, participant2, false);
 
-                    double fitness = PairFitnessEvaluator.evaluateFitness(pair);
+                    double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap);
                     if (fitness > 4.0) {
                         generatedPairs.add(pair);
                         usedParticipants.add(participant1);
@@ -58,22 +60,16 @@ public class PairGenerator extends ParticipantManager {
        // makeIndicatorForPairs(pairs);
         return pairs;
     }
+    public static void calculateWGCount(){
+        for (Pair pair:pairs) {
+            Kitchen kitchen = pair.getKitchen();
+            List<Pair> pairList = kitchenMap.getOrDefault(kitchen, new ArrayList<>());
+            pairList.add(pair);
+            kitchenMap.put(kitchen, pairList);
+        }
+    }
 
-//    /**
-//     * it loops through the whole Pairs and calculate their Indicator(Kenzahl)
-//     *
-//     * @param list
-//     */
-//    public void makeIndicatorForPairs(List<Pair> list) {
-//        for (Pair pair : list
-//        ) {
-//            pair.indicator += list.size();
-//            pair.indicator += pairSuccessors.size();
-//            pair.indicator += pair.getSexDeviation();
-//            pair.indicator += pair.getAgeDifference();
-//            pair.indicator += pair.getPreferenceDeviation();
-//        }
-//    }
+
 
 
     public static String makeIndicatorForPairsList(List<Pair> pairs){
@@ -84,18 +80,23 @@ public class PairGenerator extends ParticipantManager {
         double ageDifference = 0 ;
         double preferenceDeviation = 0 ;
 
-        for (Pair pair : generatedPairs ){
+        for (Pair pair : pairs  ){
             sexDeviation += pair.getSexDeviation();
             ageDifference += pair.getAgeDifference();
             preferenceDeviation += pair.getPreferenceDeviation();
         }
 
         sexDeviation = sexDeviation / pairSize;
+        double averageSexDeviation = 0;
+        for(Pair pair : pairs){
+            averageSexDeviation = Math.abs(pair.getSexDeviation() - sexDeviation);
+        }
+        averageSexDeviation = averageSexDeviation / pairSize;
         ageDifference = ageDifference / pairSize;
         preferenceDeviation = preferenceDeviation / pairSize;
 
         DecimalFormat df = new DecimalFormat("#.##");
-        return indicator + pairSize + " _ "  + successorSize + " _ " + df.format(sexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation);
+        return indicator + pairSize + " _ "  + successorSize + " _ " + df.format(averageSexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation);
     }
 
 
