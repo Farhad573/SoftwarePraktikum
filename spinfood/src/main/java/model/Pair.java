@@ -1,5 +1,6 @@
 package model;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import controller.Distance;
 
 import java.io.FileNotFoundException;
@@ -122,6 +123,17 @@ public class Pair {
 
     public double getSexDeviation() {
         return sexDeviation;
+    }
+
+    public JsonObject toJson(){
+        JsonObject pairJson = new JsonObject();
+        pairJson.put("premade",pairSignUp);
+        pairJson.put("foodPreference",mainFoodPreference.toString());
+        JsonObject participant1 = person1.toJson();
+        JsonObject participant2 = person2.toJson();
+        pairJson.put("firstParticipant",participant1);
+        pairJson.put("secondParticipant",participant2);
+        return pairJson;
     }
 
 
