@@ -65,22 +65,36 @@ public class Group {
         else if ((pair1.getMainFoodPreference() == FoodPreference.veggie ||
                 pair1.getMainFoodPreference() == FoodPreference.vegan) &&
                 (pair2.getMainFoodPreference() == FoodPreference.vegan ||
-                        pair2.getMainFoodPreference() == FoodPreference.veggie)) {
+                        pair2.getMainFoodPreference() == FoodPreference.veggie)
+                &&
+                (pair3.getMainFoodPreference() == FoodPreference.vegan ||
+                        pair3.getMainFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = FoodPreference.vegan;
         }
         // (1) meat|none & (2) Veggie|Veganer -> Veganer
         else if ((pair1.getMainFoodPreference() == FoodPreference.meat ||
                 pair1.getMainFoodPreference() == FoodPreference.none)
                 && (pair2.getMainFoodPreference() == FoodPreference.vegan ||
-                pair2.getMainFoodPreference() == FoodPreference.veggie)) {
+                pair2.getMainFoodPreference() == FoodPreference.veggie)
+                && (pair3.getMainFoodPreference() == FoodPreference.vegan ||
+                pair3.getMainFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = pair2.getMainFoodPreference();
         }
         // (2) meat|none && (1) vegan|vegan -> veggie | vwgan
         else if ((pair2.getMainFoodPreference() == FoodPreference.meat ||
                 pair2.getMainFoodPreference() == FoodPreference.none)
                 && (pair1.getMainFoodPreference() == FoodPreference.vegan ||
-                pair1.getMainFoodPreference() == FoodPreference.veggie)) {
+                pair1.getMainFoodPreference() == FoodPreference.veggie)
+                && (pair3.getMainFoodPreference() == FoodPreference.vegan ||
+                pair3.getMainFoodPreference() == FoodPreference.veggie)) {
 
+            this.mainFoodPreference = pair1.getMainFoodPreference();
+        } else if ((pair3.getMainFoodPreference() == FoodPreference.meat ||
+                pair3.getMainFoodPreference() == FoodPreference.none)
+                && (pair1.getMainFoodPreference() == FoodPreference.vegan ||
+                pair1.getMainFoodPreference() == FoodPreference.veggie)
+                && (pair2.getMainFoodPreference() == FoodPreference.vegan ||
+                pair2.getMainFoodPreference() == FoodPreference.veggie)) {
             this.mainFoodPreference = pair1.getMainFoodPreference();
         }
     }
@@ -89,7 +103,10 @@ public class Group {
     public String toString() {
         return "Group {" +
                 "did pair1 cooked " + pair1.isHaveCooked() + "did pair2 cooked " + pair2.isHaveCooked() + "did pair3 cooked " + pair3.isHaveCooked() +
-                "pair1=" + "\n" + pair1 + "\n" + "pair2=" + "\n" + pair2 + "\n" + "pair3=" + "\n" + pair3 + "\n" + "#".repeat(10)
+                "pair1=" + " Pair1_MainFoodPreferece " + pair1.getMainFoodPreference() +
+                " Pair2_MainFoodPreferece " + pair2.getMainFoodPreference() +
+                 " Pair3_MainFoodPreferece " + pair3.getMainFoodPreference() +
+                "\n" + pair1 + "\n" + "pair2=" + "\n" + pair2 + "\n" + "pair3=" + "\n" + pair3 + "\n" + "#".repeat(10)
                 ;
     }
 

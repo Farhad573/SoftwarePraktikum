@@ -17,10 +17,9 @@ public class ParticipantManager {
 
     protected static List<Pair> pairs;
     protected static List<Participant> pairSuccessors;
-    protected static List<Group> groups;
+    protected static List<Group> generatedGroups;
     protected static List<Pair> starterSuccessors;
-    protected static List<Pair> mainDishSuccessors;
-    protected static List<Pair> dessertSuccessors;
+
     protected static List<Pair> generatedPairs;
 
 
@@ -39,13 +38,45 @@ public class ParticipantManager {
         pairs = new ArrayList<>();
         generatedPairs = new ArrayList<>();
         kitchenCountMap = new HashMap<>();
-        groups = new ArrayList<>();
+        generatedGroups = new ArrayList<>();
         starterSuccessors = new ArrayList<>();
-        mainDishSuccessors = new ArrayList<>();
-        dessertSuccessors = new ArrayList<>();
         kitchenMap = new HashMap<>();
         CSV_Pairs = new ArrayList<>();
     }
 
+    public static List<Group> getGeneratedGroups() {
+        return generatedGroups;
+    }
 
+    public static List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public static List<Pair> getCSV_Pairs() {
+        return CSV_Pairs;
+    }
+
+    public static List<Pair> getPairs() {
+        return pairs;
+    }
+
+    public static List<Participant> getPairSuccessors() {
+        return pairSuccessors;
+    }
+
+    public static List<Pair> getStarterSuccessors() {
+        return starterSuccessors;
+    }
+
+    public static List<Pair> getGeneratedPairs() {
+        return generatedPairs;
+    }
+
+    public static Map<Kitchen, Integer> getKitchenCountMap() {
+        return kitchenCountMap;
+    }
+
+    public static Map<Kitchen, List<Pair>> getKitchenMap() {
+        return kitchenMap;
+    }
 }

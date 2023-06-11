@@ -71,6 +71,7 @@ public class GroupGenerator extends ParticipantManager {
         starterSuccessors.addAll(pairs.stream().filter(x -> !hashSet.contains(x)).toList());
         System.out.println("number starter of validPairs is " + hashSet.size());
         System.out.println("number of successors in starter " + starterSuccessors.size());
+        generatedGroups.addAll(resGroup);
         return resGroup;
     }
 
@@ -127,7 +128,7 @@ public class GroupGenerator extends ParticipantManager {
                 hashSet.add(group.pair3);
             }
         }
-
+        generatedGroups.addAll(resGroup);
         return resGroup;
     }
 
@@ -185,7 +186,7 @@ public class GroupGenerator extends ParticipantManager {
                 hashSet.add(group.pair3);
             }
         }
-
+        generatedGroups.addAll(resGroup);
         return resGroup;
     }
 
@@ -197,6 +198,8 @@ public class GroupGenerator extends ParticipantManager {
      * @param pair3 The third pair.
      * @return True if one of the pairs has cooked, false otherwise.
      */
+
+
     private boolean checkIfOneOfPairsHaveCooked(Pair pair1, Pair pair2, Pair pair3) {
         if (pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) {
             return true;
@@ -452,12 +455,5 @@ public class GroupGenerator extends ParticipantManager {
         return starterSuccessors;
     }
 
-    public static List<Pair> getMainDishSuccessors() {
-        return mainDishSuccessors;
-    }
-
-    public static List<Pair> getdessertSuccessors() {
-        return dessertSuccessors;
-    }
 
 }

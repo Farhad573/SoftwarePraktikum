@@ -39,6 +39,7 @@ public class Main {
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
+        JsonMaker jsonMaker = new JsonMaker();
         List<Pair> csvPairs = getCSV_Pairs();
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
@@ -102,20 +103,11 @@ public class Main {
         System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
-        Pair pair1 = new Pair(true);
-        Pair pair2 = new Pair(false);
-        Pair pair3 = new Pair(false);
-        System.out.println(GroupFitnessEvaluator.checkIfOneOfPairsHaveCooked(pair1,pair2,pair3));
+       //jsonMaker.makeJsonObject();
+         ParticipantManager.getGeneratedGroups().stream().filter(x -> x.getMainFoodPreference() == null).forEach(System.out::println);
 
-//        for (Pair pair:pairsInStarter
-//             ) {
-//            pair.calculatePathLength(pair);
-//            System.out.println(pair.pathLength);
-//        }
-        HashMap<Integer,String> map = new HashMap<>();
-        map.put(1,"A");
-        map.put(1,"B");
-        System.out.println(map.entrySet());
+
+
 
     }
 }
