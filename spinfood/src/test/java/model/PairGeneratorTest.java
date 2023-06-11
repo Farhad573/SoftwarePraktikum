@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 import static model.CSVFileReader.getParticipants;
-import static model.CSVFileReader.getPairs;
 
 class PairGeneratorTest {
     CSVFileReader CSVFileReader = new CSVFileReader();

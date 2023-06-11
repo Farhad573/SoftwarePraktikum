@@ -1,4 +1,3 @@
-import com.github.cliftonlabs.json_simple.JsonObject;
 import model.*;
 
 import java.io.FileNotFoundException;
@@ -40,7 +39,7 @@ public class Main {
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
-        List<Pair> csvPairs = getPairs();
+        List<Pair> csvPairs = getCSV_Pairs();
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
             partyLocation.readCSVFilePartyLocation("partylocation.csv");
@@ -58,7 +57,7 @@ public class Main {
 
         System.out.println("************************************************");
 
-        int pairLength = getPairs().size();
+        int pairLength = getCSV_Pairs().size();
         System.out.println("Length of pair list is: " + pairLength);
 
         System.out.println("************************************************");
@@ -66,7 +65,6 @@ public class Main {
         System.out.println("the count of all members : " + count);
 
         System.out.println("###############################################");
-        System.out.println(getParticipants().size());
 //        pairGenerator.calculateWGCount();
 //        for (Map.Entry<Kitchen, List<Pair>> entry : ParticipantManager.kitchenMap.entrySet()) {
 //            Kitchen kitchen = entry.getKey();

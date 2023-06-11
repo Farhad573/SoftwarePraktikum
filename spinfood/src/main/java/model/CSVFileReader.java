@@ -74,7 +74,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
                     name_2 = fields[11];
                     age_2 = Double.parseDouble(fields[12]);
                     sex_2 = Sex.valueOf(fields[13]);
-                    createAndAddParticipantPair(id, name, age, hasKitchen, foodPreference, sex, kitchen, id_2, name_2, age_2, sex_2);
+                    createAndAddCSVPair(id, name, age, hasKitchen, foodPreference, sex, kitchen, id_2, name_2, age_2, sex_2);
                 }else {
                     createAndAddParticipant(id, name, age, hasKitchen, foodPreference, sex, kitchen);
                 }
@@ -84,7 +84,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
                     name_2 = fields[11];
                     age_2 = Double.parseDouble(fields[12]);
                     sex_2 = Sex.valueOf(fields[13]);
-                    createAndAddParticipantPair(id, name, age, hasKitchen, foodPreference, sex, null, id_2, name_2, age_2, sex_2);
+                    createAndAddCSVPair(id, name, age, hasKitchen, foodPreference, sex, null, id_2, name_2, age_2, sex_2);
                 }else {
                     createAndAddParticipant(id, name, age, hasKitchen, foodPreference, sex, null);
                 }
@@ -100,7 +100,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
     }
 
     private static void updateKitchenCountInPairsList() {
-        for (Pair person : pairs) {
+        for (Pair person : CSV_Pairs) {
             Kitchen kitchen = person.getPerson1().getKitchen();
             int count = kitchenCountMap.getOrDefault(kitchen, 0);
             person.getPerson1().setKitchenCount(count);
@@ -129,11 +129,11 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
         participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen));
     }
 
-    private void createAndAddParticipantPair(String id1, String name1, double age1, HasKitchen hasKitchen1, FoodPreference foodPreference1,
-                                             Sex sex1, Kitchen kitchen, String id2, String name2, double age2, Sex sex2) {
+    private void createAndAddCSVPair(String id1, String name1, double age1, HasKitchen hasKitchen1, FoodPreference foodPreference1,
+                                     Sex sex1, Kitchen kitchen, String id2, String name2, double age2, Sex sex2) {
         Participant person1 = new Participant(id1, name1, age1, hasKitchen1, foodPreference1, sex1, kitchen);
         Participant person2 = new Participant(id2, name2, age2, hasKitchen1, foodPreference1, sex2, kitchen);
-        pairs.add(new Pair(person1, person2, true));
+        CSV_Pairs.add(new Pair(person1, person2, true));
     }
 
 
@@ -153,8 +153,8 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
      *
      * @return the list of pairs
      */
-    public static List<Pair> getPairs() {
-        return pairs;
+    public static List<Pair> getCSV_Pairs() {
+        return CSV_Pairs;
     }
 
     /**
@@ -204,7 +204,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
     public String toStringPairs() {
         StringBuilder sb = new StringBuilder();
         sb.append("ParticipantModel{\n");
-        for( Pair pairs : pairs){
+        for( Pair pairs : CSV_Pairs){
             sb.append("\t").append(pairs.toString()).append("\n");
         }
         sb.append("}");

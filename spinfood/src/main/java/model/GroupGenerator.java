@@ -324,15 +324,21 @@ public class GroupGenerator extends ParticipantManager {
         int index3 = pairs.indexOf(group.pair3);
         int minIndex = Math.min(index1, Math.min(index2, index3));
         if (minIndex == index1) {
+            group.cookingPair = pair1;
             pair1.setHaveCooked(true);
             pair1.setCourse(course);
+            group.setKitchen(pair1.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInStarter,location1);
         } else if (minIndex == index2) {
+            group.cookingPair = pair2;
             group.pair2.setHaveCooked(true);
+            group.setKitchen(pair2.getKitchen());
             pair2.setCourse(course);
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInStarter,location2);
         } else {
+            group.cookingPair = pair3;
             pair3.setHaveCooked(true);
+            group.setKitchen(pair3.getKitchen());
             pair3.setCourse(course);
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInStarter,location3);
         }

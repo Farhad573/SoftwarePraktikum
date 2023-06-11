@@ -38,8 +38,9 @@ public class Group {
         JsonObject kitchen = this.kitchen.toJson();
         groupJson.put("kitchen",kitchen);
         JsonObject cookingPair = this.cookingPair.toJson();
-        JsonObject secondPair = pair2.toJson();
-        JsonObject thirdPair = pair3.toJson();
+        List<Pair> pairs = getPairsInGroup().stream().filter(x-> !x.equals(this.cookingPair)).toList();
+        JsonObject secondPair = pairs.get(0).toJson();
+        JsonObject thirdPair = pairs.get(1).toJson();
         groupJson.put("cookingPair",cookingPair);
         groupJson.put("secondPair",secondPair);
         groupJson.put("thirdPair",thirdPair);

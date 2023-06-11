@@ -13,6 +13,8 @@ public class ParticipantManager {
 
 
     protected static List<Participant> participants;
+    protected static List<Pair> CSV_Pairs;
+
     protected static List<Pair> pairs;
     protected static List<Participant> pairSuccessors;
     protected static List<Group> groups;
@@ -42,6 +44,7 @@ public class ParticipantManager {
         mainDishSuccessors = new ArrayList<>();
         dessertSuccessors = new ArrayList<>();
         kitchenMap = new HashMap<>();
+        CSV_Pairs = new ArrayList<>();
     }
 
 

@@ -56,12 +56,10 @@ public class PairGenerator extends ParticipantManager {
         List<Pair> pairs = Stream.concat(l1.stream(), l2.stream())
                 .collect(Collectors.toList());
         ParticipantManager.pairs = pairs;
-        //?
-       // makeIndicatorForPairs(pairs);
         return pairs;
     }
     public static void calculateWGCount(){
-        for (Pair pair:pairs) {
+        for (Pair pair:CSV_Pairs) {
             Kitchen kitchen = pair.getKitchen();
             List<Pair> pairList = kitchenMap.getOrDefault(kitchen, new ArrayList<>());
             pairList.add(pair);
