@@ -52,6 +52,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             Sex sex_2 = null;
             boolean checkHasKitchen = hasKitchen != HasKitchen.no;
             boolean checkIfRegisteredAsPair = fields.length >= 14;
+            boolean emergencyKitchen = hasKitchen == HasKitchen.maybe? true : false;
             if(checkHasKitchen){
                 // check kitchen attributes
 
@@ -65,7 +66,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
                 if (checkIfKitchenCoordinatesIsGiven) {
                     kitchen_location = makeLocationObject(fields);
                 }
-                Kitchen kitchen = new Kitchen(kitchen_story, kitchen_location);
+                Kitchen kitchen = new Kitchen(kitchen_story, kitchen_location,emergencyKitchen);
                 int count = kitchenCountMap.getOrDefault(kitchen, 0);
                 kitchenCountMap.put(kitchen, count + 1);
                 if (checkIfRegisteredAsPair) {
