@@ -1,6 +1,14 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.JsonValidator;
+import com.networknt.schema.ValidationMessage;
 import model.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -106,8 +114,37 @@ public class Main {
        jsonMaker.makeJsonObject();
          //ParticipantManager.getGeneratedGroups().stream().filter(x -> x.getMainFoodPreference() == null).forEach(System.out::println);
 
-
+//        try {
+//            // Load the JSON schema from a file or resource
+//            InputStream schemaStream = Main.class.getResourceAsStream("src/main/resources/result_schema.json");
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode schemaNode = objectMapper.readTree(schemaStream);
+//
+//            // Parse the JSON schema
+//            JsonSchemaFactory factory = new JsonSchemaFactory();
+//            JsonSchema schema = factory.getSchema(schemaNode);
+//
+//            // Load and parse your JSON data
+//            String jsonData = jsonMaker.jsonString; // Replace with your JSON data String
+//            JsonNode dataNode = objectMapper.readTree(jsonData);
+//
+//            // Validate your JSON data against the schema
+//            Set<ValidationMessage> validationResult = schema.validate(dataNode);
+//
+//            // Process the validation result
+//            if (validationResult.isEmpty()) {
+//                System.out.println("Validation successful");
+//            } else {
+//                System.out.println("Validation failed");
+//                for (ValidationMessage message : validationResult) {
+//                    System.out.println(message.getMessage());
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
     }
+
 }
