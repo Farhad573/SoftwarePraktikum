@@ -44,7 +44,7 @@ public class GroupGenerator extends ParticipantManager {
                 Pair pair2 = pairs.get(j);
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
-                    if (checkGroupFoodPreference(pair1, pair2, pair3)
+                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
                              //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
@@ -96,6 +96,7 @@ public class GroupGenerator extends ParticipantManager {
                     Pair pair3 = pairs.get(k);
                     if (checkGroupFoodPreference(pair1, pair2, pair3)
                             && checkIfOneOfPairsHaveCooked(pair1, pair2, pair3)
+                            && checkNotTwoMeetNone(pair1,pair2,pair3)
 //                            && !usedPairs.contains(pair1)
 //                            && !usedPairs.contains(pair2)
 //                            && !usedPairs.contains(pair3)
@@ -153,6 +154,7 @@ public class GroupGenerator extends ParticipantManager {
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
                     if (checkGroupFoodPreference(pair1, pair2, pair3)
+                            && checkNotTwoMeetNone(pair1,pair2,pair3)
 //                            && checkIfTwoOfPairsHaveCooked(pair1, pair2, pair3)
 //                            && !usedPairs.contains(pair1)
 //                            && !usedPairs.contains(pair2)
@@ -306,6 +308,21 @@ public class GroupGenerator extends ParticipantManager {
 
         return !(hasMeat && hasVeggieOrVegan);
     }
+    public boolean checkNotTwoMeetNone(Pair pair1,Pair pair2,Pair pair3){
+        FoodPreference pref1 = pair1.getMainFoodPreference();
+        FoodPreference pref2 = pair2.getMainFoodPreference();
+        FoodPreference pref3 = pair3.getMainFoodPreference();
+
+        if(((pref1 == FoodPreference.none || pref1 == FoodPreference.meat) &&
+                (pref2 == FoodPreference.meat || pref2 == FoodPreference.none)) ||
+                ((pref3 == FoodPreference.none || pref3 == FoodPreference.meat) &&
+                        (pref2 == FoodPreference.meat || pref2 == FoodPreference.none)) ||
+                ((pref1 == FoodPreference.none || pref1 == FoodPreference.meat) &&
+                        (pref3 == FoodPreference.meat || pref3 == FoodPreference.none))) {
+            return false;
+        }else
+            return true;
+    }
 
     /**
      * Finds which pair should cook for a given group based on their kitchen distances to the party location.
@@ -366,10 +383,14 @@ public class GroupGenerator extends ParticipantManager {
         if (minIndex == index1) {
             pair1.setHaveCooked(true);
             pair1.setCourse(course);
+            group.cookingPair = pair1;
+            group.setKitchen(pair1.getKitchen());
             addPairToKitchenLocationMap(group.pair1,group.pair2,group.pair3,kitchenLocationsInMainDish,location1);
         } else {
             pair2.setHaveCooked(true);
             pair2.setCourse(course);
+            group.cookingPair = pair2;
+            group.setKitchen(pair2.getKitchen());
             addPairToKitchenLocationMap(group.pair1,group.pair2,group.pair3,kitchenLocationsInMainDish,location2);
         }
     }
@@ -385,14 +406,20 @@ public class GroupGenerator extends ParticipantManager {
         if(!pair1.isHaveCooked()){
             pair1.setHaveCooked(true);
             pair1.setCourse(course);
+            group.cookingPair = pair1;
+            group.setKitchen(pair1.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInDessert,location1);
         } else if (!pair2.isHaveCooked()) {
             pair2.setHaveCooked(true);
             pair2.setCourse(course);
+            group.cookingPair = pair2;
+            group.setKitchen(pair2.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInDessert,location2);
         }else {
             pair3.setHaveCooked(true);
             pair3.setCourse(course);
+            group.cookingPair = pair3;
+            group.setKitchen(pair3.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInDessert,location3);
         }
     }

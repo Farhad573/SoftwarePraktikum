@@ -103,8 +103,8 @@ public class Main {
         System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
-       //jsonMaker.makeJsonObject();
-         ParticipantManager.getGeneratedGroups().stream().filter(x -> x.getMainFoodPreference() == null).forEach(System.out::println);
+       jsonMaker.makeJsonObject();
+         //ParticipantManager.getGeneratedGroups().stream().filter(x -> x.getMainFoodPreference() == null).forEach(System.out::println);
 
 
 

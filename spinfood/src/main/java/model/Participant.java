@@ -196,7 +196,8 @@ public class Participant {
         participantJson.put("foodPreference",foodPreference.toString());
         participantJson.put("age",age);
         participantJson.put("gender",sex.toString());
-        JsonObject kitchen = getKitchen().toJson();
+        JsonObject kitchen = this.kitchen != null? this.kitchen.toJson():null;
+        //JsonObject kitchen =  this.kitchen.toJson();
         participantJson.put("kitchen",kitchen);
         return participantJson;
     }
