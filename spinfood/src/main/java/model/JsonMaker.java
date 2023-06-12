@@ -1,18 +1,12 @@
 package model;
-
-import com.fasterxml.jackson.databind.JsonNode;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.JsonValidator;
-import com.networknt.schema.ValidationMessage;
+
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Set;
+
 
 
 public class JsonMaker {
@@ -36,7 +30,6 @@ public class JsonMaker {
         ) {
             successorPairsJsonArray.add(pair.toJson());
         }
-        //System.out.println(successorPairsJsonArray.get(23));
         JsonArray successorParticipantsJsonArray = new JsonArray();
         for (Participant person: ParticipantManager.pairSuccessors
         ) {
@@ -55,18 +48,7 @@ public class JsonMaker {
         }
         return root;
     }
-//    public  boolean validateJson(String jsonDocument, String jsonSchemaPath) {
-//        try (InputStream schemaStream = JsonValidator.class.getResourceAsStream("src/main/resources/result_schema.json")) {
-//            JsonSchemaFactory factory = new JsonSchemaFactory();
-//            JsonSchema schema = factory.getSchema(schemaStream);
-//            JsonNode schemaNode = JsonLoader.fromResource("/path/to/schema.json")
-//            Set<ValidationMessage> validationResult = schema.validate(jsonDocument);
-//            return validationResult.isEmpty();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
+
 
 
 }

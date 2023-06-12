@@ -12,6 +12,9 @@ public class GroupGenerator extends ParticipantManager {
     public static Map<Pair,Location> kitchenLocationsInStarter = new HashMap<>();
    public static Map<Pair,Location> kitchenLocationsInMainDish = new HashMap<>();
     public static Map<Pair,Location> kitchenLocationsInDessert = new HashMap<>();
+    Set<Pair> hashSetInStarter = new HashSet<>();
+    Set<Pair> hashSetInMainDish = new HashSet<>();
+    Set<Pair> hashSetInDessert = new HashSet<>();
 
 
     /**
@@ -21,9 +24,33 @@ public class GroupGenerator extends ParticipantManager {
      * @param radius The radius within which the pairs' kitchens should be located.
      */
     public void callGroupsGenerator(List<Pair> pairs, double radius) {
-        makeStarterGroups(pairs, radius);
-        makeMainDishGroups(pairs, radius);
-        makeDessertGroups(pairs);
+        List<Group> groups = makeStarterGroups(pairs, radius);
+        //List<Pair> pairinstarter = new ArrayList<>(hashSetInStarter);
+        List<Pair> pairsInStarter = groups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
+        makeMainDishGroups(pairsInStarter, radius);
+        makeDessertGroups(pairsInStarter);
+        System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());
+        System.out.println("Number of generated groups in Maindish is " + getGeneratedGroupsInMainDish().size());
+        System.out.println("Number of generated groups in dessert -> " + getGeneratedGroupsInDessert().size());
+        //!hashSetInStarter.equals(hashSetInMainDish) && !hashSetInMainDish.equals(hashSetInDessert) &&
+        if( hashSetInStarter.size() == hashSetInMainDish.size()  && hashSetInStarter.size() == hashSetInDessert.size()){
+            System.out.println(hashSetInStarter.size());
+            System.out.println(hashSetInMainDish.size());
+            System.out.println(hashSetInDessert.size());
+        }else {
+            List<Pair> toRemove = hashSetInStarter.stream().filter(x-> !hashSetInMainDish.contains(x) && !hashSetInDessert.contains(x)).collect(Collectors.toCollection(ArrayList::new));
+            if(toRemove.size() > 0){
+                hashSetInStarter.remove(toRemove.get(0));
+            }else{
+                toRemove = hashSetInStarter.stream().filter(x-> !hashSetInMainDish.contains(x) || !hashSetInDessert.contains(x)).collect(Collectors.toCollection(ArrayList::new));
+                if(toRemove.size() > 0){
+                    hashSetInStarter.remove(toRemove.get(0));
+                }
+            }
+            hashSetInStarter.add(starterSuccessors.get(0));
+            List<Pair> newPairs = hashSetInStarter.stream().peek(x-> x.setHaveCooked(false)).toList();
+            callGroupsGenerator(newPairs,1);
+    }
     }
 
 
@@ -35,7 +62,7 @@ public class GroupGenerator extends ParticipantManager {
      * @return The list of generated groups for the starter course.
      */
     public List<Group> makeStarterGroups(List<Pair> pairs, double radius) {
-
+        hashSetInStarter = new HashSet<>();
         Map<Group,Double> map = new HashMap<>();
 
         for (int i = 0; i < pairs.size(); i++) {
@@ -55,22 +82,23 @@ public class GroupGenerator extends ParticipantManager {
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
         //Collections.shuffle(list);
-        Set<Pair> hashSet = new HashSet<>();
+
 
         List<Group> resGroup = new ArrayList<>();
         for (Group group : list) {
-            if (!hashSet.contains(group.pair1) && !hashSet.contains(group.pair2) && !hashSet.contains(group.pair3)) {
+            if (!hashSetInStarter.contains(group.pair1) && !hashSetInStarter.contains(group.pair2) && !hashSetInStarter.contains(group.pair3)) {
                 findWhichPairToCookInStarter(group, pairs);
                 group.setPairsWhoMetInStarter(group);
                 resGroup.add(group);
-                hashSet.add(group.pair1);
-                hashSet.add(group.pair2);
-                hashSet.add(group.pair3);
+                hashSetInStarter.add(group.pair1);
+                hashSetInStarter.add(group.pair2);
+                hashSetInStarter.add(group.pair3);
             }
         }
-        starterSuccessors.addAll(pairs.stream().filter(x -> !hashSet.contains(x)).toList());
-        System.out.println("number starter of validPairs is " + hashSet.size());
+        starterSuccessors.addAll(pairs.stream().filter(x -> !hashSetInStarter.contains(x)).toList());
+        System.out.println("number starter of validPairs is " + hashSetInStarter.size());
         System.out.println("number of successors in starter " + starterSuccessors.size());
+        generatedGroupsinStarter = resGroup;
         generatedGroups.addAll(resGroup);
         return resGroup;
     }
@@ -84,6 +112,7 @@ public class GroupGenerator extends ParticipantManager {
      * @return The list of generated groups for the main dish course.
      */
     public List<Group> makeMainDishGroups(List<Pair> pairs, double radius) {
+        hashSetInMainDish = new HashSet<>();
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
         Map<Group,Double> map = new HashMap<>();
@@ -118,18 +147,19 @@ public class GroupGenerator extends ParticipantManager {
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
         //Collections.shuffle(list);
-        Set<Pair> hashSet = new HashSet<>();
+
         for (Group group : list) {
-            if (!hashSet.contains(group.pair1) && !hashSet.contains(group.pair2) && !hashSet.contains(group.pair3)) {
+            if (!hashSetInMainDish.contains(group.pair1) && !hashSetInMainDish.contains(group.pair2) && !hashSetInMainDish.contains(group.pair3)) {
                 findWhichPairToCookInMainDish(group, pairs);
                 group.setPairsWhoMetInMainDish(group);
                 resGroup.add(group);
-                hashSet.add(group.pair1);
-                hashSet.add(group.pair2);
-                hashSet.add(group.pair3);
+                hashSetInMainDish.add(group.pair1);
+                hashSetInMainDish.add(group.pair2);
+                hashSetInMainDish.add(group.pair3);
             }
         }
         generatedGroups.addAll(resGroup);
+        generatedGroupsInMainDish = resGroup;
         return resGroup;
     }
 
@@ -142,7 +172,7 @@ public class GroupGenerator extends ParticipantManager {
      */
     public List<Group> makeDessertGroups(List<Pair> pairs) {
         //this.course = Course.dessert;
-
+        hashSetInDessert = new HashSet<>();
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
         Map<Group,Double> map = new HashMap<>();
@@ -177,18 +207,19 @@ public class GroupGenerator extends ParticipantManager {
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
         //Collections.shuffle(list);
-        Set<Pair> hashSet = new HashSet<>();
+
         for (Group group : list) {
-            if (!hashSet.contains(group.pair1) && !hashSet.contains(group.pair2) && !hashSet.contains(group.pair3)) {
+            if (!hashSetInDessert.contains(group.pair1) && !hashSetInDessert.contains(group.pair2) && !hashSetInDessert.contains(group.pair3)) {
                 findWhichPairToCookInDessert(group, pairs);
                 group.setPairsWhoMetInDessert(group);
                 resGroup.add(group);
-                hashSet.add(group.pair1);
-                hashSet.add(group.pair2);
-                hashSet.add(group.pair3);
+                hashSetInDessert.add(group.pair1);
+                hashSetInDessert.add(group.pair2);
+                hashSetInDessert.add(group.pair3);
             }
         }
         generatedGroups.addAll(resGroup);
+        generatedGroupsInDessert = resGroup;
         return resGroup;
     }
 
