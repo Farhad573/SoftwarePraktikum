@@ -1,0 +1,94 @@
+Generelle Anmerkung:
+
+
+Klasse Distance:
+- gehört in Model
+
+Klasse ParticipantManager:
+- würde ich umbenennen z.b. in SolutionManager oder sowas weil Namen sprechend sein sollten und die Klasse nicht nur die Participants managed
+- Datenfelder sollten private und nicht static sein und dann solltet Ihr getter Methoden für die Datenfelder haben (Stichwort Daten-Kapselung) 
+
+Klasse PartyLocation/ex/Course/FoodPreference:
+- passt
+
+Klasse Cancellation:
+- Wieso macht Ihr eine ganze Klasse für Canceln? Ihr könnt theoretisch einfach Methode in ParticipantManager einfügen und die Listen darin updaten
+- Das extends von ParticipantManager macht nicht so viel sinn, weil ihr weder auf Datenfelder noch auf Methoden zugreift von der Oberklasse
+- Es sollte auch eine Methode geben, die bei der einfach manuell eine Person z.b. durch eine andere Person ausgetauscht werden kann
+
+Klasse CSVFileReader:
+- extends ParticipantManager macht wieder nicht so viel Sinn (gleicher Grund wie oben) und implements FileReader auch nicht. FileReader ist ein Interface, was nur von einer einzigen Klasse benutzt wird, damit ist es einmischen überflüssig. D.h. es macht eigentlich Sinn einfach nur die Methode in der Klasse CSVFileReader zu implementieren ohne das Interface und die Oberklasse
+- Java Docs fehlt teilweise
+- Zeile 55-70 kann in eine eigne Methode ausgelagert werden
+- Zeile 71-76 und 81-86 sind Duplikate. Kann man umgehen in dem man Kitchen mit null oder new Kitchen initialisiert und dann einfach am Ende checkt ob als paar angemeldet wurde
+- Scanner can eigentlich auch eine Exception werfen würde einen try-Block with resources hinzufügen (https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
+- Die static getter Methoden sind nicht so gut, weil dann kann man darauf nicht wirklich was verändern mit den Objekten
+- die Method toStringPairs und toStringSuccessors macht im Prinzip das gleiche. Ich würde einfach als Parameter eine Liste von pairs über geben und bei toStringParticipants eine Liste von Participants, dann könnt Ihr toStringParticipants für das Printen von participants und für participantsSuccessors benutzen und toStringPairs für das Printen von pairs und successor pairs
+
+Klasse FitnessEvaluator:
+- Entweder ihr packt hier auch die Methoden von GroupFitnessEvaluator mit rein oder Ihr benennt die Klasse in Pair FitnessEvaluator
+- Java Docs fehlt
+- calculateFoodPreferenceFitness: Wieso greift Ihr nicht auf get value von FoodPreference zu?
+int foodPrefFirst = pair.getPerson1().getFoodPreference().getValue();
+int foodPrefSecond = pair.getPerson2().getFoodPreference().getValue();
+Int diff = Math.abs(foodPrefFirst - foodPrefSecond);
+Theoretisch könntet Ihr den Wert dann diff * -1 rechnen dann werden unterschiede größer als 0 zu minus zahlen und 0 (kein unterschied) bleibt 0.
+Generell sollte Vegan und Fleisch als Kombination garnicht erst möglich sein aber vegetarisch und Fleischi/egali geht
+- checkFoodPreferenceFitness: hier müsst ihr eigentlich nur false zurück geben, wenn ein Veganer mit einem Fleischi gepaart wird also könnt ihr euch alle if Fälle sparen und einfach nur checken:
+if ((pref1.equals(FoodPreference.meat) || pref2.equals(FoodPreference.meat)) & (pref1.equals(FoodPreference.vegan) || pref2.equals(FoodPreference.vegan)) { return false; } return true;
+- Wofür normalisiert Ihr die Altersdifferenz in calculateAgeDifferenceFitness?
+- bei checkKitchenFitness könntet Ihr auf calculateKitchenFitness zugreifen, damit Ihr keine Duplikate habt und einfach nur prüfen: if (calculateKitchenFitness(pair) == -0.5) { return false; } return true;
+
+Klasse Group:
+- Datenfelder sollten privat sein und mit gettern zurück gegeben werden
+- calculateMainFoodPreference sieht irgendwie kompliziert aus. Eigentlich müssen nur folgende Fälle in der Reihenfolge abgeprüft werden:
+A) if (pair1.getMainFoodPreference().equals(Foodpreference.vegan) || pair2.getMainFoodPreference().equals(Foodpreference.vegan) || pair3.getMainFoodPreference().equals(Foodpreference.vegan)) { return FoodPreference.vegan; }
+if (pair1.getMainFoodPreference().equals(Foodpreference.veggi) || pair2.getMainFoodPreference().equals(Foodpreference.veggi) || pair3.getMainFoodPreference().equals(Foodpreference.veggi)) { return FoodPreference.vegan; }
+if (pair1.getMainFoodPreference().equals(Foodpreference.meat) || pair2.getMainFoodPreference().equals(Foodpreference.meat) || pair3.getMainFoodPreference().equals(Foodpreference.meat)) { FoodPreference.meat;}
+Else { return FoodPreference.none;};
+
+Klasse GroupFitnessEvaluator:
+- für checkKitchenFitness gilt das gleich wie für checkKitchenFitness in FitnessEvaluator
+- Was ihr hier noch testen müsstet ist ob in einer vegetarischen Gruppe mehr als ein Fleischi/Egali Pärchen ist. Weil es soll nur maximal ein Fleischi/Egali in Gemische Gruppen sein "Damit sich nicht zuviele Fleischis/Egalis anpassen müssen, darf zudem in gemischten Gruppen höchstens ein Fleischi-/Egali-Pärchen vorhanden sein. Die Veggie-/Veganer-Pärchen müssen also die Mehrheit bilden." (Siehe Anforderungsspezifikation)
+
+Klasse GroupGenerator:
+- Extends ParticipantManager macht hier wieder nicht so viel sinn weil ich nicht auf Datenfelder etc. zugreift 
+- statt drei Methoden checkIfOneOfPairsHaveCooked, checkIfAllPairsDidntCook, checkIfAllPairsDidntCook, checkIfAllOfPairsHaveCooked zu schreiben könntet Ihr auch einfach eine Methode schreiben, die zurück gibt wie viele Pairs von den drei gekocht haben und dann je nach dem ob es 0, 1, 2 oder 3 sind in der Methode die aufruft unterscheiden
+
+Klasse HardlyRepeatedRandomNumberGenerator:
+- Java Docs fehlt
+
+Klasse Pair:
+- für calculateMainFoodPreference gilt das gleiche wie für calculateMainFoodPreference in Group
+- Eigentlich ist es nicht üblich die Kennzahlen als Datenfelder in Gruppe oder Pair zu halten (könnt ihr machen aber unüblich) 
+- Java Docs fehlt teilweise
+- validPair hat bisher keine Funktion könnte aber überprüfen, ob:
+A) Jedes Pärchen eine Küche hat
+B) Veganer nicht mit Fleischis gepaart werden
+
+Klasse PairGenerator:
+- extends ParticipantManager macht wieder nicht so viel Sinn
+- Zeile 54 versucht Ihr das statische Datenfeld pairs über ein Object anzusprechen, das geht eigentlich nicht. Deshalb sollten die Datenfelder in der Klasse ParticipantManager nicht statisch sein 
+
+Klasse Participant:
+- Zweiter Konstruktor nicht notwendig eigentlich, mann kann bei Kitchen auch einfach null übergeben, dann braucht man keine zwei Konstruktoren
+ 
+
+Testklassen:
+- Generell: Fügt Java Docs zu Testfällen hinzu, die beschreibt was tests testen, dann müsst Ihr die schriftliche Dokumentation auch nicht mehr machen
+
+Klasse CSVFileReaderTest:
+- Anzahl an Testfällen deckt Statement-Coverage nicht ganz ab. Es gibt Test-Plugins die das abbrühen können (https://www.jetbrains.com/help/idea/code-coverage.html)
+
+Klasse GroupGeneratorTest:
+- checkMeatWithVeganOderVeggieInStarter: vegetarian und fleischis dürfen sich in einer Gruppe treffen (siehe Anfordeungsspezifikation) nur halt nicht in der Überzahl sein.
+- diese Methoden checkIfOneOfPairsHaveCooked, checkIfTwoOfPairsHaveCooked, checkIfAllPairsHaveCooked habt Ihr doch schon in einer anderen Klasse implementiert
+- Wichtig ist hier das Ihr die folgenden Testfälle abdeckt: 
+A) Jedes Pärchen der Gruppenliste kocht genau 1 mal
+B) Jedes Pärchen der Gruppenliste isst drei mal/ist in 3 Gruppen vorhanden
+C) Jedes Pärchen der Gruppenliste ist nur einmal mit einem anderen Pärchen gepaart 
+D) In einer vegetarischen/veganen Gruppe ist nicht mehr als ein Fleishi/Egali Pärchen 
+
+Ihr müsst noch alle Eure Methoden testen, die die Kennzahlen berechnen für Gruppen und Paare
+
+
