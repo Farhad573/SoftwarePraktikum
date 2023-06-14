@@ -88,7 +88,7 @@ public class Main {
         List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair,csvPairs);
         System.out.println("pair kenZahl is -> " + pairGenerator.makeIndicatorForPairsList(concatenatedlist));
 
-        groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
+        //groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
 //        List<Group> starterGroups = groupGenerator.makeStarterGroups(concatenatedlist,1);
 //        List<Pair> pairsInStarter = starterGroups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
@@ -105,6 +105,11 @@ public class Main {
         System.out.println("number of pairs in starterMap is " + GroupGenerator.kitchenLocationsInStarter.keySet().size());
         System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
+
+        System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
+        //jsonMaker.makeJsonObject();
+
+
 
 
 

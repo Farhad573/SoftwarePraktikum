@@ -158,7 +158,17 @@ public class Pair {
         this.haveCooked = haveCooked;
     }
 
+    public void setMetPairsInStarter(List<Pair> metPairsInStarter) {
+        this.metPairsInStarter = metPairsInStarter;
+    }
 
+    public void setMetPairsInMainDish(List<Pair> metPairsInMainDish) {
+        this.metPairsInMainDish = metPairsInMainDish;
+    }
+
+    public void setMetPairsInDessert(List<Pair> metPairsInDessert) {
+        this.metPairsInDessert = metPairsInDessert;
+    }
 
     /**
      *
@@ -259,7 +269,7 @@ public class Pair {
         System.out.println(builder);
     }
 
-    public void calculatePathLength(Pair pair) throws FileNotFoundException {
+    public  void calculatePathLength(Pair pair) throws FileNotFoundException {
         Location location1 = GroupGenerator.kitchenLocationsInStarter.get(pair);
         Location location2 = GroupGenerator.kitchenLocationsInMainDish.get(pair);
         Location location3 = GroupGenerator.kitchenLocationsInDessert.get(pair);

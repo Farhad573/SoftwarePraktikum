@@ -1,5 +1,6 @@
 package model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Cancellation extends ParticipantManager {
      * @param maximum               The maximum number of participants.
      * @param radius                The radius for generating groups.
      */
-    public void cancelPerson(List<Participant> cancelledParticipants, List<Participant> participants, int maximum, double radius) {
+    public void cancelPerson(List<Participant> cancelledParticipants, List<Participant> participants, int maximum, double radius) throws FileNotFoundException {
         for (Participant cancelledPerson : cancelledParticipants) {
             if (participants.contains(cancelledPerson)) {
                 cancelIfSingleRegistered(cancelledPerson, participants, radius);
@@ -36,7 +37,7 @@ public class Cancellation extends ParticipantManager {
      * @param participants The list of all participants.
      * @param radius       The radius for generating groups.
      */
-    private void cancelIfSingleRegistered(Participant person, List<Participant> participants, double radius) {
+    private void cancelIfSingleRegistered(Participant person, List<Participant> participants, double radius) throws FileNotFoundException {
         participants.remove(person);
 
         if (pairSuccessors.size() > 0) {
@@ -62,7 +63,7 @@ public class Cancellation extends ParticipantManager {
      * @param pairs  The list of pairs for generating groups.
      * @param radius The radius for generating groups.
      */
-    private void newGroupGenerator(List<Pair> pairs, double radius) {
+    private void newGroupGenerator(List<Pair> pairs, double radius) throws FileNotFoundException {
         GroupGenerator groupGenerator = new GroupGenerator();
         groupGenerator.callGroupsGenerator(pairs, radius);
     }
