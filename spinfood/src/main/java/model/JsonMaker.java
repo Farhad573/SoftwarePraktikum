@@ -18,6 +18,11 @@ public class JsonMaker {
         this.jsonString = "";
     }
 
+    /**
+     * Creates a JSON object based on the data from ParticipantManager.
+     *
+     * @return The created JSON object.
+     */
     public JsonObject makeJsonObject() {
         addGroupsToJson();
         addPairsToJson();
@@ -30,6 +35,9 @@ public class JsonMaker {
         return rootObject;
     }
 
+    /**
+     * add groups elements to json object
+     */
     private void addGroupsToJson() {
         JsonArray groupsJsonArray = new JsonArray();
         List<Group> generatedGroups = ParticipantManager.generatedGroups;
@@ -39,6 +47,9 @@ public class JsonMaker {
         rootObject.put("groups", groupsJsonArray); // add to json Object
     }
 
+    /**
+     * add pairs elements to json object
+     */
     private void addPairsToJson() {
         JsonArray pairsJsonArray = new JsonArray();
         List<Pair> pairs = ParticipantManager.pairs;
@@ -48,6 +59,10 @@ public class JsonMaker {
         rootObject.put("pairs", pairsJsonArray);// add to json Object
     }
 
+
+    /**
+     * add successorsPair elements to json object
+     */
     private void addSuccessorPairsToJson() {
         JsonArray successorPairsJsonArray = new JsonArray();
         List<Pair> starterSuccessors = ParticipantManager.starterSuccessors;
@@ -57,6 +72,10 @@ public class JsonMaker {
         rootObject.put("successorPairs", successorPairsJsonArray);// add to json Object
     }
 
+
+    /**
+     * add successor participants elements to json object
+     */
     private void addSuccessorParticipantsToJson() {
         JsonArray successorParticipantsJsonArray = new JsonArray();
         List<Participant> pairSuccessors = ParticipantManager.pairSuccessors;
@@ -66,6 +85,11 @@ public class JsonMaker {
         rootObject.put("successorParticipants", successorParticipantsJsonArray);
     }
 
+
+    /**
+     * write json data on a given file path
+     * @param filePath
+     */
     private void writeJsonToFile(String filePath) {
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.write(getJsonString());
@@ -74,6 +98,13 @@ public class JsonMaker {
         }
     }
 
+    /**
+     * Retrieves the JSON string representation of the rootObject.
+     * If the jsonString is empty, it serializes the rootObject and assigns
+     * the serialized JSON string to the jsonString field.
+     *
+     * @return The JSON string representation of the rootObject.
+     */
     private String getJsonString() {
         if (jsonString.isEmpty()) {
             this.jsonString = Jsoner.serialize(rootObject);
