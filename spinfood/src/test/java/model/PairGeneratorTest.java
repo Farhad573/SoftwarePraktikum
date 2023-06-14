@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static model.CSVFileReader.getParticipants;
 
@@ -102,7 +100,7 @@ class PairGeneratorTest {
 
 
     @Test
-    void cehckPreferenceDeviation() throws FileNotFoundException {
+    void checkPreferenceDeviation() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
         List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
@@ -110,6 +108,20 @@ class PairGeneratorTest {
         ) {
             Assertions.assertTrue(pair.getPreferenceDeviation() <= 3);
         }
+    }
+    @Test
+    void checkkitchenCount() throws FileNotFoundException {
+        List<Participant> participantList = createSampleParticipant();
+        List<Pair> population = PairGenerator.generateInitialPopulation(participantList);
+        Map<Kitchen,List<Pair>> kitchenMap = new HashMap<>();
+        for (Pair pair:population) {
+            Kitchen kitchen = pair.getKitchen();
+            List<Pair> pairList = kitchenMap.getOrDefault(kitchen, new ArrayList<>());
+            pairList.add(pair);
+            kitchenMap.put(kitchen, pairList);
+        }
+        Assertions.assertEquals(0,kitchenMap.values().stream().filter(x -> x.size() >= 4).count());
+
     }
 
 
@@ -123,5 +135,7 @@ class PairGeneratorTest {
         }
         return getParticipants();
     }
+
+
 
 }

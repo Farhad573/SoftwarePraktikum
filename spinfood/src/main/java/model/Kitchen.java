@@ -1,5 +1,7 @@
 package model;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 import java.util.Objects;
 
 /**
@@ -9,6 +11,7 @@ public class Kitchen {
 
     private double kitchen_story;
     private Location kitchen_location;
+    private boolean emergencyKitcehn ;
 
 
     /**
@@ -17,9 +20,10 @@ public class Kitchen {
      * @param kitchen_story    the story of the kitchen
      * @param kitchen_location the location of the kitchen
      */
-    public Kitchen(double kitchen_story, Location kitchen_location) {
+    public Kitchen(double kitchen_story, Location kitchen_location,Boolean emergencyKitcehn) {
         this.kitchen_story = kitchen_story;
         this.kitchen_location = kitchen_location;
+        this.emergencyKitcehn = emergencyKitcehn;
     }
 
     /**
@@ -84,6 +88,10 @@ public class Kitchen {
         return Objects.hash(kitchen_story, kitchen_location);
     }
 
+    public boolean isEmergencyKitcehn() {
+        return emergencyKitcehn;
+    }
+
     /**
      * Returns a string representation of the Kitchen object.
      *
@@ -97,4 +105,13 @@ public class Kitchen {
                 ", kitchen_location= " + kitchen_location +
                 '}';
     }
+    public JsonObject toJson(){
+        JsonObject kitchenJson = new JsonObject();
+        kitchenJson.put("emergencyKitchen",emergencyKitcehn);
+        kitchenJson.put("story",kitchen_story);
+        kitchenJson.put("longitude",kitchen_location.getLongitude());
+        kitchenJson.put("latitude",kitchen_location.getLatitude());
+        return  kitchenJson;
+    }
+
 }

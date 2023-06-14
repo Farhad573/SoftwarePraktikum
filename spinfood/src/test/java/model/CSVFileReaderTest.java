@@ -44,7 +44,7 @@ class CSVFileReaderTest {
         }
         // Assert that the count of elements in the groups list is as expected
         int expectedGroupCount = 73;
-        int actualGroupCount = CSVFileReader.pairs.size();
+        int actualGroupCount = CSVFileReader.CSV_Pairs.size();
         assertEquals(expectedGroupCount, actualGroupCount);
     }
 
