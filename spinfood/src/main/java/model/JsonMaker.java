@@ -1,54 +1,114 @@
 package model;
+
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
-
-
+import java.util.List;
 
 public class JsonMaker {
-    public JsonObject rootObject;
-    public String jsonString;
+    private final JsonObject rootObject;
+    private String jsonString;
 
+
+    public JsonMaker() {
+        this.rootObject = new JsonObject();
+        this.jsonString = "";
+    }
+
+    /**
+     * Creates a JSON object based on the data from ParticipantManager.
+     *
+     * @return The created JSON object.
+     */
     public JsonObject makeJsonObject() {
-        JsonObject root = new JsonObject();
+        addGroupsToJson();
+        addPairsToJson();
+        addSuccessorPairsToJson();
+        addSuccessorParticipantsToJson();
+
+        //i can change !!
+        writeJsonToFile("data_test.json");
+
+        return rootObject;
+    }
+
+    /**
+     * add groups elements to json object
+     */
+    private void addGroupsToJson() {
         JsonArray groupsJsonArray = new JsonArray();
-        for (Group group:ParticipantManager.generatedGroups
-             ) {
+        List<Group> generatedGroups = ParticipantManager.generatedGroups;
+        for (Group group : generatedGroups) {
             groupsJsonArray.add(group.toJson());
         }
+        rootObject.put("groups", groupsJsonArray); // add to json Object
+    }
+
+    /**
+     * add pairs elements to json object
+     */
+    private void addPairsToJson() {
         JsonArray pairsJsonArray = new JsonArray();
-        for (Pair pair: ParticipantManager.pairs
-             ) {
+        List<Pair> pairs = ParticipantManager.pairs;
+        for (Pair pair : pairs) {
             pairsJsonArray.add(pair.toJson());
         }
-        JsonArray successorPairsJsonArray = new JsonArray();
-        for (Pair pair: ParticipantManager.starterSuccessors
-        ) {
-            successorPairsJsonArray.add(pair.toJson());
-        }
-        JsonArray successorParticipantsJsonArray = new JsonArray();
-        for (Participant person: ParticipantManager.pairSuccessors
-        ) {
-            successorParticipantsJsonArray.add(person.toJson());
-        }
-        root.put("groups",groupsJsonArray);
-        root.put("pairs",pairsJsonArray);
-        root.put("successorPairs",successorPairsJsonArray);
-        root.put("successorParticipants",successorParticipantsJsonArray);
-        this.rootObject = root;
-        this.jsonString = Jsoner.serialize(root);
-        try (FileWriter writer = new FileWriter("D:\\Uni_Marburrg\\4th-semester\\Software Praktikum\\Repo\\data_test7.json")) {
-            writer.write(jsonString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return root;
+        rootObject.put("pairs", pairsJsonArray);// add to json Object
     }
 
 
+    /**
+     * add successorsPair elements to json object
+     */
+    private void addSuccessorPairsToJson() {
+        JsonArray successorPairsJsonArray = new JsonArray();
+        List<Pair> starterSuccessors = ParticipantManager.starterSuccessors;
+        for (Pair pair : starterSuccessors) {
+            successorPairsJsonArray.add(pair.toJson());
+        }
+        rootObject.put("successorPairs", successorPairsJsonArray);// add to json Object
+    }
 
+
+    /**
+     * add successor participants elements to json object
+     */
+    private void addSuccessorParticipantsToJson() {
+        JsonArray successorParticipantsJsonArray = new JsonArray();
+        List<Participant> pairSuccessors = ParticipantManager.pairSuccessors;
+        for (Participant person : pairSuccessors) {
+            successorParticipantsJsonArray.add(person.toJson());
+        }
+        rootObject.put("successorParticipants", successorParticipantsJsonArray);
+    }
+
+
+    /**
+     * write json data on a given file path
+     * @param filePath
+     */
+    private void writeJsonToFile(String filePath) {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write(getJsonString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Retrieves the JSON string representation of the rootObject.
+     * If the jsonString is empty, it serializes the rootObject and assigns
+     * the serialized JSON string to the jsonString field.
+     *
+     * @return The JSON string representation of the rootObject.
+     */
+    private String getJsonString() {
+        if (jsonString.isEmpty()) {
+            this.jsonString = Jsoner.serialize(rootObject);
+        }
+        return jsonString;
+    }
 }
