@@ -52,7 +52,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             Sex sex_2 = null;
             boolean checkHasKitchen = hasKitchen != HasKitchen.no;
             boolean checkIfRegisteredAsPair = fields.length >= 14;
-            boolean emergencyKitchen = hasKitchen == HasKitchen.maybe? true : false;
+            boolean emergencyKitchen = hasKitchen == HasKitchen.maybe;
             if(checkHasKitchen){
                 // check kitchen attributes
 
@@ -99,6 +99,9 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             updateKitchenCountInPairsList();
     }
 
+    /**
+     * update the number of kitchen in the list of pair
+     */
     private static void updateKitchenCountInPairsList() {
         for (Pair person : CSV_Pairs) {
             Kitchen kitchen = person.getPerson1().getKitchen();
@@ -107,6 +110,9 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
         }
     }
 
+    /**
+     * update the number of kitchen in the list of participant
+     */
     private static void updateKitchenCountInParticipantsList() {
         for (Participant person : participants) {
             Kitchen kitchen = person.getKitchen();
@@ -115,6 +121,11 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
         }
     }
 
+    /**
+     * initial a location object if it is given
+     * @param fields
+     * @return
+     */
     private static Location makeLocationObject(String[] fields) {
         double kitchen_lat;
         double kitchen_long;
@@ -125,10 +136,34 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
         return kitchen_location;
     }
 
+    /**
+     * add participant to the list of participant
+     * @param id
+     * @param name
+     * @param age
+     * @param hasKitchen
+     * @param foodPreference
+     * @param sex
+     * @param kitchen
+     */
     private void createAndAddParticipant(String id, String name, double age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         participants.add(new Participant(id, name, age, hasKitchen, foodPreference, sex, kitchen));
     }
 
+    /**
+     * add given pairs data from csv file to the pairs list
+     * @param id1
+     * @param name1
+     * @param age1
+     * @param hasKitchen1
+     * @param foodPreference1
+     * @param sex1
+     * @param kitchen
+     * @param id2
+     * @param name2
+     * @param age2
+     * @param sex2
+     */
     private void createAndAddCSVPair(String id1, String name1, double age1, HasKitchen hasKitchen1, FoodPreference foodPreference1,
                                      Sex sex1, Kitchen kitchen, String id2, String name2, double age2, Sex sex2) {
         Participant person1 = new Participant(id1, name1, age1, hasKitchen1, foodPreference1, sex1, kitchen);
