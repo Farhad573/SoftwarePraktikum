@@ -83,7 +83,7 @@ public class JsonMaker {
         for (Participant person : pairSuccessors) {
             successorParticipantsJsonArray.add(person.toJson());
         }
-        rootObject.put("successorParticipants", successorParticipantsJsonArray);
+        rootObject.put("successorParticipants", successorParticipantsJsonArray);// add to json Object
     }
 
 
