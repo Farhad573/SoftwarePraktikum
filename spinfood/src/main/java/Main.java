@@ -1,16 +1,10 @@
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.JsonValidator;
-import com.networknt.schema.ValidationMessage;
 import model.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static model.CSVFileReader.*;
 
@@ -107,15 +101,11 @@ public class Main {
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
-        //jsonMaker.makeJsonObject();
-
-
-
-
-
-
-
-
+        try {
+            jsonMaker.makeJsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

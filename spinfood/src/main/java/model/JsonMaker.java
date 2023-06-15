@@ -4,6 +4,7 @@ import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +24,7 @@ public class JsonMaker {
      *
      * @return The created JSON object.
      */
-    public JsonObject makeJsonObject() {
+    public JsonObject makeJsonObject() throws IOException {
         addGroupsToJson();
         addPairsToJson();
         addSuccessorPairsToJson();
@@ -88,10 +89,16 @@ public class JsonMaker {
 
     /**
      * write json data on a given file path
+     *
      * @param filePath
      */
-    private void writeJsonToFile(String filePath) {
-        try (FileWriter writer = new FileWriter(filePath)) {
+    private void writeJsonToFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (file.exists()) {
+            throw new IOException("File already exists at the specified path: " + filePath);
+        }
+
+        try (FileWriter writer = new FileWriter(file)) {
             writer.write(getJsonString());
         } catch (IOException e) {
             e.printStackTrace();
