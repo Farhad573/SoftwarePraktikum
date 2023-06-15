@@ -7,7 +7,7 @@ import java.util.Map;
 public class PairFitnessEvaluator {
 
     /**
-     *
+     * to calculate the fitness of pairs , to generate pairs with the given conditions perority
      * @param pair
      * @param map
      * @return
@@ -27,7 +27,7 @@ public class PairFitnessEvaluator {
     }
 
     /**
-     *
+     * to calculate the count kitchen from the same location (same WG)
      * @param pair
      * @param map
      * @return
@@ -85,38 +85,46 @@ public class PairFitnessEvaluator {
     }
 
     /**
-     *
+     * check the food preference to make pairs with the given conditions
      * @param pair
      * @return
      */
     public static boolean checkFoodPreferenceFitness(Pair pair) {
         FoodPreference pref1 = pair.getPerson1().getFoodPreference();
         FoodPreference pref2 = pair.getPerson2().getFoodPreference();
-
+        boolean meatOrNoneCheck = (pref1 == FoodPreference.meat && pref2 == FoodPreference.none) ||
+                (pref2 == FoodPreference.meat && pref1 == FoodPreference.none);
+        boolean veggieOrVeganCheck = (pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) ||
+                (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan);
+        boolean veggieOrVeganOrNoneCheck = ((pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan) && (pref2 == FoodPreference.none)) ||
+                ((pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none));
         if (pref1 == pref2) {
             // Same food preference, assign higher fitness
             return true;
-        } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) ||
-                (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
-            // meat && none
-            return true;
-        } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) ||
-                (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
-            // veggie & vegan
-            return true;
-        } else if (((pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan) && (pref2 == FoodPreference.none)) ||
-                ((pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none))) {
-            // none & veggie | vegan
-            return true;
         } else {
-            // meat & veggie | vegan
-            return false;
+            if (meatOrNoneCheck) {
+                // meat && none
+                return true;
+            } else {
+                if (veggieOrVeganCheck) {
+                    // veggie & vegan
+                    return true;
+                } else {
+                    if (veggieOrVeganOrNoneCheck) {
+                        // none & veggie | vegan
+                        return true;
+                    } else {
+                        // meat & veggie | vegan
+                        return false;
+                    }
+                }
+            }
         }
     }
 
 
     /**
-     *
+     * calculate age difference of a build pairs
      * @param pair
      * @return
      */
@@ -126,7 +134,7 @@ public class PairFitnessEvaluator {
     }
 
     /**
-     *
+     * calculate the gender diversity of a build pairs
      * @param pair
      * @return
      */
@@ -138,7 +146,7 @@ public class PairFitnessEvaluator {
     }
 
     /**
-     *
+     * check and calculate the fitness of "HAVE_KITCHEN" conditions
      * @param pair
      * @return
      */
@@ -146,14 +154,17 @@ public class PairFitnessEvaluator {
         HasKitchen kitchen1 = pair.getPerson1().getHasKitchen();
         HasKitchen kitchen2 = pair.getPerson2().getHasKitchen();
 
-        if (((kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && kitchen2 == HasKitchen.no) ||
-                ((kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe) && kitchen1 == HasKitchen.no)) {
+        boolean yesOrMaybeAndNoKitchenCheck = ((kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && kitchen2 == HasKitchen.no) ||
+                ((kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe) && kitchen1 == HasKitchen.no);
+        boolean yesOrMaybeKitchenCheck = (kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && (kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe);
+        if (yesOrMaybeAndNoKitchenCheck) {
             return 1.0;
-        } else if ((kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && (kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe)) {
-            return 0.5;
         } else {
-
-            return -8.0;
+            if (yesOrMaybeKitchenCheck) {
+                return 0.5;
+            } else {
+                return -8.0;
+            }
         }
     }
 
@@ -166,11 +177,12 @@ public class PairFitnessEvaluator {
     public static boolean checkKitchenFitness(Pair pair) {
         HasKitchen kitchen1 = pair.getPerson1().getHasKitchen();
         HasKitchen kitchen2 = pair.getPerson2().getHasKitchen();
-
-        if (((kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && kitchen2 == HasKitchen.no) ||
-                ((kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe) && kitchen1 == HasKitchen.no)) {
+        boolean yesOrMaybeAndNoKitchenCheck = ((kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && kitchen2 == HasKitchen.no) ||
+                ((kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe) && kitchen1 == HasKitchen.no);
+        boolean yesOrMaybeKitchenCheck = (kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && (kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe);
+        if (yesOrMaybeAndNoKitchenCheck) {
             return true;
-        } else if ((kitchen1 == HasKitchen.yes || kitchen1 == HasKitchen.maybe) && (kitchen2 == HasKitchen.yes || kitchen2 == HasKitchen.maybe)) {
+        } else if (yesOrMaybeKitchenCheck) {
             return true;
         } else {
             return false;
