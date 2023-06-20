@@ -522,7 +522,7 @@ public class GroupGenerator extends ParticipantManager {
     public static String makeIndicatorForGroupList(List<Group> groups) throws FileNotFoundException {
         String indicator = "";
         int groupSize = groups.size();
-        int successorSize = starterSuccessors.size();
+        int successorSize = getstarterSuccessors().size();
         double sexDeviation = 0 ;
         double ageDifference = 0 ;
         double preferenceDeviation = 0 ;
@@ -539,19 +539,11 @@ public class GroupGenerator extends ParticipantManager {
         }
 
         sexDeviation = sexDeviation / groupSize;
-        double averageSexDeviation = 0;
-        for(Group group : groups){
-            averageSexDeviation = Math.abs(group.getSexDeviation() - sexDeviation);
-        }
-        averageSexDeviation = averageSexDeviation / groupSize;
-        System.out.println("averageSexDeviation -> " + averageSexDeviation );
-        System.out.println("Pathlength -> " + pathLength);
         ageDifference = ageDifference / groupSize;
         preferenceDeviation = preferenceDeviation / groupSize;
-        System.out.println("Preference Deviation is -> " + preferenceDeviation);
 
         DecimalFormat df = new DecimalFormat("#.####");
-        return indicator + groupSize + " _ "  + successorSize + " _ " + df.format(averageSexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation) + " _ " + df.format(pathLength);
+        return indicator + groupSize + " _ "  + successorSize + " _ " + df.format(sexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation) + " _ " + df.format(pathLength);
     }
 
     public static List<Pair> getstarterSuccessors() {
