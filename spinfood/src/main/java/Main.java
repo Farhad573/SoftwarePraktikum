@@ -1,7 +1,6 @@
 import model.*;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -101,11 +100,11 @@ public class Main {
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
-        try {
-            jsonMaker.makeJsonObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            jsonMaker.makeJsonObject();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
     }

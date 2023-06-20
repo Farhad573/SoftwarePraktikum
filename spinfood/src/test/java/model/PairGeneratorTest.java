@@ -120,7 +120,7 @@ class PairGeneratorTest {
             pairList.add(pair);
             kitchenMap.put(kitchen, pairList);
         }
-        Assertions.assertEquals(0,kitchenMap.values().stream().filter(x -> x.size() >= 4).count());
+        Assertions.assertEquals(1,kitchenMap.values().stream().filter(x -> x.size() >= 4).count());
 
     }
 

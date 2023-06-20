@@ -122,7 +122,7 @@ public class Pair {
     private double calculateSexDifference(){
         int sexOfPerson1 = this.person1.getSex() == Sex.female? 1 : 0;
         int sexOfPerson2 = this.person2.getSex() == Sex.female? 1 : 0;
-        return (sexOfPerson1 + sexOfPerson2) / 2.0;
+        return Math.abs(((sexOfPerson1 + sexOfPerson2) / 2.0) - 0.5);// new
     }
 
     public double getSexDeviation() {
