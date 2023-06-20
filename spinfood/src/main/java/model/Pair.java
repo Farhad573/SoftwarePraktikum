@@ -57,7 +57,7 @@ public class Pair {
 
 
     /**
-     * check the conditions of food preference to make pair from two participants
+     *
      * @param person1
      * @param person2
      */
@@ -115,24 +115,16 @@ public class Pair {
         return Math.abs(this.person1.getFoodPreference().getValue() - this.person2.getFoodPreference().getValue());
     }
 
-    /**
-     * calculate the sex difference in a build pair
-     * @return
-     */
     private double calculateSexDifference(){
         int sexOfPerson1 = this.person1.getSex() == Sex.female? 1 : 0;
         int sexOfPerson2 = this.person2.getSex() == Sex.female? 1 : 0;
-        return Math.abs(((sexOfPerson1 + sexOfPerson2) / 2.0) - 0.5);// new
+        return Math.abs(((sexOfPerson1 + sexOfPerson2) / 2.0) - 0.5);
     }
 
     public double getSexDeviation() {
         return sexDeviation;
     }
 
-    /**
-     * add fields of class to json object
-     * @return
-     */
     public JsonObject toJson(){
         JsonObject pairJson = new JsonObject();
         pairJson.put("premade",pairSignUp);
@@ -248,7 +240,9 @@ public class Pair {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(person1, person2);
+
     }
 
 
@@ -269,21 +263,13 @@ public class Pair {
     }
 
 
-    /**
-     *
-     */
     public void printPairsWhoCooked(){
         StringBuilder builder = new StringBuilder();
         builder.append("have Pair cooked: " + this.isHaveCooked() + ", when : " + this.getCourse());
         System.out.println(builder);
     }
 
-    /**
-     * calculate kitchen path from starter to dessert Course
-     * @param pair
-     * @throws FileNotFoundException
-     */
-    public void calculatePathLength(Pair pair) throws FileNotFoundException {
+    public  void calculatePathLength(Pair pair) throws FileNotFoundException {
         Location location1 = GroupGenerator.kitchenLocationsInStarter.get(pair);
         Location location2 = GroupGenerator.kitchenLocationsInMainDish.get(pair);
         Location location3 = GroupGenerator.kitchenLocationsInDessert.get(pair);
@@ -296,11 +282,6 @@ public class Pair {
         double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLat,partyLon);
         this.pathLength = distance1 + distance2 + distance3;
     }
-
-
-    /**
-     * test to see which pairs have already met each other
-     */
     public void printPairsWhoMet(){
         StringBuilder builder = new StringBuilder();
         builder.append("Course : Starter" + "\n");
