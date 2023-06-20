@@ -277,9 +277,9 @@ public class Pair {
         partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
         double partyLat = partyLocation.getLatitude();
         double partyLon = partyLocation.getLongitude();
-        double distance1 = Distance.calculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());
-        double distance2 = Distance.calculateDistance(location2.getLatitude(),location2.getLongitude(),location3.getLatitude(),location3.getLongitude());
-        double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLat,partyLon);
+        double distance1 = Distance.newCalculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());
+        double distance2 = Distance.newCalculateDistance(location2.getLatitude(),location2.getLongitude(),location3.getLatitude(),location3.getLongitude());
+        double distance3 = Distance.newCalculateDistance(location3.getLatitude(),location3.getLongitude(),partyLat,partyLon);
         this.pathLength = distance1 + distance2 + distance3;
     }
     public void printPairsWhoMet(){
