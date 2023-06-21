@@ -49,10 +49,10 @@ public class GroupGeneratorTest {
     void StarterGroupDuplicateTest() throws FileNotFoundException {
         List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
         List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 2);
+        //List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 2);
+        groupGenerator.callGroupsGenerator(concat,1);
 
-
-        for (Group group : groupGeneration) {
+        for (Group group : ParticipantManager.getGeneratedGroupsinStarter()) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
