@@ -85,16 +85,11 @@ public class PairGenerator extends ParticipantManager {
         }
 
         sexDeviation = sexDeviation / pairSize;
-        double averageSexDeviation = 0;
-        for(Pair pair : pairs){
-            averageSexDeviation = Math.abs(pair.getSexDeviation() - sexDeviation);
-        }
-        averageSexDeviation = averageSexDeviation / pairSize;
         ageDifference = ageDifference / pairSize;
         preferenceDeviation = preferenceDeviation / pairSize;
 
         DecimalFormat df = new DecimalFormat("#.####");
-        return indicator + pairSize + " _ "  + successorSize + " _ " + df.format(averageSexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation);
+        return indicator + pairSize + " _ "  + successorSize + " _ " + df.format(sexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation);
     }
 
 

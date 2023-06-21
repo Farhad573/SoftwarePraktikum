@@ -27,4 +27,9 @@ public class Distance {
         double distance = EARTH_RADIUS * c;
         return distance;
     }
+
+    public static double newCalculateDistance(double lat1, double lon1, double lat2, double lon2) {
+
+        return Math.sqrt(Math.pow(lat1 - lat2, 2.0) + Math.pow(lon1 - lon2, 2.0));
+    }
 }
