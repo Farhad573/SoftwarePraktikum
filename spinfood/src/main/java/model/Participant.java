@@ -136,27 +136,51 @@ public class Participant {
     }
 
     private int calculateAgeRange(double age) {
-        if (age <= 17) {
-            return 0;
-        } else if (age >= 18 && age <= 23) {
-            return 1;
-        } else if (age >= 24 && age <= 27) {
-            return 2;
-        } else if (age >= 28 && age <= 30) {
-            return 3;
-        } else if (age >= 31 && age <= 35) {
-            return 4;
-        } else if (age >= 36 && age <= 41) {
-            return 5;
-        } else if (age >= 42 && age <= 46) {
-            return 6;
-        } else if (age >= 47 && age <= 56) {
-            return 7;
-        } else if (age >= 57) {
+//        if (age <= 17) {
+//            return 0;
+//        } else if (age >= 18 && age <= 23) {
+//            return 1;
+//        } else if (age >= 24 && age <= 27) {
+//            return 2;
+//        } else if (age >= 28 && age <= 30) {
+//            return 3;
+//        } else if (age >= 31 && age <= 35) {
+//            return 4;
+//        } else if (age >= 36 && age <= 41) {
+//            return 5;
+//        } else if (age >= 42 && age <= 46) {
+//            return 6;
+//        } else if (age >= 47 && age <= 56) {
+//            return 7;
+//        } else if (age >= 57) {
+//            return 8;
+//        }
+//        return -1;
+        if (age < 0) {
+            throw new IllegalArgumentException(Double.toString(age));
+        } else {
+            if (age <= 17) {
+                return 0;
+            } else if (age <= 23) {
+                return 1;
+            } else if (age <= 27) {
+                return 2;
+            } else if (age <= 30) {
+                return 3;
+            } else if (age <= 35) {
+                return 4;
+            } else if (age <= 41) {
+                return 5;
+            } else if (age <= 46) {
+                return 6;
+            } else if (age <= 56) {
+                return 7;
+            }
             return 8;
+            }
+
         }
-        return -1;
-    }
+
 
     public int getKitchenCount() {
         return kitchenCount;
