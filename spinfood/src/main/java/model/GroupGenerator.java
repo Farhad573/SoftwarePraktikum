@@ -556,6 +556,18 @@ public class GroupGenerator extends ParticipantManager {
         return starterSuccessors;
     }
 
+    public Set<Pair> getHashSetInStarter() {
+        return hashSetInStarter;
+    }
+
+    public Set<Pair> getHashSetInMainDish() {
+        return hashSetInMainDish;
+    }
+
+    public Set<Pair> getHashSetInDessert() {
+        return hashSetInDessert;
+    }
+
 
    /** public Object makeIndicatorForGroupList(List<Group> firstGroup, List<String> selectedPreferences) {
         int indicator = 0;
