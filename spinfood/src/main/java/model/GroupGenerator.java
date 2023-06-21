@@ -42,7 +42,10 @@ public class GroupGenerator extends ParticipantManager {
             System.out.println(hashSetInMainDish.size());
             System.out.println(hashSetInDessert.size());
         }else {
-            starterSuccessors.stream().peek(x-> x.setHaveCooked(false)).peek(x-> x.setMetPairsInStarter(new ArrayList<>())).peek(x-> x.setMetPairsInMainDish(new ArrayList<>())).peek(x-> x.setMetPairsInDessert(new ArrayList<>()));
+            starterSuccessors.stream().peek(x-> {x.setHaveCooked(false);
+                x.setMetPairsInStarter(new ArrayList<>());
+                x.setMetPairsInMainDish(new ArrayList<>());
+                x.setMetPairsInDessert(new ArrayList<>());} );
             List<Pair> toRemove = hashSetInStarter.stream().filter(x-> !hashSetInMainDish.contains(x) && !hashSetInDessert.contains(x)).collect(Collectors.toCollection(ArrayList::new));
             if(toRemove.size() > 0){
 //                System.out.println("both");
@@ -80,7 +83,10 @@ public class GroupGenerator extends ParticipantManager {
                     starterSuccessors.add(pair);
                 }
             }
-            hashSetInStarter.add(starterSuccessors.get(0));
+            Pair toAdd = starterSuccessors.get(0);
+            starterSuccessors.remove(0);
+            hashSetInStarter.add(toAdd);
+            //hashSetInStarter.add(starterSuccessors.get(0));
             List<Pair> newPairs = hashSetInStarter.stream().peek(x-> x.setHaveCooked(false)).peek(x-> x.setMetPairsInStarter(new ArrayList<>()))
                     .peek(x-> x.setMetPairsInMainDish(new ArrayList<>()))
                     .peek(x-> x.setMetPairsInDessert(new ArrayList<>()))
