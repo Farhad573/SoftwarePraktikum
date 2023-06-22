@@ -236,4 +236,24 @@ public class Participant {
 
 
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public void setFoodPreference(FoodPreference foodPreference) {
+        this.foodPreference = foodPreference;
+    }
+
+    public void setHasKitchen(HasKitchen hasKitchen) {
+        this.hasKitchen = hasKitchen;
+    }
 }

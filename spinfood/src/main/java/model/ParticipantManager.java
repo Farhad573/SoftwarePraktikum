@@ -97,4 +97,13 @@ public class ParticipantManager {
     public static List<Group> getGeneratedGroupsInDessert() {
         return generatedGroupsInDessert;
     }
+
+    public Participant getParticipantById(String id) {
+        for (Participant participant : participants) {
+            if (participant.getId().equals(id)) {
+                return participant;
+            }
+        }
+        return null;
+    }
 }

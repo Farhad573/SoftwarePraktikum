@@ -1,4 +1,5 @@
 package view;
+
 import model.*;
 
 import javax.swing.*;
@@ -37,60 +38,40 @@ public class MainFrame extends JFrame {
         JPanel participantsPanel = new JPanel();
         participantsPanel.setLayout(new BorderLayout());
 
-        // Create a panel for the pairs tab
-        JPanel pairsPanel = new JPanel();
-        pairsPanel.setLayout(new BorderLayout());
+        // Create a panel for the search field and button
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new FlowLayout());
 
-// Add the pairs panel to the tabbed pane with the title "Pairs"
-        tabbedPane.addTab("Pairs", pairsPanel);
+        // Create a text field for entering the participant ID
+        JTextField searchField = new JTextField();
+        searchField.setColumns(10);
+        searchPanel.add(searchField);
 
-        // Create a button to start pairing
-        JButton startPairingButton = new JButton("Start Pairing");
-        startPairingButton.addActionListener(new ActionListener() {
+        // Create a button for search
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Generate the pairs
-               // List<Pair> pairs = PairGenerator.generateInitialPopulation(participantModel.getParticipants());
-                java.util.List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
-                List<Pair> csvPairs = getCSV_Pairs();
-                List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair,csvPairs);
-
-                // Create a table model and table for the pairs
-                DefaultTableModel pairsTableModel = new DefaultTableModel();
-                JTable pairsTable = new JTable(pairsTableModel);
-                JScrollPane pairsScrollPane = new JScrollPane(pairsTable);
-                pairsPanel.add(pairsScrollPane, BorderLayout.CENTER);
-
-                // Update the table model with the pairs and matching scores
-                Vector<Vector<Object>> pairsData = new Vector<>();
-                for (Pair pair : concatenatedlist) {
-                    Vector<Object> pairRow = new Vector<>();
-                    pairRow.add(pair.getPerson1());
-                    pairRow.add(pair.getPerson2());
-                    pairRow.add(pairGenerator.makeIndicatorForPairsList(concatenatedlist));
-                    pairsData.add(pairRow);
+                String searchId = searchField.getText().trim();
+                if (!searchId.isEmpty()) {
+                    Participant participant = participantModel.getParticipantById(searchId);
+                    if (participant != null) {
+                        JOptionPane.showMessageDialog(MainFrame.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(MainFrame.this, "Participant not found", "Search Result", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
-                Vector<String> pairsColumnNames = new Vector<>();
-                pairsColumnNames.add("Participant 1");
-                pairsColumnNames.add("Participant 2");
-                pairsColumnNames.add("Matching Score");
-                pairsTableModel.setDataVector(pairsData, pairsColumnNames);
-
-                // Switch to the "Pairs" tab
-                tabbedPane.setSelectedComponent(pairsPanel);
             }
         });
-        participantsPanel.add(startPairingButton, BorderLayout.PAGE_END);
+        searchPanel.add(searchButton);
 
+        participantsPanel.add(searchPanel, BorderLayout.PAGE_START);
 
         // Create a table model and table to display the participants
         tableModel = new DefaultTableModel();
         participantsTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(participantsTable);
         participantsPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Add the participants panel to the tabbed pane with the title "Participant"
-        tabbedPane.addTab("Participant", participantsPanel);
 
         // Create a button panel for action buttons
         JPanel buttonPanel = new JPanel();
@@ -115,37 +96,107 @@ public class MainFrame extends JFrame {
         });
         buttonPanel.add(loadButton);
 
-        // Create a button for search
-        JButton searchButton = new JButton("Search");
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Add search functionality here
-            }
-        });
-        buttonPanel.add(searchButton);
 
-        // Create a button for edit
-        JButton editButton = new JButton("Edit");
+        // Create a button for editing a participant
+        JButton editButton = new JButton("Edit Participant");
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add edit functionality here
+                // Edit participant functionality here
+                int selectedRow = participantsTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    String participantId = (String) participantsTable.getValueAt(selectedRow, 0);
+                    Participant participant = participantModel.getParticipantById(participantId);
+                    if (participant != null) {
+                        // Open a dialog to edit the participant
+                        EditParticipantDialog dialog = new EditParticipantDialog(MainFrame.this, participant);
+                        dialog.setVisible(true);
+
+                        // Update the participant information in the table
+                        if (dialog.isParticipantUpdated()) {
+                            displayParticipants();
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Please select a participant to edit", "Edit Participant", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
         buttonPanel.add(editButton);
 
+        // Create a button for deleting a participant
+        JButton deleteButton = new JButton("Delete Participant");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = participantsTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    int confirm = JOptionPane.showConfirmDialog(MainFrame.this, "Are you sure you want to delete this participant?", "Delete Participant", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        String participantId = (String) participantsTable.getValueAt(selectedRow, 0);
+                        deleteParticipant(participantId);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Please select a participant to delete", "Delete Participant", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        buttonPanel.add(deleteButton);
 
+
+
+        // Create a button to start pairing
+        JButton startPairingButton = new JButton("Start Pairing");
+        startPairingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Generate the pairs
+                java.util.List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+                List<Pair> csvPairs = getCSV_Pairs();
+                List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair, csvPairs);
+
+                // Create a table model and table for the pairs
+                DefaultTableModel pairsTableModel = new DefaultTableModel();
+                JTable pairsTable = new JTable(pairsTableModel);
+                JScrollPane pairsScrollPane = new JScrollPane(pairsTable);
+                tabbedPane.addTab("Pairs", pairsScrollPane);
+
+                // Update the table model with the pairs and matching scores
+                Vector<Vector<Object>> pairsData = new Vector<>();
+                for (Pair pair : concatenatedlist) {
+                    Vector<Object> pairRow = new Vector<>();
+                    pairRow.add(pair.getPerson1());
+                    pairRow.add(pair.getPerson2());
+                    pairRow.add(pairGenerator.makeIndicatorForPairsList(concatenatedlist));
+                    pairsData.add(pairRow);
+                }
+                Vector<String> pairsColumnNames = new Vector<>();
+                pairsColumnNames.add("Participant 1");
+                pairsColumnNames.add("Participant 2");
+                pairsColumnNames.add("Matching Score");
+                pairsTableModel.setDataVector(pairsData, pairsColumnNames);
+
+                // Switch to the "Pairs" tab
+                tabbedPane.setSelectedComponent(pairsScrollPane);
+            }
+        });
         buttonPanel.add(startPairingButton);
 
         // Add the button panel to the participants panel
         participantsPanel.add(buttonPanel, BorderLayout.PAGE_END);
+
+        // Add the participants panel to the tabbed pane with the title "Participant"
+        tabbedPane.addTab("Participant", participantsPanel);
 
         // Add the tabbed pane to the frame
         add(tabbedPane);
 
         // Set the participants tab as the default selected tab
         tabbedPane.setSelectedComponent(participantsPanel);
+    }
+
+    private void deleteParticipant(String participantId) {
+
     }
 
     private void displayParticipants() {
