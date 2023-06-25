@@ -5,6 +5,14 @@ package model;
  */
 public class GroupFitnessEvaluator {
 
+    public static double evaluateFitnessForStarter(Group group) {
+        // Calculate fitness based on different criteria
+        double fitness = 0.0;
+        fitness += calculateAgeDifferenceFitness(group);
+        fitness += calculatePreferenceDeviationFitness(group);
+        return fitness;
+    }
+
     /**
      * Evaluates the fitness of a group for the main dish.
      *
@@ -17,6 +25,8 @@ public class GroupFitnessEvaluator {
         fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
         fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
         fitness += checkIfOneOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
+        fitness += calculateAgeDifferenceFitness(group);
+        fitness += calculatePreferenceDeviationFitness(group);
         return fitness;
     }
 
@@ -32,6 +42,8 @@ public class GroupFitnessEvaluator {
         fitness += didPairsMeetInMainDish(group.pair1, group.pair2, group.pair3);
         fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
         fitness += checkIfTwoOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
+        fitness += calculateAgeDifferenceFitness(group);
+        fitness += calculatePreferenceDeviationFitness(group);
         return fitness;
     }
 
@@ -180,18 +192,20 @@ public class GroupFitnessEvaluator {
     /**
      * Calculates the fitness based on the preference deviation within a pair.
      *
-     * @param pair The pair to evaluate.
+     * @param group The pair to evaluate.
      * @return The fitness score based on the preference deviation.
      */
-    private static double calculatePreferenceDeviationFitness(Pair pair) {
-        int preferenceDeviation = pair.getPreferenceDeviation();
+    private static double calculatePreferenceDeviationFitness(Group group) {
+        int preferenceDeviation = group.getPreferenceDeviation();
 
-        if (preferenceDeviation == 0) {
-            return 1.0;
+        if (preferenceDeviation == 2.0) {
+            return 2.0;
+        } else if (preferenceDeviation == 4.0/3.0) {
+            return 4.0/3.0;
         } else if (preferenceDeviation == 1) {
-            return 0.5;
+            return 1.0;
         } else {
-            return -0.5;
+            return 2.0/3.0;
         }
     }
 }
