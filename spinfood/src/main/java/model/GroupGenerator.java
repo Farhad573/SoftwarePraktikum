@@ -118,7 +118,7 @@ public class GroupGenerator extends ParticipantManager {
                              //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
-                        map.put(group, 1.0);
+                        map.put(group, GroupFitnessEvaluator.evaluateFitnessForStarter(group));
                     }
                 }
             }
@@ -359,20 +359,22 @@ public class GroupGenerator extends ParticipantManager {
      * @param pair3 The third pair.
      * @return True if the food preferences match, false otherwise.
      */
-    public boolean checkGroupFoodPreference(Pair pair1, Pair pair2, Pair pair3) {
+    public boolean checkGroupFoodPreference(Pair pair1,Pair pair2,Pair pair3) {
         FoodPreference pref1 = pair1.getMainFoodPreference();
         FoodPreference pref2 = pair2.getMainFoodPreference();
         FoodPreference pref3 = pair3.getMainFoodPreference();
 
 
-        boolean hasMeat = false;
+        //boolean hasMeat = false;
         boolean hasVeggieOrVegan = false;
 
-        if (pref1 == FoodPreference.meat
-                || pref2 == FoodPreference.meat
-                || pref3 == FoodPreference.meat) {
-            hasMeat = true;
-        }
+//        if (pref1 == FoodPreference.meat
+//                || pref2 == FoodPreference.meat
+//                || pref3 == FoodPreference.meat) {
+//            hasMeat = true;
+//        }
+        Group group = new Group(pair1,pair2,pair3,null);
+        boolean hasMeat = group.getPairsInGroup().stream().filter(x -> x.getMainFoodPreference() == FoodPreference.meat).count() > 1;
 
         if (pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan
                 || pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan
