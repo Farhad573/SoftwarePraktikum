@@ -40,7 +40,7 @@ public class CSVFileReader extends ParticipantManager implements FileReader {
             String id = fields[1];
             String name = fields[2];
             FoodPreference foodPreference = FoodPreference.valueOf(fields[3]);
-            double age = Double.parseDouble(fields[4]);
+            int age = Integer.parseInt(fields[4]);
             Sex sex = Sex.valueOf(fields[5]);
             HasKitchen hasKitchen = HasKitchen.valueOf(fields[6]);
             double kitchen_story = 0;

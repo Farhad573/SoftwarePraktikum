@@ -31,7 +31,7 @@ public class EditParticipantDialog extends JDialog {
         setLocationRelativeTo(parentFrame);
         setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(7, 2, 10, 10)); // Increase row count to accommodate hasKitchen field
 
         JLabel idLabel = new JLabel("ID:");
         idField = new JTextField(participant.getId());
@@ -59,6 +59,10 @@ public class EditParticipantDialog extends JDialog {
         formPanel.add(foodPreferenceLabel);
         formPanel.add(foodPreferenceField);
 
+        JLabel hasKitchenLabel = new JLabel("Has Kitchen:"); // Add a label for the hasKitchen field
+        hasKitchenField = new JTextField(String.valueOf(participant.getHasKitchen()));
+        formPanel.add(hasKitchenLabel);
+        formPanel.add(hasKitchenField);
 
         add(formPanel, BorderLayout.CENTER);
 

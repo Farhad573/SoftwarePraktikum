@@ -2,6 +2,8 @@ package model;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -114,4 +116,12 @@ public class Kitchen {
         return  kitchenJson;
     }
 
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("emergencyKitchen", emergencyKitcehn);
+        map.put("story", kitchen_story);
+        map.put("longitude", kitchen_location.getLongitude());
+        map.put("latitude", kitchen_location.getLatitude());
+        return map;
+    }
 }

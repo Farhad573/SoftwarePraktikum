@@ -2,6 +2,8 @@ package model;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -256,4 +258,19 @@ public class Participant {
     public void setHasKitchen(HasKitchen hasKitchen) {
         this.hasKitchen = hasKitchen;
     }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("name", name);
+        map.put("age", age);
+        map.put("ageRange", ageRange);
+        map.put("hasKitchen", hasKitchen);
+        map.put("foodPreference", foodPreference);
+        map.put("sex", sex);
+        map.put("kitchen", kitchen != null ? kitchen.toMap() : null);
+        map.put("kitchenCount", kitchenCount);
+        return map;
+    }
+
 }

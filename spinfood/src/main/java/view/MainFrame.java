@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import static model.CSVFileReader.getCSV_Pairs;
@@ -17,9 +18,10 @@ import static model.CSVFileReader.getParticipants;
 public class MainFrame extends JFrame {
     private ParticipantManager participantModel;
     private CSVFileReader fileReader;
-
     private JTable participantsTable;
     private DefaultTableModel tableModel;
+    private JTable pairTable;
+    private DefaultTableModel pairTableModel;
 
     public MainFrame() {
         participantModel = new ParticipantManager();
@@ -53,12 +55,19 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchId = searchField.getText().trim();
-                if (!searchId.isEmpty()) {
+                String searchName = searchField.getText().trim();
+                if (!searchId.isEmpty() || !searchName.isEmpty()) {
                     Participant participant = participantModel.getParticipantById(searchId);
                     if (participant != null) {
                         JOptionPane.showMessageDialog(MainFrame.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.this, "Participant not found", "Search Result", JOptionPane.WARNING_MESSAGE);
+                        participant = participantModel.getParticipantByName(searchName);
+                        if (participant != null){
+                            JOptionPane.showMessageDialog(MainFrame.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(MainFrame.this, "Participant not found", "Search Result", JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 }
             }
@@ -72,7 +81,7 @@ public class MainFrame extends JFrame {
         participantsTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(participantsTable);
         participantsPanel.add(scrollPane, BorderLayout.CENTER);
-
+        
         // Create a button panel for action buttons
         JPanel buttonPanel = new JPanel();
 
@@ -143,6 +152,26 @@ public class MainFrame extends JFrame {
         });
         buttonPanel.add(deleteButton);
 
+        JButton compareButton = new JButton("Compare");
+        compareButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = participantsTable.getSelectedRows();
+                if (selectedRows.length == 2) {
+                    Participant participant1 = getParticipantFromSelectedRow(selectedRows[0]);
+                    Participant participant2 = getParticipantFromSelectedRow(selectedRows[1]);
+                    if (participant1 != null && participant2 != null) {
+                        CompareParticipantsDialog dialog = new CompareParticipantsDialog(MainFrame.this, participant1, participant2);
+                        dialog.setVisible(true);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Please select exactly two participants to compare", "Compare Participants", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        compareButton.setEnabled(true); // Disable the button initially
+        buttonPanel.add(compareButton);
+
 
 
         // Create a button to start pairing
@@ -195,8 +224,17 @@ public class MainFrame extends JFrame {
         tabbedPane.setSelectedComponent(participantsPanel);
     }
 
-    private void deleteParticipant(String participantId) {
+    private Participant getParticipantFromSelectedRow(int selectedRow) {
+        String participantId = (String) participantsTable.getValueAt(selectedRow, 0);
+        return participantModel.getParticipantById(participantId);
+    }
 
+    private void deleteParticipant(String participantId) {
+        Participant participant = participantModel.getParticipantById(participantId);
+        if (participant != null) {
+            participantModel.removeParticipant(participant);
+            displayParticipants();
+        }
     }
 
     private void displayParticipants() {
@@ -215,6 +253,7 @@ public class MainFrame extends JFrame {
             rowData.add(participant.getHasKitchen());
             data.add(rowData);
         }
+
 
         // Update the table model with the new data
         Vector<String> columnNames = new Vector<>();

@@ -106,4 +106,17 @@ public class ParticipantManager {
         }
         return null;
     }
+
+    public void removeParticipant(Participant participant) {
+        participants.remove(participant);
+    }
+
+    public Participant getParticipantByName(String name) {
+        for (Participant participant : participants) {
+            if (participant.getName().equals(name)) {
+                return participant;
+            }
+        }
+        return null;
+    }
 }
