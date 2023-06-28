@@ -261,6 +261,12 @@ public class Pair {
     public List<Pair> getMetPairsInDessert() {
         return metPairsInDessert;
     }
+    public List<Participant> getParticipantsInPair(){
+        List<Participant> participants = new ArrayList<>();
+        participants.add(person1);
+        participants.add(person2);
+        return  participants;
+    }
 
 
     public void printPairsWhoCooked(){

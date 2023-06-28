@@ -16,7 +16,7 @@ class PairGeneratorTest {
     void generateInitialPopulation() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList,new int[4]);
         Set<Pair> uniquePairs = new HashSet<>(population);
 
         Assertions.assertEquals(population.size(), uniquePairs.size());
@@ -30,7 +30,7 @@ class PairGeneratorTest {
     @Test
     void generateInitialPopulationFromDifferentParticipant() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();//read file
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);// make pair with method
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList,new int[4]);// make pair with method
 
         HashSet<Participant> hashSetParticipant = new HashSet<>();
 
@@ -57,7 +57,7 @@ class PairGeneratorTest {
     void checkHasKitchenNo() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList,new int[4]);
 
 
         for (Pair pair : population) {
@@ -81,7 +81,7 @@ class PairGeneratorTest {
     void checkMeatWithVeganOderVeggie() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList,new int[4]);
 
         for (Pair pair : population) {
             Participant person1 = pair.getPerson1();
@@ -103,7 +103,7 @@ class PairGeneratorTest {
     void checkPreferenceDeviation() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
 
-        List<Pair> population = pairGenerator.generateInitialPopulation(participantList);
+        List<Pair> population = pairGenerator.generateInitialPopulation(participantList,new int[4]);
         for (Pair pair: population
         ) {
             Assertions.assertTrue(pair.getPreferenceDeviation() <= 3);
@@ -112,7 +112,7 @@ class PairGeneratorTest {
     @Test
     void checkkitchenCount() throws FileNotFoundException {
         List<Participant> participantList = createSampleParticipant();
-        List<Pair> population = PairGenerator.generateInitialPopulation(participantList);
+        List<Pair> population = PairGenerator.generateInitialPopulation(participantList,new int[4]);
         Map<Kitchen,List<Pair>> kitchenMap = new HashMap<>();
         for (Pair pair:population) {
             Kitchen kitchen = pair.getKitchen();
