@@ -1,9 +1,16 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.JsonValidator;
+import com.networknt.schema.ValidationMessage;
 import model.*;
 
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static model.CSVFileReader.*;
 
@@ -69,7 +76,7 @@ public class Main {
         System.out.println("###############################################");
 
         System.out.println("###############################################");
-        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),new int[4]);
         System.out.println("number of generated Pairs is " + getGeneratedPairs().size());
         System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
@@ -89,7 +96,8 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-   //     groupGenerator.callGroupsGenerator(concatenatedlist,1);
+        int[] numbers = {4,4,4,4,5};
+        groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
         System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());
@@ -100,11 +108,15 @@ public class Main {
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
-//        try {
-//            jsonMaker.makeJsonObject();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        jsonMaker.makeJsonObject();
+
+
+
+
+
+
+
+
 
 
     }
