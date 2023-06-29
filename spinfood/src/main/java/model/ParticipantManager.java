@@ -29,7 +29,7 @@ public class ParticipantManager {
 
     protected static Map<Kitchen,Integer> kitchenCountMap;
     public static Map<Kitchen,List<Pair>> kitchenMap;
-    public static Location partyLocation = null;
+    public static Location partyLocation = new Location(1,1);
 
 
     /**
