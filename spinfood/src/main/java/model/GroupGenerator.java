@@ -22,18 +22,17 @@ public class GroupGenerator extends ParticipantManager {
      * Generates groups by calling specific methods for generating starter, main dish, and dessert groups.
      *
      * @param pairs  The list of pairs to generate groups from.
-     * @param radius The radius within which the pairs' kitchens should be located.
      */
-    public void callGroupsGenerator(List<Pair> pairs, double radius) throws FileNotFoundException {
+    public void callGroupsGenerator(List<Pair> pairs, int[] numbers,Location location) throws FileNotFoundException {
         kitchenLocationsInStarter = new HashMap<>();
         kitchenLocationsInMainDish = new HashMap<>();
         kitchenLocationsInDessert = new HashMap<>();
         generatedGroups = new ArrayList<>();
-        List<Group> groups = makeStarterGroups(pairs, radius);
+        List<Group> groups = makeStarterGroups(pairs,numbers);
         List<Pair> pairsInStarter = new ArrayList<>(hashSetInStarter);
         //List<Pair> pairsInStarter = groups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
-        makeMainDishGroups(pairsInStarter, radius);
-        makeDessertGroups(pairsInStarter);
+        makeMainDishGroups(pairsInStarter,numbers,location);
+        makeDessertGroups(pairsInStarter,numbers,location);
         System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());
         System.out.println("Number of generated groups in Maindish is " + getGeneratedGroupsInMainDish().size());
         System.out.println("Number of generated groups in dessert -> " + getGeneratedGroupsInDessert().size());
@@ -42,7 +41,10 @@ public class GroupGenerator extends ParticipantManager {
             System.out.println(hashSetInMainDish.size());
             System.out.println(hashSetInDessert.size());
         }else {
-            starterSuccessors.stream().peek(x-> x.setHaveCooked(false)).peek(x-> x.setMetPairsInStarter(new ArrayList<>())).peek(x-> x.setMetPairsInMainDish(new ArrayList<>())).peek(x-> x.setMetPairsInDessert(new ArrayList<>()));
+            starterSuccessors.stream().peek(x-> {x.setHaveCooked(false);
+                x.setMetPairsInStarter(new ArrayList<>());
+                x.setMetPairsInMainDish(new ArrayList<>());
+                x.setMetPairsInDessert(new ArrayList<>());} );
             List<Pair> toRemove = hashSetInStarter.stream().filter(x-> !hashSetInMainDish.contains(x) && !hashSetInDessert.contains(x)).collect(Collectors.toCollection(ArrayList::new));
             if(toRemove.size() > 0){
 //                System.out.println("both");
@@ -80,25 +82,25 @@ public class GroupGenerator extends ParticipantManager {
                     starterSuccessors.add(pair);
                 }
             }
-            hashSetInStarter.add(starterSuccessors.get(0));
+            Pair toAdd = starterSuccessors.get(0);
+            starterSuccessors.remove(0);
+            hashSetInStarter.add(toAdd);
+            //hashSetInStarter.add(starterSuccessors.get(0));
             List<Pair> newPairs = hashSetInStarter.stream().peek(x-> x.setHaveCooked(false)).peek(x-> x.setMetPairsInStarter(new ArrayList<>()))
                     .peek(x-> x.setMetPairsInMainDish(new ArrayList<>()))
                     .peek(x-> x.setMetPairsInDessert(new ArrayList<>()))
                     .collect(Collectors.toCollection(ArrayList::new));
 //            pairsSortedBasedOnDistance(newPairs);
-            callGroupsGenerator(newPairs,1);
+            callGroupsGenerator(newPairs,numbers,location);
     }
     }
-
-
     /**
      * Generates groups for the starter course based on the given pairs and radius.
      *
      * @param pairs  The list of pairs to generate groups from.
-     * @param radius The radius within which the pairs' kitchens should be located.
      * @return The list of generated groups for the starter course.
      */
-    public List<Group> makeStarterGroups(List<Pair> pairs, double radius) {
+    public List<Group> makeStarterGroups(List<Pair> pairs,int[] numbers) {
         hashSetInStarter = new HashSet<>();
         Map<Group,Double> map = new HashMap<>();
 
@@ -108,19 +110,16 @@ public class GroupGenerator extends ParticipantManager {
                 Pair pair2 = pairs.get(j);
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
-                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
-                             && checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
-                    ) {
+                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3))
+                     {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
-                        map.put(group, 1.0);
+                        map.put(group, GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers));
                     }
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
-        Collections.shuffle(list);
-
-
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 2.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        //Collections.shuffle(list);
         List<Group> resGroup = new ArrayList<>();
         for (Group group : list) {
             if (!hashSetInStarter.contains(group.pair1) && !hashSetInStarter.contains(group.pair2) && !hashSetInStarter.contains(group.pair3)) {
@@ -144,11 +143,11 @@ public class GroupGenerator extends ParticipantManager {
     /**
      * Generates groups for the main dish course based on the given pairs and radius.
      *
-     * @param pairs  The list of pairs to generate groups from.
-     * @param radius The radius within which the pairs' kitchens should be located.
+     * @param pairs    The list of pairs to generate groups from.
+     * @param location
      * @return The list of generated groups for the main dish course.
      */
-    public List<Group> makeMainDishGroups(List<Pair> pairs, double radius) {
+    public List<Group> makeMainDishGroups(List<Pair> pairs, int[] numbers, Location location) {
         hashSetInMainDish = new HashSet<>();
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
@@ -168,7 +167,7 @@ public class GroupGenerator extends ParticipantManager {
 //                            && !usedPairs.contains(pair3)
                     ) { // kitchen check to after party
                         Group group = new Group(pair1, pair2, pair3,Course.main);
-                        double fitness = GroupFitnessEvaluator.evaluateFitnessForMainDish(group);
+                        double fitness = GroupFitnessEvaluator.evaluateFitnessForMainDish(group,numbers,kitchenLocationsInStarter,pairs,location);
                         map.put(group,fitness);
 //                        if (fitness > 0) {
 //                            findWhichPairToCookInMainDish(group, pairs);
@@ -182,7 +181,7 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 5.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
         //Collections.shuffle(list);
 
         for (Group group : list) {
@@ -204,10 +203,11 @@ public class GroupGenerator extends ParticipantManager {
     /**
      * Generates groups for the dessert course based on the given pairs.
      *
-     * @param pairs The list of pairs to generate groups from.
+     * @param pairs    The list of pairs to generate groups from.
+     * @param location
      * @return The list of generated groups for the dessert course.
      */
-    public List<Group> makeDessertGroups(List<Pair> pairs) {
+    public List<Group> makeDessertGroups(List<Pair> pairs, int[] numbers, Location location) {
         //this.course = Course.dessert;
         hashSetInDessert = new HashSet<>();
         List<Group> resGroup = new ArrayList<>();
@@ -228,7 +228,7 @@ public class GroupGenerator extends ParticipantManager {
 //                            && !usedPairs.contains(pair3)
                     ) { // kitchen check to after party
                         Group group = new Group(pair1, pair2, pair3,Course.dessert);
-                        double fitness = GroupFitnessEvaluator.evaluateFitnessForDessert(group);
+                        double fitness = GroupFitnessEvaluator.evaluateFitnessForDessert(group,numbers,kitchenLocationsInMainDish,pairs,location);
                         map.put(group,fitness);
 //                        if (fitness > 0) {
 //                            findWhichPairToCookInDessert(group, pairs);
@@ -242,7 +242,7 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 5.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
         //Collections.shuffle(list);
 
         for (Group group : list) {
@@ -353,20 +353,22 @@ public class GroupGenerator extends ParticipantManager {
      * @param pair3 The third pair.
      * @return True if the food preferences match, false otherwise.
      */
-    public boolean checkGroupFoodPreference(Pair pair1, Pair pair2, Pair pair3) {
+    public boolean checkGroupFoodPreference(Pair pair1,Pair pair2,Pair pair3) {
         FoodPreference pref1 = pair1.getMainFoodPreference();
         FoodPreference pref2 = pair2.getMainFoodPreference();
         FoodPreference pref3 = pair3.getMainFoodPreference();
 
 
-        boolean hasMeat = false;
+        //boolean hasMeat = false;
         boolean hasVeggieOrVegan = false;
 
-        if (pref1 == FoodPreference.meat
-                || pref2 == FoodPreference.meat
-                || pref3 == FoodPreference.meat) {
-            hasMeat = true;
-        }
+//        if (pref1 == FoodPreference.meat
+//                || pref2 == FoodPreference.meat
+//                || pref3 == FoodPreference.meat) {
+//            hasMeat = true;
+//        }
+        Group group = new Group(pair1,pair2,pair3,null);
+        boolean hasMeat = group.getPairsInGroup().stream().filter(x -> x.getMainFoodPreference() == FoodPreference.meat).count() > 1;
 
         if (pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan
                 || pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan
@@ -485,13 +487,15 @@ public class GroupGenerator extends ParticipantManager {
             group.cookingPair = pair2;
             group.setKitchen(pair2.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInDessert,location2);
-        }else {
+        }else if(!pair3.isHaveCooked()) {
             pair3.setHaveCooked(true);
             pair3.setCourse(course);
             group.cookingPair = pair3;
             group.setKitchen(pair3.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInDessert,location3);
         }
+        else
+            throw new RuntimeException("all Pairs are cooked");
     }
 
 
@@ -522,7 +526,7 @@ public class GroupGenerator extends ParticipantManager {
     public static String makeIndicatorForGroupList(List<Group> groups) throws FileNotFoundException {
         String indicator = "";
         int groupSize = groups.size();
-        int successorSize = starterSuccessors.size();
+        int successorSize = getstarterSuccessors().size();
         double sexDeviation = 0 ;
         double ageDifference = 0 ;
         double preferenceDeviation = 0 ;
@@ -539,23 +543,27 @@ public class GroupGenerator extends ParticipantManager {
         }
 
         sexDeviation = sexDeviation / groupSize;
-        double averageSexDeviation = 0;
-        for(Group group : groups){
-            averageSexDeviation = Math.abs(group.getSexDeviation() - sexDeviation);
-        }
-        averageSexDeviation = averageSexDeviation / groupSize;
-        System.out.println("averageSexDeviation -> " + averageSexDeviation );
-        System.out.println("Pathlength -> " + pathLength);
         ageDifference = ageDifference / groupSize;
         preferenceDeviation = preferenceDeviation / groupSize;
-        System.out.println("Preference Deviation is -> " + preferenceDeviation);
 
         DecimalFormat df = new DecimalFormat("#.####");
-        return indicator + groupSize + " _ "  + successorSize + " _ " + df.format(averageSexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation) + " _ " + df.format(pathLength);
+        return indicator + groupSize + " _ "  + successorSize + " _ " + df.format(sexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation) + " _ " + df.format(pathLength);
     }
 
     public static List<Pair> getstarterSuccessors() {
         return starterSuccessors;
+    }
+
+    public Set<Pair> getHashSetInStarter() {
+        return hashSetInStarter;
+    }
+
+    public Set<Pair> getHashSetInMainDish() {
+        return hashSetInMainDish;
+    }
+
+    public Set<Pair> getHashSetInDessert() {
+        return hashSetInDessert;
     }
 
 

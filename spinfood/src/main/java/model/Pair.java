@@ -122,7 +122,8 @@ public class Pair {
     private double calculateSexDifference(){
         int sexOfPerson1 = this.person1.getSex() == Sex.female? 1 : 0;
         int sexOfPerson2 = this.person2.getSex() == Sex.female? 1 : 0;
-        return Math.abs(((sexOfPerson1 + sexOfPerson2) / 2.0) - 0.5);// new
+
+        return Math.abs(((sexOfPerson1 + sexOfPerson2) / 2.0) - 0.5);
     }
 
     public double getSexDeviation() {
@@ -267,6 +268,12 @@ public class Pair {
     public List<Pair> getMetPairsInDessert() {
         return metPairsInDessert;
     }
+    public List<Participant> getParticipantsInPair(){
+        List<Participant> participants = new ArrayList<>();
+        participants.add(person1);
+        participants.add(person2);
+        return  participants;
+    }
 
 
     /**
@@ -291,9 +298,9 @@ public class Pair {
         partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
         double partyLat = partyLocation.getLatitude();
         double partyLon = partyLocation.getLongitude();
-        double distance1 = Distance.calculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());
-        double distance2 = Distance.calculateDistance(location2.getLatitude(),location2.getLongitude(),location3.getLatitude(),location3.getLongitude());
-        double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLat,partyLon);
+        double distance1 = Distance.newCalculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());
+        double distance2 = Distance.newCalculateDistance(location2.getLatitude(),location2.getLongitude(),location3.getLatitude(),location3.getLongitude());
+        double distance3 = Distance.newCalculateDistance(location3.getLatitude(),location3.getLongitude(),partyLat,partyLon);
         this.pathLength = distance1 + distance2 + distance3;
     }
 
@@ -319,5 +326,11 @@ public class Pair {
 
     }
 
+    public void setPerson1(Participant person1) {
+        this.person1 = person1;
+    }
 
+    public void setPerson2(Participant person2) {
+        this.person2 = person2;
+    }
 }

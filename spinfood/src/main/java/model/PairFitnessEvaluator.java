@@ -6,18 +6,23 @@ import java.util.Map;
 
 public class PairFitnessEvaluator {
 
+
     /**
      * to calculate the fitness of pairs , to generate pairs with the given conditions perority
      * @param pair
      * @param map
      * @return
      */
-    public static double evaluateFitness(Pair pair, Map<Kitchen, List<Pair>> map) {
+    public static double evaluateFitness(Pair pair, Map<Kitchen, List<Pair>> map,int[] numbers) {
+        double foodPreferenceDeviationWeight = calculateWeight(numbers[0]);
+        double ageDifferenceWeight = calculateWeight(numbers[1]);
+        double genderDiversityWeight = calculateWeight(numbers[2]);
+        double minimumSuccessor = calculateWeight(numbers[3]);
         double fitness = 0.0;
 
-        fitness += calculateFoodPreferenceFitness(pair);
-        fitness += calculateAgeDifferenceFitness(pair);
-        fitness += calculateGenderDiversityFitness(pair);
+        fitness += calculateFoodPreferenceFitness(pair) ;
+        fitness += calculateAgeDifferenceFitness(pair) ;
+        fitness += calculateGenderDiversityFitness(pair)  ;
         fitness += calculateKitchenFitness(pair);
         fitness += calculatePreferenceDeviationFitness(pair);
         fitness += pair.getSexDeviation();
@@ -32,7 +37,7 @@ public class PairFitnessEvaluator {
      * @param map
      * @return
      */
-    private static double calculateWGCountFitness(Pair pair, Map<Kitchen, List<Pair>> map) {
+    private static double calculateWGCountFitness(Pair pair,Map<Kitchen, List<Pair>> map){
         Kitchen kitchen = pair.getKitchen();
         int kitchenCount = map.getOrDefault(kitchen, new ArrayList<>()).size();
         if (kitchenCount >= 3) {
@@ -40,6 +45,17 @@ public class PairFitnessEvaluator {
         } else
             return 1.0;
     }
+
+    public static double calculateWeight(int num){
+        switch (num){
+            case 1: return 1.4;
+            case 2: return 1.3;
+            case 3: return 1.2;
+            case 4: return 1.1;
+            default:return 0;
+        }
+    }
+
 
     /**
      *

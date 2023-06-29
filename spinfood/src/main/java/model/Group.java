@@ -159,7 +159,7 @@ public class Group {
         return (this.pair1.getPreferenceDeviation() + this.pair2.getPreferenceDeviation() + this.pair3.getPreferenceDeviation()) / 3;
     }
     private double calculateSexDeviation(){
-        return (pair1.getSexDeviation() + pair2.getSexDeviation() + pair3.getSexDeviation()) / 3;
+        return Math.abs(((pair1.getSexDeviation() + pair2.getSexDeviation() + pair3.getSexDeviation()) / 3) - 0.5);
     }
 
     public Course getCourse() {

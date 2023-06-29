@@ -1,6 +1,7 @@
 import model.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,11 +36,12 @@ public class Main {
         return starterChecker && mainChecker && dessertChecker;
 
     }
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
        CSVFileReader CSVFileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
+        Cancellation cancellation = new Cancellation();
         JsonMaker jsonMaker = new JsonMaker();
         List<Pair> csvPairs = getCSV_Pairs();
         try {
@@ -69,7 +71,7 @@ public class Main {
         System.out.println("###############################################");
 
         System.out.println("###############################################");
-        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),new int[4]);
         System.out.println("number of generated Pairs is " + getGeneratedPairs().size());
         System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
@@ -83,15 +85,9 @@ public class Main {
 
         //groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
-//        List<Group> starterGroups = groupGenerator.makeStarterGroups(concatenatedlist,1);
-//        List<Pair> pairsInStarter = starterGroups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
-//        System.out.println("number of pairs in starter is " + pairsInStarter.size());
-//        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
-//        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
-//        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-   //     groupGenerator.callGroupsGenerator(concatenatedlist,1);
 
-
+        int[] numbers = {1,3,4,2,5};
+        groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
         System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());
         System.out.println("Number of generated groups in Maindish is " + getGeneratedGroupsInMainDish().size());
         System.out.println("Number of generated groups in dessert -> " + getGeneratedGroupsInDessert().size());
@@ -100,11 +96,9 @@ public class Main {
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
-//        try {
-//            jsonMaker.makeJsonObject();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
+           //jsonMaker.makeJsonObject();
+
 
 
     }

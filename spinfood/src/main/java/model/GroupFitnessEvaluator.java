@@ -1,38 +1,155 @@
 package model;
 
+import controller.Distance;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * The GroupFitnessEvaluator class provides methods to evaluate the fitness of groups for main dishes and desserts.
  */
 public class GroupFitnessEvaluator {
 
+    public static double evaluateFitnessForStarter(Group group, int[] numbers) {
+        // Calculate fitness based on different criteria
+        double foodPreferenceDeviationWeight = calculateWeight(numbers[0]);
+        double ageDifferenceWeight = calculateWeight(numbers[1]);
+        double genderDiversityWeight = calculateWeight(numbers[2]);
+        double shortestPathWeight = calculateWeight(numbers[3]);
+        double minimumSuccessor = calculateWeight(numbers[4]);
+        double fitness = 0.0;
+        fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
+        fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
+        fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight;
+        return fitness;
+    }
+    public static double calculateGenderDiversityFitness(Group group){
+        double genderDiversity = group.getSexDeviation();
+        if(genderDiversity == 0){
+            return 1.0;
+        } else {
+            return 0.5;
+        }
+    }
+
     /**
      * Evaluates the fitness of a group for the main dish.
      *
-     * @param group The group to evaluate.
+     * @param group    The group to evaluate.
+     * @param numbers
+     * @param location
      * @return The fitness score for the group.
      */
-    public static double evaluateFitnessForMainDish(Group group) {
+    public static double evaluateFitnessForMainDish(Group group, int[] numbers, Map<Pair,Location> map, List<Pair> pairs, Location location) {
         // Calculate fitness based on different criteria
+        double foodPreferenceDeviationWeight = calculateWeight(numbers[0]);
+        double ageDifferenceWeight = calculateWeight(numbers[1]);
+        double genderDiversityWeight = calculateWeight(numbers[2]);
+        double shortestPathWeight = calculateWeight(numbers[3]);
+        double minimumSuccessor = calculateWeight(numbers[4]);
         double fitness = 0.0;
         fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
         fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
         fitness += checkIfOneOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
+        fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
+        fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight ;
+        fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
+        fitness += calculateLengthPathFitnessForMainDish(group,map,pairs,location) * shortestPathWeight ;
         return fitness;
     }
+    public static double calculateLengthPathFitnessForMainDish(Group group, Map<Pair,Location> map, List<Pair> pairs, Location partyLocation){
+        Pair pair1 = group.pair1;
+        Pair pair2 = group.pair2;
+        Pair pair3 = group.pair3;
+
+        Location location1 = map.get(pair1);
+        Location location2 = map.get(pair2);
+        Location location3 = map.get(pair3);
+        List<Pair> pairsWhoDidntCook = group.getPairsInGroup().stream().filter(x -> !x.isHaveCooked()).toList();
+        Pair pairWhoDidntCook1 = pairsWhoDidntCook.get(0);
+        Pair pairWhoDidntCook2 = pairsWhoDidntCook.get(1);
+        Location newKitchen1 = pairWhoDidntCook1.getKitchen().getKitchen_location();
+        Location newKitchen2 = pairWhoDidntCook2.getKitchen().getKitchen_location();
+
+        double distance1 = Distance.calculateDistance(location1.getLatitude(),location1.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance2 = Distance.calculateDistance(location2.getLatitude(),location2.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance4 = Distance.calculateDistance(newKitchen1.getLatitude(),newKitchen1.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance5 = Distance.calculateDistance(newKitchen2.getLatitude(),newKitchen2.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+
+        boolean isKitchen1Nearer = (distance4 < distance1) && (distance4 < distance2) && (distance4 < distance3);
+        boolean isKitchen2Nearer = (distance5 < distance1) && (distance5 < distance2) && (distance5 < distance3);
+        if(isKitchen1Nearer && isKitchen2Nearer) {
+            return 1.0;
+        }
+        return 0.5;
+    }
+
 
     /**
      * Evaluates the fitness of a group for the dessert.
      *
-     * @param group The group to evaluate.
+     * @param group    The group to evaluate.
+     * @param numbers
+     * @param location
      * @return The fitness score for the group.
      */
-    public static double evaluateFitnessForDessert(Group group) {
+    public static double evaluateFitnessForDessert(Group group, int[] numbers,Map<Pair,Location> map, List<Pair> pairs, Location location) {
         // Calculate fitness based on different criteria
+        double foodPreferenceDeviationWeight = calculateWeight(numbers[0]);
+        double ageDifferenceWeight = calculateWeight(numbers[1]);
+        double genderDiversityWeight = calculateWeight(numbers[2]);
+        double shortestPathWeight = calculateWeight(numbers[3]);
+        double minimumSuccessor = calculateWeight(numbers[4]);
         double fitness = 0.0;
         fitness += didPairsMeetInMainDish(group.pair1, group.pair2, group.pair3);
         fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
         fitness += checkIfTwoOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
+        fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
+        fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
+        fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight ;
+        fitness += calculateLengthPathFitnessForDessert(group,map,pairs,location) * shortestPathWeight ;
         return fitness;
+    }
+    public static double calculateLengthPathFitnessForDessert(Group group, Map<Pair,Location> map, List<Pair> pairs, Location partyLocation){
+        Pair pair1 = group.pair1;
+        Pair pair2 = group.pair2;
+        Pair pair3 = group.pair3;
+
+        Location location1 = map.get(pair1);
+        Location location2 = map.get(pair2);
+        Location location3 = map.get(pair3);
+        if(location1 == null || location2 == null || location3 == null){
+            return - 100.0;
+        }
+        List<Pair> pairsWhoDidntCook = group.getPairsInGroup().stream().filter(x -> !x.isHaveCooked()).toList();
+        Pair pairWhoDidntCook;
+        if(pairsWhoDidntCook.size() == 1){
+            pairWhoDidntCook = pairsWhoDidntCook.get(0);
+        }else {
+            return -100.0;
+        }
+        Location newKitchen = pairWhoDidntCook.getKitchen().getKitchen_location();
+
+        double distance1 = Distance.calculateDistance(location1.getLatitude(),location1.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance2 = Distance.calculateDistance(location2.getLatitude(),location2.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+        double distance4 = Distance.calculateDistance(newKitchen.getLatitude(),newKitchen.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+
+        boolean isKitchen1Nearer = (distance4 < distance1) && (distance4 < distance2) && (distance4 < distance3);
+        if(isKitchen1Nearer) {
+            return 1.0;
+        }
+        return 0.5;
+    }
+    public static double calculateWeight(int num){
+        switch (num){
+            case 1: return 10;
+            case 2: return 8;
+            case 3: return 6;
+            case 4: return 4;
+            default:return 0;
+        }
     }
 
     /**
@@ -180,18 +297,20 @@ public class GroupFitnessEvaluator {
     /**
      * Calculates the fitness based on the preference deviation within a pair.
      *
-     * @param pair The pair to evaluate.
+     * @param group The pair to evaluate.
      * @return The fitness score based on the preference deviation.
      */
-    private static double calculatePreferenceDeviationFitness(Pair pair) {
-        int preferenceDeviation = pair.getPreferenceDeviation();
+    private static double calculatePreferenceDeviationFitness(Group group) {
+        int preferenceDeviation = (group.pair1.getMainFoodPreference().getValue() + group.pair2.getMainFoodPreference().getValue() + group.pair3.getMainFoodPreference().getValue()) / 3;
 
-        if (preferenceDeviation == 0) {
-            return 1.0;
+        if (preferenceDeviation == 2.0) {
+            return 2.0;
+        } else if (preferenceDeviation == 4.0/3.0) {
+            return 4.0/3.0;
         } else if (preferenceDeviation == 1) {
-            return 0.5;
+            return 1.0;
         } else {
-            return -0.5;
+            return 2.0/3.0;
         }
     }
 }

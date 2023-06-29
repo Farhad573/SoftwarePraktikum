@@ -18,7 +18,7 @@ public class PairGenerator extends ParticipantManager {
      * @param participants The list of participants from which to generate the initial population.
      * @return The list of pairs representing the initial population.
      */
-    public static List<Pair> generateInitialPopulation(List<Participant> participants) {
+    public static List<Pair> generateInitialPopulation(List<Participant> participants,int[] numbers) {
         HashSet<Participant> usedParticipants = new HashSet<>();
         calculateWGCount();
         for (int i = 0; i < participants.size(); i++) {
@@ -31,7 +31,7 @@ public class PairGenerator extends ParticipantManager {
                         !usedParticipants.contains(participant2)) {
                     Pair pair = new Pair(participant1, participant2, false);
 
-                    double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap);
+                    double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap,numbers);
                     if (fitness > 4.0) {
                         generatedPairs.add(pair);
                         usedParticipants.add(participant1);
@@ -85,16 +85,11 @@ public class PairGenerator extends ParticipantManager {
         }
 
         sexDeviation = sexDeviation / pairSize;
-        double averageSexDeviation = 0;
-        for(Pair pair : pairs){
-            averageSexDeviation = Math.abs(pair.getSexDeviation() - sexDeviation);
-        }
-        averageSexDeviation = averageSexDeviation / pairSize;
         ageDifference = ageDifference / pairSize;
         preferenceDeviation = preferenceDeviation / pairSize;
 
         DecimalFormat df = new DecimalFormat("#.####");
-        return indicator + pairSize + " _ "  + successorSize + " _ " + df.format(averageSexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation);
+        return indicator + pairSize + " _ "  + successorSize + " _ " + df.format(sexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation);
     }
 
 

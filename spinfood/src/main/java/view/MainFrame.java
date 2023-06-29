@@ -218,7 +218,7 @@ public class MainFrame extends JFrame {
                     Vector<Object> pairRow = new Vector<>();
                     pairRow.add(pair.getPerson1());
                     pairRow.add(pair.getPerson2());
-                    pairRow.add(pairGenerator.makeIndicatorForPairsList(concatenatedlist));
+                    //pairRow.add(pairGenerator.makeIndicatorForPairsList(concatenatedlist));
                     pairsData.add(pairRow);
                 }
                 Vector<String> pairsColumnNames = new Vector<>();

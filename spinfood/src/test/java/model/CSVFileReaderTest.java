@@ -96,7 +96,7 @@ class CSVFileReaderTest {
         }catch (FileNotFoundException e){
             System.out.println("file is not found !!!");
         }
-        List<Pair> initialPopulation = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants());
+        List<Pair> initialPopulation = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
 
         boolean duplicate = hasNoDuplicates(initialPopulation);
         assertTrue(duplicate);

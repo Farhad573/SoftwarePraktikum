@@ -35,7 +35,9 @@ public class PartyLocation {
 
             // Update instance variables
             this.longitude = longitudeValue;
+            ParticipantManager.partyLocation.setLongitude(longitudeValue);
             this.latitude = latitudeValue;
+            ParticipantManager.partyLocation.setLatitude(latitudeValue);
         }
         scanner.close();
     }
