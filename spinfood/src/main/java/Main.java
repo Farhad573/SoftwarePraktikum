@@ -97,7 +97,7 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        int[] numbers = {4,4,4,4,5};
+        int[] numbers = {1,3,4,2,5};
         groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
@@ -109,42 +109,6 @@ public class Main {
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
-        List<Participant> cancelled = new ArrayList<>();
-        cancelled.add(getGeneratedGroups().get(0).getPairsInGroup().get(0).getPerson1());
-        cancelled.add(getGeneratedGroups().get(0).getPairsInGroup().get(0).getPerson2());
-        List<Participant> tmp = new ArrayList<>();
-        tmp.addAll(cancelled);
-        boolean check1 = false;
-        for (Group group: getGeneratedGroups()
-        ) {
-            for (Pair pair: group.getPairsInGroup()
-            ) {
-                for (Participant person: pair.getParticipantsInPair()
-                ) {
-                    if(person.equals(tmp.get(0)) || person.equals(tmp.get(1))){
-                        check1 = true;
-                    }
-                }
-            }
-
-        }
-        System.out.println("check1 is: " + check1);
-        cancellation.cancelPerson(cancelled,getPairs(),getGeneratedGroups(),5,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
-        boolean check2 = false;
-        for (Group group: getGeneratedGroups()
-             ) {
-            for (Pair pair: group.getPairsInGroup()
-                 ) {
-                for (Participant person: pair.getParticipantsInPair()
-                     ) {
-                    if(person.equals(tmp.get(0)) || person.equals(tmp.get(1))){
-                        check2 = true;
-                    }
-                }
-            }
-
-        }
-        System.out.println("check2 is: " + check2);
         //jsonMaker.makeJsonObject();
 
 

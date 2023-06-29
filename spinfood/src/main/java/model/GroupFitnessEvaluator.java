@@ -144,10 +144,10 @@ public class GroupFitnessEvaluator {
     }
     public static double calculateWeight(int num){
         switch (num){
-            case 1: return 1.4;
-            case 2: return 1.3;
-            case 3: return 1.2;
-            case 4: return 1.1;
+            case 1: return 10;
+            case 2: return 8;
+            case 3: return 6;
+            case 4: return 4;
             default:return 0;
         }
     }
