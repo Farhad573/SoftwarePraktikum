@@ -47,6 +47,7 @@ public class Main {
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
+        Cancellation cancellation = new Cancellation();
         JsonMaker jsonMaker = new JsonMaker();
         List<Pair> csvPairs = getCSV_Pairs();
         try {
@@ -108,7 +109,43 @@ public class Main {
         System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
-        jsonMaker.makeJsonObject();
+        List<Participant> cancelled = new ArrayList<>();
+        cancelled.add(getGeneratedGroups().get(0).getPairsInGroup().get(0).getPerson1());
+        cancelled.add(getGeneratedGroups().get(0).getPairsInGroup().get(0).getPerson2());
+        List<Participant> tmp = new ArrayList<>();
+        tmp.addAll(cancelled);
+        boolean check1 = false;
+        for (Group group: getGeneratedGroups()
+        ) {
+            for (Pair pair: group.getPairsInGroup()
+            ) {
+                for (Participant person: pair.getParticipantsInPair()
+                ) {
+                    if(person.equals(tmp.get(0)) || person.equals(tmp.get(1))){
+                        check1 = true;
+                    }
+                }
+            }
+
+        }
+        System.out.println("check1 is: " + check1);
+        cancellation.cancelPerson(cancelled,getPairs(),getGeneratedGroups(),5,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
+        boolean check2 = false;
+        for (Group group: getGeneratedGroups()
+             ) {
+            for (Pair pair: group.getPairsInGroup()
+                 ) {
+                for (Participant person: pair.getParticipantsInPair()
+                     ) {
+                    if(person.equals(tmp.get(0)) || person.equals(tmp.get(1))){
+                        check2 = true;
+                    }
+                }
+            }
+
+        }
+        System.out.println("check2 is: " + check2);
+        //jsonMaker.makeJsonObject();
 
 
 

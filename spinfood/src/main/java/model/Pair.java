@@ -306,5 +306,11 @@ public class Pair {
 
     }
 
+    public void setPerson1(Participant person1) {
+        this.person1 = person1;
+    }
 
+    public void setPerson2(Participant person2) {
+        this.person2 = person2;
+    }
 }
