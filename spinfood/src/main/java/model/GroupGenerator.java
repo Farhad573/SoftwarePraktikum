@@ -109,7 +109,7 @@ public class GroupGenerator extends ParticipantManager {
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
                     if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
-                             //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
+                             && checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
                         map.put(group, 1.0);
@@ -118,7 +118,7 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
-        //Collections.shuffle(list);
+        Collections.shuffle(list);
 
 
         List<Group> resGroup = new ArrayList<>();
@@ -559,4 +559,14 @@ public class GroupGenerator extends ParticipantManager {
     }
 
 
+   /** public Object makeIndicatorForGroupList(List<Group> firstGroup, List<String> selectedPreferences) {
+        int indicator = 0;
+        for (Group group : groups) {
+            // Calculate indicator based on selected preferences
+            // Example: if (selectedPreferences.contains("Food Preference")) { ... }
+        }
+
+        return indicator;
+    }
+    */
 }

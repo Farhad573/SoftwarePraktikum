@@ -89,7 +89,7 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        groupGenerator.callGroupsGenerator(concatenatedlist,1);
+   //     groupGenerator.callGroupsGenerator(concatenatedlist,1);
 
 
         System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());

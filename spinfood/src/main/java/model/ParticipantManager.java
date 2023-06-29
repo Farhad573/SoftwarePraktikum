@@ -107,6 +107,15 @@ public class ParticipantManager {
         return null;
     }
 
+    public Pair getPairById(String id) {
+        for (Pair pair : pairs) {
+            if (pair.getPerson1().getId().equals(id) || pair.getPerson2().getId().equals(id)) {
+                return pair;
+            }
+        }
+        return null;
+    }
+
     public void removeParticipant(Participant participant) {
         participants.remove(participant);
     }
@@ -119,4 +128,7 @@ public class ParticipantManager {
         }
         return null;
     }
+
+
+
 }
