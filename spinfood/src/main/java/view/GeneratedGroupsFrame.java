@@ -30,6 +30,8 @@ public class GeneratedGroupsFrame extends JFrame {
 
     private PairGenerator pairGenerator;
 
+    final int[] num = {4,5,1,3,4};
+
     public GeneratedGroupsFrame() {
         setTitle("Generated Groups");
         setSize(800, 600);
@@ -75,10 +77,10 @@ public class GeneratedGroupsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ParticipantManager participantManager = new ParticipantManager();
-                List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+                List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),num);
                 List<Pair> csvPairs = getCSV_Pairs();
                 List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair, csvPairs);
-                List<Group> firstGroup = groupGenerator.makeStarterGroups(concatenatedlist, 5);
+                List<Group> firstGroup = groupGenerator.makeStarterGroups(concatenatedlist, num);
                 JFrame popup = new JFrame();
                 JPanel tablesPanel = new JPanel();
                 tablesPanel.setLayout(new GridLayout(2, 1));
@@ -177,6 +179,7 @@ public class GeneratedGroupsFrame extends JFrame {
             public void run() {
                 GeneratedGroupsFrame frame = new GeneratedGroupsFrame();
                 frame.setVisible(true);
+
             }
         });
     }

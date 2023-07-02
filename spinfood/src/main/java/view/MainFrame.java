@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
     private DefaultTableModel pairTableModel;
     private JPanel buttonPanel; // Button panel for action buttons
 
-
+    final int[] num = {4,5,1,3,4};
 
     public MainFrame() {
         participantModel = new ParticipantManager();
@@ -199,7 +199,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Generate the pairs
-                java.util.List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants());
+                java.util.List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),num);
                 List<Pair> csvPairs = getCSV_Pairs();
                 List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair, csvPairs);
                 List<Participant> succssesorsList = ParticipantManager.getPairSuccessors();
