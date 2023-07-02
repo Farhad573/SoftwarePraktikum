@@ -14,21 +14,21 @@ public class PairFitnessEvaluator {
         double fitness = 0.0;
 
         fitness += calculateFoodPreferenceFitness(pair) ;
-        fitness += calculateAgeDifferenceFitness(pair) ;
-        fitness += calculateGenderDiversityFitness(pair)  ;
-        fitness += calculateKitchenFitness(pair);
-        fitness += calculatePreferenceDeviationFitness(pair);
-//        fitness += pair.getSexDeviation();
+        fitness += calculateAgeDifferenceFitness(pair) * ageDifferenceWeight ;
+        fitness += calculateGenderDiversityFitness(pair) * genderDiversityWeight ;
+        fitness += calculateKitchenFitness(pair) ;
+        fitness += calculatePreferenceDeviationFitness(pair) * foodPreferenceDeviationWeight;
+
         fitness += calculateWGCountFitness(pair,map);
 
         return fitness;
     }
     public static double calculateWeight(int num){
         switch (num){
-            case 1: return 1.4;
-            case 2: return 1.3;
-            case 3: return 1.2;
-            case 4: return 1.1;
+            case 1: return 10;
+            case 2: return 8;
+            case 3: return 6;
+            case 4: return 4;
             default:return 0;
         }
     }
@@ -36,7 +36,7 @@ public class PairFitnessEvaluator {
         Kitchen kitchen = pair.getKitchen();
         int kitchenCount = map.getOrDefault(kitchen,new ArrayList<>()).size();
         if(kitchenCount >= 3){
-            return - 8.0;
+            return - 1000.0;
         }else
             return 1.0;
     }
@@ -65,7 +65,7 @@ public class PairFitnessEvaluator {
             return 0.8;
         } else {
             // meat & veggie | vegan
-            return -8.0;
+            return -1000.0;
         }
     }
 
@@ -118,7 +118,7 @@ public class PairFitnessEvaluator {
             return 0.5;
         } else {
 
-            return -8.0;
+            return -1000.0;
         }
     }
 
@@ -150,7 +150,7 @@ public class PairFitnessEvaluator {
         } else if (preferenceDeviation == 1) {
             return 0.5;
         } else {
-            return -8.0;
+            return -1000.0;
         }
     }
 

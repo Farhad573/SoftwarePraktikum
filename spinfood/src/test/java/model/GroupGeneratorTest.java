@@ -2,17 +2,14 @@ package model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static model.CSVFileReader.getParticipants;
 import static model.ParticipantManager.generatedGroupsInMainDish;
-import static model.ParticipantManager.participants;
 
 public class GroupGeneratorTest {
     static CSVFileReader CSVFileReader;
@@ -25,7 +22,8 @@ public class GroupGeneratorTest {
     static HashSet<Pair> usedParisInMainDish;
     static HashSet<Pair> usedPairsInDessert;
     static Location partyLocation;
-    static int[] num = {1, 1, 1, 1, 1};
+    static int[] groupWeights = {1, 1, 1, 1, 1};
+    static int[] pairWeights = {1, 1, 1, 1};
 
     @BeforeAll
     static void setUp() throws FileNotFoundException {
@@ -47,9 +45,9 @@ public class GroupGeneratorTest {
             System.out.println("File not found.");
         }
         partyLocation = new Location(party.getLongitude(), party.getLatitude());
-        List<Pair> population = PairGenerator.generateInitialPopulation(getParticipants(), new int[4]);
+        List<Pair> population = PairGenerator.generateInitialPopulation(getParticipants(), pairWeights);
         List<Pair> concat = pairGenerator.makeAllPairsTogether(population, model.CSVFileReader.getCSV_Pairs());
-        groupGenerator.callGroupsGenerator(concat, num, partyLocation);
+        groupGenerator.callGroupsGenerator(concat, groupWeights, partyLocation);
     }
 
 
