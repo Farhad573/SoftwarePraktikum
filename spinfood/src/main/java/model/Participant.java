@@ -212,7 +212,7 @@ public class Participant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, ageRange, hasKitchen, foodPreference, sex, kitchen, kitchenCount);
+        return Objects.hash(id, name);
     }
 
     public JsonObject toJson(){

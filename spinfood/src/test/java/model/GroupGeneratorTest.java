@@ -1,32 +1,34 @@
 package model;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static model.CSVFileReader.getParticipants;
+import static model.ParticipantManager.generatedGroupsInMainDish;
 import static model.ParticipantManager.participants;
 
 public class GroupGeneratorTest {
-    static CSVFileReader CSVFileReader ;
-    static PairGenerator pairGenerator  ;
+    static CSVFileReader CSVFileReader;
+    static PairGenerator pairGenerator;
     static GroupGenerator groupGenerator;
-    static  List<Group> starter ;
-    static List<Group> mainDish ;
-    static List<Group> dessert ;
+    static List<Group> starter;
+    static List<Group> mainDish;
+    static List<Group> dessert;
     static HashSet<Pair> usedPairsInStarter;
-    static HashSet<Pair> usedParisInMainDish ;
+    static HashSet<Pair> usedParisInMainDish;
     static HashSet<Pair> usedPairsInDessert;
     static Location partyLocation;
+    static int[] num = {1, 1, 1, 1, 1};
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() throws FileNotFoundException {
         CSVFileReader = new CSVFileReader();
         pairGenerator = new PairGenerator();
         groupGenerator = new GroupGenerator();
@@ -44,24 +46,19 @@ public class GroupGeneratorTest {
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
-        partyLocation = new Location(party.getLongitude(),party.getLatitude());
+        partyLocation = new Location(party.getLongitude(), party.getLatitude());
+        List<Pair> population = PairGenerator.generateInitialPopulation(getParticipants(), new int[4]);
+        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, model.CSVFileReader.getCSV_Pairs());
+        groupGenerator.callGroupsGenerator(concat, num, partyLocation);
     }
-
 
 
     @Test
     void StarterGroupDuplicateTest() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        //List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 2);
-        groupGenerator.callGroupsGenerator(concat,new int[4],partyLocation);
-
         for (Group group : ParticipantManager.getGeneratedGroupsinStarter()) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
-
-            // Check for duplicates before adding participants to the set
             if (usedPairsInStarter.contains(pair1) || usedPairsInStarter.contains(pair2) || usedPairsInStarter.contains(pair3)) {
                 Assertions.fail("Duplicate participants found in generated pairs.");
             }
@@ -74,73 +71,19 @@ public class GroupGeneratorTest {
 
     }
 
-
-    @Test
-    void StarterGroupHasOnePairCookTest() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat,new int[4]);
-        for (Group group : groupGeneration) {
-            Pair pair1 = group.pair1;
-            Pair pair2 = group.pair2;
-            Pair pair3 = group.pair3;
-
-            // Check for duplicates before adding participants to the set
-            if (!checkIfOneOfPairsHaveCooked(pair1, pair2, pair3)) {
-                Assertions.fail("One Pair did not cook");
-            }
-        }
-    }
-
-
-
-
     @Test
     void checkMeatWithVeganOderVeggieInStarter() throws FileNotFoundException {
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concate,new int[4]);
-
-        for (Group group : groupGeneration) {
-            FoodPreference pref1 = group.pair1.getMainFoodPreference();
-            FoodPreference pref2 = group.pair2.getMainFoodPreference();
-            FoodPreference pref3 = group.pair3.getMainFoodPreference();
-
-
-            boolean hasMeat = false;
-            boolean hasVeggieOrVegan = false;
-
-            if (pref1 == FoodPreference.meat
-                    || pref2 == FoodPreference.meat
-                    || pref3 == FoodPreference.meat) {
-                hasMeat = true;
-            }
-
-            if (pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan
-                    || pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan
-                    || pref3 == FoodPreference.veggie || pref3 == FoodPreference.vegan) {
-                hasVeggieOrVegan = true;
-            }
-
-            // Check for duplicates before adding participants to the set
-            if (hasMeat && hasVeggieOrVegan) {
+        for (Group group : ParticipantManager.generatedGroupsinStarter) {
+            if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
                 Assertions.fail("Fleichi && Veggie/vegan Pair found.");
             }
-
         }
     }
-
 
 
     @Test
     void MainDishDuplicateTest() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concat,new int[4], partyLocation);
-
-
-        for (Group group : groupGeneration) {
+        for (Group group : ParticipantManager.generatedGroupsInMainDish) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
@@ -157,80 +100,19 @@ public class GroupGeneratorTest {
 
     }
 
-
-
-    @Test
-    void MainGroupHasTwoPairCookTest() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration0 = groupGenerator.makeStarterGroups(concat,new int[4]);
-
-        List<Group> groupGeneration = groupGenerator.makeMainDishGroups(concat,new int[4], partyLocation);
-        for (Group group : groupGeneration) {
-            Pair pair1 = group.pair1;
-            Pair pair2 = group.pair2;
-            Pair pair3 = group.pair3;
-
-            // Check for duplicates before adding participants to the set
-            if (!checkIfTwoOfPairsHaveCooked(pair1, pair2, pair3)) {
-                Assertions.fail("two Pair did not cook");
-            }
-        }
-
-    }
-
-
-
-
-
-
     @Test
     void checkVeggieVegganFleichiInMainDishGroup() throws FileNotFoundException {
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat,new int[4]);
-
-        for (Group group : groupGeneration) {
-            FoodPreference pref1 = group.pair1.getMainFoodPreference();
-            FoodPreference pref2 = group.pair2.getMainFoodPreference();
-            FoodPreference pref3 = group.pair3.getMainFoodPreference();
-
-
-            boolean hasMeat = false;
-            boolean hasVeggieOrVegan = false;
-
-            if (pref1 == FoodPreference.meat
-                    || pref2 == FoodPreference.meat
-                    || pref3 == FoodPreference.meat) {
-                hasMeat = true;
+        for (Group group : generatedGroupsInMainDish) {
+            if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
+                Assertions.fail("More than one Fleichi/Egali Pair in Group Found.");
             }
-
-            if (pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan
-                    || pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan
-                    || pref3 == FoodPreference.veggie || pref3 == FoodPreference.vegan) {
-                hasVeggieOrVegan = true;
-            }
-
-            // Check for duplicates before adding participants to the set
-            if (hasMeat && hasVeggieOrVegan) {
-                Assertions.fail("Fleichi && Veggie/vegan Pair found.");
-            }
-
         }
     }
-
 
 
     @Test
     void DessertGroupDuplicateTest() throws FileNotFoundException {
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concate = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeDessertGroups(concate,new int[4], partyLocation);
-
-
-        for (Group group : groupGeneration) {
+        for (Group group : ParticipantManager.generatedGroupsInDessert) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
@@ -248,247 +130,82 @@ public class GroupGeneratorTest {
     }
 
     @Test
-    void DessertGroupHaveAllPairCookTest() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration0 = groupGenerator.makeStarterGroups(concat,new int[4]);
-        List<Group> groupGeneration1 = groupGenerator.makeMainDishGroups(concat,new int[4], partyLocation);
-        List<Group> groupGeneration = groupGenerator.makeDessertGroups(concat,new int[4], partyLocation);
-
-        for (Group group : groupGeneration) {
-            Pair pair1 = group.pair1;
-            //pair1.printPairsWhoMet();
-            Pair pair2 = group.pair2;
-            //pair2.printPairsWhoMet();
-            Pair pair3 = group.pair3;
-            //pair3.printPairsWhoMet();
-            //group.printPairsWhoCooked();
-
-            // Check for duplicates before adding participants to the set
-            if (!checkIfAllPairsHaveCooked(pair1, pair2, pair3)) {
-                Assertions.fail("All Pair did not cook");
-            }
-        }
-
-    }
-
-
-
-
-    @Test
     void checkVeggieVegganFleichiInDessertGroup() throws FileNotFoundException {
-
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat,new int[4]);
-
-        for (Group group : groupGeneration) {
-            FoodPreference pref1 = group.pair1.getMainFoodPreference();
-            FoodPreference pref2 = group.pair2.getMainFoodPreference();
-            FoodPreference pref3 = group.pair3.getMainFoodPreference();
-
-
-            boolean hasMeat = false;
-            boolean hasVeggieOrVegan = false;
-
-            if (pref1 == FoodPreference.meat
-                    || pref2 == FoodPreference.meat
-                    || pref3 == FoodPreference.meat) {
-                hasMeat = true;
+        for (Group group : ParticipantManager.generatedGroupsInDessert) {
+            if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
+                Assertions.fail("More than one Fleichi/Egali Pair in Group Found.");
             }
-
-            if (pref1 == FoodPreference.veggie || pref1 == FoodPreference.vegan
-                    || pref2 == FoodPreference.veggie || pref2 == FoodPreference.vegan
-                    || pref3 == FoodPreference.veggie || pref3 == FoodPreference.vegan) {
-                hasVeggieOrVegan = true;
-            }
-
-            // Check for duplicates before adding participants to the set
-            if (hasMeat && hasVeggieOrVegan) {
-                Assertions.fail("Fleichi && Veggie/vegan Pair found.");
-            }
-
         }
     }
 
     @Test
-    void checkNumberOfPairsWhoCookedInStarter() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        groupGenerator.pairsSortedBasedOnDistance(concat);
-        List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat,new int[4]);
-        List<Pair> pairsWhoCookInStarter = groupGeneration.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Assertions.assertEquals(groupGeneration.size(),pairsWhoCookInStarter.size());
-
-        for (Group group : groupGeneration) {
-            group.printPairsWhoCooked();
+    void checkIfPairCooksOnce() throws FileNotFoundException {
+        Set<Pair> cookingPairsSet = new HashSet<>();
+        for (Group group : ParticipantManager.generatedGroups
+        ) {
+            if (cookingPairsSet.contains(group.cookingPair)) {
+                Assertions.fail("Duplicate Cooking Pair found in generated Groups.");
+            }
+            cookingPairsSet.add(group.cookingPair);
         }
     }
 
     @Test
-    void checkNumberOfPairsWhoCookedInMainDish() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        groupGenerator.pairsSortedBasedOnDistance(concat);
-        List<Group> starterGroups = groupGenerator.makeStarterGroups(concat,new int[4]);
-        List<Pair> pairsWhoCookInStarter = starterGroups.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Assertions.assertEquals(starterGroups.size() ,pairsWhoCookInStarter.size());
-        for (Group group : starterGroups) {
-            group.printPairsWhoCooked();
+    void checkEachPairIsIn3Groups() throws FileNotFoundException {
+        Map<Pair, Set<Group>> pairGroupMap = new HashMap<>();
+        for (Group group : ParticipantManager.generatedGroups
+        ) {
+            Pair pair1 = group.getPair1();
+            Pair pair2 = group.getPair2();
+            Pair pair3 = group.getPair3();
+
+            // Add group to pair1
+            pairGroupMap.computeIfAbsent(pair1, key -> new HashSet<>()).add(group);
+
+            // Add group to pair2
+            pairGroupMap.computeIfAbsent(pair2, key -> new HashSet<>()).add(group);
+
+            // Add group to pair3
+            pairGroupMap.computeIfAbsent(pair3, key -> new HashSet<>()).add(group);
         }
-        System.out.println("#".repeat(30));
-        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(concat,new int[4], partyLocation);
-        List<Pair> pairsWhoCookInMainDish = mainDishGroup.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Assertions.assertEquals(mainDishGroup.size() * 2,pairsWhoCookInMainDish.size());
+        for (Map.Entry<Pair, Set<Group>> entry : pairGroupMap.entrySet()) {
+            Pair pair = entry.getKey();
+            Set<Group> groupList = entry.getValue();
 
-        for (Group group : mainDishGroup) {
-            group.printPairsWhoCooked();
-        }
-    }
-    @Test
-    void checkNumberOfPairsWhoCookedInDessert() throws FileNotFoundException {
-        List<Pair> population = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),new int[4]);
-        List<Pair> concat = pairGenerator.makeAllPairsTogether(population, CSVFileReader.getCSV_Pairs());
-        groupGenerator.pairsSortedBasedOnDistance(concat);
-        List<Group> starterGroups = groupGenerator.makeStarterGroups(concat,new int[4]);
-        List<Pair> pairsWhoCookInStarter = starterGroups.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Assertions.assertEquals(starterGroups.size() ,pairsWhoCookInStarter.size());
-        List<Pair> pairsInStarter = starterGroups.stream().flatMap(x-> x.getPairsInGroup().stream()).collect(Collectors.toList());
-        System.out.println("number of Pairs in starter is " + pairsInStarter.size());
-
-
-
-//        for (Group group : starterGroups) {
-//            group.printPairsWhoCooked();
-//        }
-
-        System.out.println("#".repeat(90));
-        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter,new int[4], partyLocation);
-        List<Pair> pairsWhoCookInMainDish = mainDishGroup.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Assertions.assertEquals(mainDishGroup.size() * 2,pairsWhoCookInMainDish.size());
-       // List<Pair> pairsInMainDish = mainDishGroup.stream().flatMap(x -> x.getPairsInGroup().stream()).toList();
-
-
-//        for (Group group : mainDishGroup) {
-//            group.printPairsWhoCooked();
-//        }
-
-        System.out.println("#".repeat(30));
-        List<Group> dessertGroup = groupGenerator.makeDessertGroups(pairsInStarter,new int[4], partyLocation);
-        List<Pair> pairsWhoCookInDessert = dessertGroup.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Assertions.assertEquals(dessertGroup.size() * 3,pairsWhoCookInDessert.size());
-        System.out.println("number of pairs in starterMap is " + GroupGenerator.kitchenLocationsInStarter.keySet().size());
-        System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
-        System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
-
-//        for (Group group : dessertGroup) {
-//            group.printPairsWhoCooked();
-//        }
-//        for (Pair pair: concat
-//             ) {
-//            pair.printPairsWhoMet();
-//        }
-        System.out.println("#".repeat(30));
-
-    }
-
-
-@Test
-    void checkNumberOfStarterWithMainDish(){
-        Assertions.assertEquals(mainDish.size(),starter.size());
-    }
-    @Test
-    void checkNumberOfMainDishWithDessert(){
-        Assertions.assertEquals(mainDish.size(),dessert.size());
-    }
-    @Test
-    void checkNumberOfStarterWithDessert(){
-        Assertions.assertEquals(dessert.size(),starter.size());
-    }
-
-    @Test
-    void checkIfSamePairsAreUsedInStarterAndMain() throws FileNotFoundException {
-
-
-    }
-
-
-    // Helper Function
-
-
-    /**
-     * Checks if one of the pairs in a group has cooked.
-     *
-     * @param pairs   The pairs.
-     * @return        True if one of the pairs has cooked, false otherwise.
-     */
-    private boolean checkIfOneOfPairsHaveCooked(Pair... pairs){
-        int i = 0 ;
-        for (Pair pair : pairs) {
-            if (pair.isHaveCooked()) {
-                i++;
+            if (groupList.size() != 3) {
+                Assertions.fail("Each Pair is not 3 different groups");
             }
         }
-        return i==1;
     }
 
-    /**
-     * Checks if two of the pairs in a group has cooked.
-     *
-     * @param pairs   The pairs.
-     * @return        True if one of the pairs has cooked, false otherwise.
-     */
-    private boolean checkIfTwoOfPairsHaveCooked(Pair... pairs){
-        int i = 0 ;
-        for (Pair pair : pairs) {
-            if (pair.isHaveCooked()) {
-                i++;
+    @Test
+    void checkEachPairMeetOthersOnce() throws FileNotFoundException {
+        List<Group> dessertGroups = ParticipantManager.generatedGroups.stream().filter(x-> x.getCourse() == Course.dessert).toList();
+        for (Group group : dessertGroups
+        ) {
+            Pair pair1 = group.getPair1();
+            Pair pair2 = group.getPair2();
+            Pair pair3 = group.getPair3();
+            List<Pair> metPairs1 = Stream.concat(Stream.concat(pair1.getMetPairsInStarter().stream(),
+                            pair1.getMetPairsInMainDish().stream()),
+                    pair1.getMetPairsInDessert().stream()).toList();
+            List<Pair> metPairs2 = Stream.concat(Stream.concat(pair2.getMetPairsInStarter().stream(),
+                            pair2.getMetPairsInMainDish().stream()),
+                    pair2.getMetPairsInDessert().stream()).toList();
+            List<Pair> metPairs3 = Stream.concat(Stream.concat(pair3.getMetPairsInStarter().stream(),
+                            pair3.getMetPairsInMainDish().stream()),
+                    pair3.getMetPairsInDessert().stream()).toList();
+            Set<Pair> set1 = new HashSet<>(metPairs1);
+            boolean hasDuplicates1 = metPairs1.size() > set1.size();
+            Set<Pair> set2 = new HashSet<>(metPairs2);
+            boolean hasDuplicates2 = metPairs2.size() > set2.size();
+            Set<Pair> set3 = new HashSet<>(metPairs3);
+            boolean hasDuplicates3 = metPairs3.size() > set3.size();
+            if(hasDuplicates1 || hasDuplicates2 || hasDuplicates3){
+                Assertions.fail("A pair has met another one more than once");
             }
-        }
-        return i==2;
-    }
 
-    /**
-     * Checks if all the pairs in a group has cooked.
-     *
-     * @param pairs   The pairs.
-     * @return        True if one of the pairs has cooked, false otherwise.
-     */
-    private boolean checkIfAllPairsHaveCooked(Pair... pairs) {
-        int cookedCount = 0; // Counter variable for cooked pairs
-
-        for (Pair pair : pairs) {
-            if (pair.isHaveCooked()) {
-                cookedCount++;
-            }
         }
 
-        return cookedCount == 3; // Return true if all pairs have cooked
     }
-
-
-
-    // read CSV File
-    private static List<Participant> createSampleParticipant() throws FileNotFoundException {
-        try{
-            CSVFileReader.readCSVFile("teilnehmerliste.csv");
-        }catch (FileNotFoundException e){
-            System.out.println("file did not found");
-        }
-        participants = getParticipants();
-        return getParticipants();
-    }
-
 }

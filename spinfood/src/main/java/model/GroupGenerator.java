@@ -13,6 +13,9 @@ public class GroupGenerator extends ParticipantManager {
     public static Map<Pair,Location> kitchenLocationsInStarter = new HashMap<>();
    public static Map<Pair,Location> kitchenLocationsInMainDish = new HashMap<>();
     public static Map<Pair,Location> kitchenLocationsInDessert = new HashMap<>();
+    List<Group> groupsInStarter = new ArrayList<>();
+    List<Group> groupsInMainDish = new ArrayList<>();
+    List<Group> groupsInDessert = new ArrayList<>();
     Set<Pair> hashSetInStarter = new HashSet<>();
     Set<Pair> hashSetInMainDish = new HashSet<>();
     Set<Pair> hashSetInDessert = new HashSet<>();
@@ -91,6 +94,7 @@ public class GroupGenerator extends ParticipantManager {
                     .peek(x-> x.setMetPairsInDessert(new ArrayList<>()))
                     .collect(Collectors.toCollection(ArrayList::new));
 //            pairsSortedBasedOnDistance(newPairs);
+            //newPairs.forEach(System.out::println);
             callGroupsGenerator(newPairs,numbers,location);
     }
     }
@@ -102,6 +106,7 @@ public class GroupGenerator extends ParticipantManager {
      */
     public List<Group> makeStarterGroups(List<Pair> pairs,int[] numbers) {
         hashSetInStarter = new HashSet<>();
+        generatedGroupsinStarter = new ArrayList<>();
         Map<Group,Double> map = new HashMap<>();
 
         for (int i = 0; i < pairs.size(); i++) {
@@ -137,7 +142,9 @@ public class GroupGenerator extends ParticipantManager {
         starterSuccessors.addAll(pairs.stream().filter(x -> !hashSetInStarter.contains(x)).toList());
         System.out.println("number starter of validPairs is " + hashSetInStarter.size());
         System.out.println("number of successors in starter " + starterSuccessors.size());
-        generatedGroupsinStarter = resGroup;
+        generatedGroupsinStarter.addAll(resGroup);
+        groupsInStarter.addAll(resGroup);
+        //ParticipantManager.generatedGroupsinStarter.forEach(System.out::println);
         generatedGroups.addAll(resGroup);
         return resGroup;
     }
@@ -152,6 +159,7 @@ public class GroupGenerator extends ParticipantManager {
      */
     public List<Group> makeMainDishGroups(List<Pair> pairs, int[] numbers, Location location) {
         hashSetInMainDish = new HashSet<>();
+        generatedGroupsInMainDish = new ArrayList<>();
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
         Map<Group,Double> map = new HashMap<>();
@@ -198,7 +206,8 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
         generatedGroups.addAll(resGroup);
-        generatedGroupsInMainDish = resGroup;
+        groupsInMainDish.addAll(resGroup);
+        generatedGroupsInMainDish.addAll(resGroup);
         return resGroup;
     }
 
@@ -213,6 +222,7 @@ public class GroupGenerator extends ParticipantManager {
     public List<Group> makeDessertGroups(List<Pair> pairs, int[] numbers, Location location) {
         //this.course = Course.dessert;
         hashSetInDessert = new HashSet<>();
+        generatedGroupsInDessert = new ArrayList<>();
         List<Group> resGroup = new ArrayList<>();
         Set<Pair> usedPairs = new HashSet<>();
         Map<Group,Double> map = new HashMap<>();
@@ -259,7 +269,8 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
         generatedGroups.addAll(resGroup);
-        generatedGroupsInDessert = resGroup;
+        groupsInDessert.addAll(resGroup);
+        generatedGroupsInDessert.addAll(resGroup);
         return resGroup;
     }
 
@@ -569,5 +580,15 @@ public class GroupGenerator extends ParticipantManager {
         return hashSetInDessert;
     }
 
+    public List<Group> getGroupsGroupsInStarter() {
+        return groupsInStarter;
+    }
 
+    public List<Group> getGroupsGroupsInMainDish() {
+        return groupsInMainDish;
+    }
+
+    public List<Group> getGroupsGroupsInDessert() {
+        return groupsInDessert;
+    }
 }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static model.CSVFileReader.*;
 
@@ -97,7 +98,7 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        int[] numbers = {1,3,4,2,5};
+        int[] numbers = {1,1,1,1,1};
         groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
@@ -110,16 +111,6 @@ public class Main {
 
         System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
         //jsonMaker.makeJsonObject();
-
-
-
-
-
-
-
-
-
-
     }
 
 }
