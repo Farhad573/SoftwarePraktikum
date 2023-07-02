@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public class PairGenerator extends ParticipantManager {
 
 
-
+    int[] numbers ={1,2,3,4};
 
     /**
      * Generates the initial population of pairs from a list of participants.
@@ -32,7 +32,7 @@ public class PairGenerator extends ParticipantManager {
                     Pair pair = new Pair(participant1, participant2, false);
 
                     double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap,numbers);
-                    if (fitness > 4.0) {
+                    if (fitness > 5.0) {
                         generatedPairs.add(pair);
                         usedParticipants.add(participant1);
                         usedParticipants.add(participant2);
