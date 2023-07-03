@@ -120,14 +120,14 @@ public class GroupFitnessEvaluator {
         Location location2 = map.get(pair2);
         Location location3 = map.get(pair3);
         if(location1 == null || location2 == null || location3 == null){
-            return - 100.0;
+            return - 1000.0;
         }
         List<Pair> pairsWhoDidntCook = group.getPairsInGroup().stream().filter(x -> !x.isHaveCooked()).toList();
         Pair pairWhoDidntCook;
         if(pairsWhoDidntCook.size() == 1){
             pairWhoDidntCook = pairsWhoDidntCook.get(0);
         }else {
-            return -100.0;
+            return -1000.0;
         }
         Location newKitchen = pairWhoDidntCook.getKitchen().getKitchen_location();
 
@@ -166,7 +166,7 @@ public class GroupFitnessEvaluator {
                 (pair2.isHaveCooked() && !pair3.isHaveCooked() && !pair1.isHaveCooked())) {
             return 1.0;
         }
-        return -8.0;
+        return -1000.0;
     }
 
     /**
@@ -183,7 +183,7 @@ public class GroupFitnessEvaluator {
                 (pair2.isHaveCooked() && pair3.isHaveCooked() && !pair1.isHaveCooked() )) {
             return 1.0;
         } else {
-            return -8.0;
+            return -1000.0;
         }
     }
 
@@ -197,7 +197,7 @@ public class GroupFitnessEvaluator {
      */
     public static double checkIfAllPairsDidntCook(Pair pair1, Pair pair2, Pair pair3) {
         if (!pair1.isHaveCooked() && !pair2.isHaveCooked() && !pair3.isHaveCooked()) {
-            return -8.0;
+            return -1000.0;
         } else {
             return 1.0;
         }
@@ -217,7 +217,7 @@ public class GroupFitnessEvaluator {
                 !pair3.getMetPairsInStarter().contains(pair1) && !pair3.getMetPairsInStarter().contains(pair2)) {
             return 1.0;
         } else {
-            return -8.0;
+            return -1000.0;
         }
     }
     public static double didPairsMeetInMainDish(Pair pair1, Pair pair2, Pair pair3) {
@@ -229,7 +229,7 @@ public class GroupFitnessEvaluator {
                 !pair3.getMetPairsInMainDish().contains(pair1) && !pair3.getMetPairsInMainDish().contains(pair2) ) {
             return 1.0;
         } else {
-            return -8.0;
+            return -1000.0;
         }
     }
 
