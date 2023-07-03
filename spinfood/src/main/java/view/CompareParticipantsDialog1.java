@@ -1,6 +1,5 @@
 package view;
 
-import model.Pair;
 import model.Participant;
 
 import javax.swing.*;
@@ -8,11 +7,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Map;
 
-public class ComparePairsDialog extends JFrame {
+public class CompareParticipantsDialog1 extends JDialog {
     private JTable resultTable;
 
-    public ComparePairsDialog(JFrame parentFrame, Pair pair1, Pair pair2) {
-
+    public CompareParticipantsDialog1(JFrame parentFrame, Participant participant1, Participant participant2) {
+        super(parentFrame, "Compare Participants", true);
 
         setSize(600, 400);
         setLocationRelativeTo(parentFrame);
@@ -21,7 +20,7 @@ public class ComparePairsDialog extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
 
         // Compare the participants and generate the result
-        JTable comparisonResult = compareParticipants(pair1, pair2);
+        JTable comparisonResult = compareParticipants(participant1, participant2);
 
         resultTable = comparisonResult;
 
@@ -38,28 +37,22 @@ public class ComparePairsDialog extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private JTable compareParticipants(Pair pair1, Pair pair2) {
-        Map<String, Object> attributes1 = pair1.getPerson1().toMap();
-        Map<String, Object> attributes2 = pair1.getPerson2().toMap();
-        Map<String, Object> attributes3 = pair2.getPerson1().toMap();
-        Map<String, Object> attributes4 = pair2.getPerson2().toMap();
+    private JTable compareParticipants(Participant participant1, Participant participant2) {
+        Map<String, Object> attributes1 = participant1.toMap();
+        Map<String, Object> attributes2 = participant2.toMap();
 
         // Create the table model with three columns
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Category");
-        tableModel.addColumn("Participant 1.1");
-        tableModel.addColumn("Participant 1.2");
-        tableModel.addColumn("Participant 2.1");
-        tableModel.addColumn("Participant 2.2");
+        tableModel.addColumn("Participant 1");
+        tableModel.addColumn("Participant 2");
 
         // Compare the attributes and add rows to the table model
         for (String attribute : attributes1.keySet()) {
             Object value1 = attributes1.get(attribute);
             Object value2 = attributes2.get(attribute);
-            Object value3 = attributes3.get(attribute);
-            Object value4 = attributes4.get(attribute);
 
-            tableModel.addRow(new Object[]{attribute, value1, value2, value3, value4});
+            tableModel.addRow(new Object[]{attribute, value1, value2});
         }
 
         // Create the table with the table model
@@ -67,5 +60,4 @@ public class ComparePairsDialog extends JFrame {
 
         return comparisonTable;
     }
-
 }

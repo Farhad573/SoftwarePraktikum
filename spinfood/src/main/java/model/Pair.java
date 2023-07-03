@@ -280,7 +280,7 @@ public class Pair {
         Location location2 = GroupGenerator.kitchenLocationsInMainDish.get(pair);
         Location location3 = GroupGenerator.kitchenLocationsInDessert.get(pair);
         PartyLocation partyLocation = new PartyLocation();
-        partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
+        partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
         double partyLat = partyLocation.getLatitude();
         double partyLon = partyLocation.getLongitude();
         double distance1 = Distance.newCalculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());

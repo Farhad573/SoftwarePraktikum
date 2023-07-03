@@ -56,7 +56,7 @@ public class GroupGeneratorTest {
         //List<Group> groupGeneration = groupGenerator.makeStarterGroups(concat, 2);
         groupGenerator.callGroupsGenerator(concat,new int[4],partyLocation);
 
-        for (Group group : ParticipantManager.getGeneratedGroupsinStarter()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInStarter()) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;

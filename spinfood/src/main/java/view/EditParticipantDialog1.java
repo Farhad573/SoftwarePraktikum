@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EditParticipantDialog extends JDialog {
+public class EditParticipantDialog1 extends JDialog {
     private JTextField idField;
     private JTextField nameField;
     private JTextField ageField;
@@ -22,7 +22,7 @@ public class EditParticipantDialog extends JDialog {
     private boolean participantUpdated;
     private JComboBox comboBox1;
 
-    public EditParticipantDialog(JFrame parentFrame, Participant participant) {
+    public EditParticipantDialog1(JFrame parentFrame, Participant participant) {
         super(parentFrame, "Edit Participant", true);
         this.participant = participant;
         participantUpdated = false;

@@ -41,7 +41,7 @@ public class JsonMaker {
         root.put("successorParticipants",successorParticipantsJsonArray);
         this.rootObject = root;
         this.jsonString = Jsoner.serialize(root);
-        try (FileWriter writer = new FileWriter("D:\\Uni_Marburrg\\4th-semester\\Software Praktikum\\Repo\\data_test10.json")) {
+        try (FileWriter writer = new FileWriter("C:\\Users\\tonyk\\Desktop\\SWT-Praktikum\\SP23_Gruppe4_sajjadi_salekim_emamideh_Kassisa")) {
             writer.write(jsonString);
         } catch (IOException e) {
             e.printStackTrace();

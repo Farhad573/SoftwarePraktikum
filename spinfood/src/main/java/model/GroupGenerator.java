@@ -33,7 +33,7 @@ public class GroupGenerator extends ParticipantManager {
         //List<Pair> pairsInStarter = groups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
         makeMainDishGroups(pairsInStarter,numbers,location);
         makeDessertGroups(pairsInStarter,numbers,location);
-        System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());
+        System.out.println("Number of generated groups in starter is " + getGeneratedGroupsInStarter().size());
         System.out.println("Number of generated groups in Maindish is " + getGeneratedGroupsInMainDish().size());
         System.out.println("Number of generated groups in dessert -> " + getGeneratedGroupsInDessert().size());
         if( hashSetInStarter.size() == hashSetInMainDish.size()  && hashSetInStarter.size() == hashSetInDessert.size()){
@@ -114,7 +114,9 @@ public class GroupGenerator extends ParticipantManager {
                              //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
-                        map.put(group, GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers));
+                        double fitness = GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers);
+                        group.setFitness(fitness);
+                        map.put(group, fitness);
                     }
                 }
             }
@@ -124,6 +126,25 @@ public class GroupGenerator extends ParticipantManager {
 
 
         List<Group> resGroup = new ArrayList<>();
+        Map<Pair, List<Group>> listOfGroups = new HashMap<>();
+        Set<Pair> pairsUnique = list.stream()
+                .flatMap(group -> Stream.of(group.getPair1(), group.getPair2(), group.getPair3()))
+                .collect(Collectors.toSet());
+        for(Pair p: pairsUnique) {
+            listOfGroups.put(p, new ArrayList<Group>());
+            for(Group g: list) {
+                if (p.equals(g.getPair1()) || p.equals(g.getPair2()) || p.equals(g.getPair3())) {
+                    listOfGroups.get(p).add(g);
+                }
+            }
+            listOfGroups.get(p).stream().sorted().collect(Collectors.toList());
+
+
+        }
+
+
+
+
         for (Group group : list) {
             if (!hashSetInStarter.contains(group.pair1) && !hashSetInStarter.contains(group.pair2) && !hashSetInStarter.contains(group.pair3)) {
                 findWhichPairToCookInStarter(group, pairs);
@@ -137,10 +158,114 @@ public class GroupGenerator extends ParticipantManager {
         starterSuccessors.addAll(pairs.stream().filter(x -> !hashSetInStarter.contains(x)).toList());
         System.out.println("number starter of validPairs is " + hashSetInStarter.size());
         System.out.println("number of successors in starter " + starterSuccessors.size());
-        generatedGroupsinStarter = resGroup;
+        generatedGroupsInStarter = resGroup;
         generatedGroups.addAll(resGroup);
         return resGroup;
     }
+
+    /**
+     * Generates groups for the starter course based on the given pairs and radius.
+     *
+     * @param pairs  The list of pairs to generate groups from.
+     * @return The list of generated groups for the starter course.
+     */
+    public Map<Pair, List<Group>> makePairGroups(List<Pair> pairs,int[] numbers) {
+        Map<Group,Double> map = new HashMap<>();
+        for (int i = 0; i < pairs.size(); i++) {
+            Pair pair1 = pairs.get(i);
+            for (int j = i + 1; j < pairs.size(); j++) {
+                Pair pair2 = pairs.get(j);
+                for (int k = j + 1; k < pairs.size(); k++) {
+                    Pair pair3 = pairs.get(k);
+                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
+                        //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
+                    ) {
+                        Group group = new Group(pair1, pair2, pair3,Course.first);
+                        double fitness = GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers);
+                        group.setFitness(fitness);
+                        map.put(group, fitness);
+                    }
+                }
+            }
+        }
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 10.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+
+        Map<Pair, List<Group>> listOfGroups = new HashMap<>();
+        Set<Pair> pairsUnique = list.stream()
+                .flatMap(group -> Stream.of(group.getPair1(), group.getPair2(), group.getPair3()))
+                .collect(Collectors.toSet());
+        for(Pair p: pairsUnique) {
+            listOfGroups.put(p, new ArrayList<Group>());
+            for(Group g: list) {
+                if (p.equals(g.getPair1()) || p.equals(g.getPair2()) || p.equals(g.getPair3())) {
+                    listOfGroups.get(p).add(g);
+                }
+            }
+            listOfGroups.get(p).stream().sorted().collect(Collectors.toList());
+        }
+        return listOfGroups;
+    }
+
+    public List<Group> getGroups(Map<Pair, List<Group>> pairGroups) {
+        List<Group> resultingGroups = new ArrayList<>();
+        List<Map<Pair, List<Group>>> tempPairing = new ArrayList<>();
+        for(Pair p: pairGroups.keySet()) {
+            Map<Pair, List<Group>> tempMap = new HashMap<>();
+            tempMap.put(p, new ArrayList<Group>());
+            tempPairing.add(tempMap);
+            while(tempMap.get(p).size() < 3) {
+                List<Group> groups = pairGroups.get(p);
+                for (Group tempG: groups) {
+                    if(tempMap.get(p).isEmpty() || checkGroupingBefore(tempMap.get(p), tempG, p)) {
+                        tempMap.get(p).add(tempG);
+                        // added für die anderen zwei in der Gruppe zu tempMap die anderen zwei Pairs
+                        if (tempMap.get(p).size() > 3) {
+                            break;
+                        }
+                    }
+                }
+            }
+            tempMap.get(p).get(0).cookingPair = p;
+
+        }
+
+        // überprüfen ob es ein pair gib, dass nicht 3 Gruppen hat in tempMap dann in sucessor und nicht in die resultingGroups
+        // hier hätten wir für jedes Pair - Liste von 3 Gruppen
+        // Gruppen course setzen basierend auf path length (von außen nach innen setzen zu party location)
+        // course hinzufügen
+        // die Gruppen in die resultingGroups einfügen
+        return resultingGroups;
+    }
+
+    private boolean checkGroupingBefore(List<Group> groups, Group group, Pair canContain) {
+        List<Pair> otherPairs = new ArrayList<>();
+        for(Group g: groups) {
+            if(g.getPair1().equals(canContain)) {
+                otherPairs.add(g.getPair2());
+                otherPairs.add(g.getPair3());
+            }
+            if(g.getPair2().equals(canContain)) {
+                otherPairs.add(g.getPair1());
+                otherPairs.add(g.getPair3());
+            }
+            if(g.getPair3().equals(canContain)) {
+                otherPairs.add(g.getPair2());
+                otherPairs.add(g.getPair1());
+            }
+        }
+        if(otherPairs.contains(group.getPair1()) || otherPairs.contains(group.getPair2()) || otherPairs.contains(group.getPair3())) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
+
+
+
+
 
 
     /**
@@ -526,6 +651,11 @@ public class GroupGenerator extends ParticipantManager {
         return (distance1 < radius) && (distance2 < radius) && (distance3 < radius);
     }
 
+
+
+
+
+
     public static String makeIndicatorForGroupList(List<Group> groups) throws FileNotFoundException {
         String indicator = "";
         int groupSize = groups.size();
@@ -567,6 +697,10 @@ public class GroupGenerator extends ParticipantManager {
 
     public Set<Pair> getHashSetInDessert() {
         return hashSetInDessert;
+    }
+
+    public static void main(String[] args) {
+
     }
 
 

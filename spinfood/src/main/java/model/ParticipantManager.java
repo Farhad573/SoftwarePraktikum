@@ -21,7 +21,7 @@ public class ParticipantManager {
     protected static List<Pair> starterSuccessors;
 
     protected static List<Pair> generatedPairs;
-    protected static List<Group> generatedGroupsinStarter;
+    protected static List<Group> generatedGroupsInStarter;
     protected static List<Group> generatedGroupsInMainDish;
     protected static List<Group> generatedGroupsInDessert;
 
@@ -46,7 +46,7 @@ public class ParticipantManager {
         starterSuccessors = new ArrayList<>();
         kitchenMap = new HashMap<>();
         CSV_Pairs = new ArrayList<>();
-        generatedGroupsinStarter = new ArrayList<>();
+        generatedGroupsInStarter = new ArrayList<>();
         generatedGroupsInMainDish = new ArrayList<>();
         generatedGroupsInDessert = new ArrayList<>();
     }
@@ -87,8 +87,8 @@ public class ParticipantManager {
         return kitchenMap;
     }
 
-    public static List<Group> getGeneratedGroupsinStarter() {
-        return generatedGroupsinStarter;
+    public static List<Group> getGeneratedGroupsInStarter() {
+        return generatedGroupsInStarter;
     }
 
     public static List<Group> getGeneratedGroupsInMainDish() {

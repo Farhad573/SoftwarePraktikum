@@ -1,16 +1,9 @@
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.JsonValidator;
-import com.networknt.schema.ValidationMessage;
 import model.*;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static model.CSVFileReader.*;
 
@@ -51,8 +44,8 @@ public class Main {
         JsonMaker jsonMaker = new JsonMaker();
         List<Pair> csvPairs = getCSV_Pairs();
         try {
-            CSVFileReader.readCSVFile("teilnehmerliste.csv");
-            partyLocation.readCSVFilePartyLocation("partylocation.csv");
+            CSVFileReader.readCSVFile("spinfood/teilnehmerliste.csv");
+            partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
             System.out.println(partyLocation.toString());
             //System.out.println(CSVFileReader.toStringParticipants());
             //System.out.println(CSVFileReader.toStringPairs());
@@ -91,27 +84,32 @@ public class Main {
 
         //groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
-//        List<Group> starterGroups = groupGenerator.makeStarterGroups(concatenatedlist,1);
-//        List<Pair> pairsInStarter = starterGroups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
-//        System.out.println("number of pairs in starter is " + pairsInStarter.size());
-//        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
-//        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
-//        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
+        //List<Group> starterGroups = groupGenerator.makeStarterGroups(concatenatedlist,new int[]{1,2,5,3,4});
+        //List<Pair> pairsInStarter = starterGroups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));
+       // System.out.println("number of pairs in starter is " + pairsInStarter.size());
+       // System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
+        //List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
+       //List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
         int[] numbers = {1,3,4,2,5};
         groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
-        System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());
-        System.out.println("Number of generated groups in Maindish is " + getGeneratedGroupsInMainDish().size());
-        System.out.println("Number of generated groups in dessert -> " + getGeneratedGroupsInDessert().size());
-        System.out.println("number of pairs in starterMap is " + GroupGenerator.kitchenLocationsInStarter.keySet().size());
-        System.out.println("number of pairs in MainDishMap is " + GroupGenerator.kitchenLocationsInMainDish.keySet().size());
-        System.out.println("number of pairs in DessertMap is " + GroupGenerator.kitchenLocationsInDessert.keySet().size());
 
-        System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
+
+        //System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
         //jsonMaker.makeJsonObject();
 
+/**
+        Map<Pair, List<Group>> map = groupGenerator.makePairGroups(concatenatedlist, numbers);
+        System.out.println(map.size());
+        int counter = 0;
+        for(List<Group> l: map.values()) {
+            counter++;
+            System.out.println(l.size());
+        }
 
+
+*/
 
 
 

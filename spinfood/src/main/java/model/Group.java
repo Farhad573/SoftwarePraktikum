@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Group {
+public class Group implements Comparable<Group> {
     Pair pair1;
     Pair pair2;
     Pair pair3;
     Pair cookingPair;
+
+    private double fitness;
 
 
     private FoodPreference mainFoodPreference;
@@ -31,6 +33,18 @@ public class Group {
         this.sexDeviation = calculateSexDeviation();
         this.course = course;
     }
+
+    public Group(Pair pair1, Pair pair2, Pair pair3) {
+        this.pair1 = pair1;
+        this.pair2 = pair2;
+        this.pair3 = pair3;
+        this.ageDifference = calculateAgeDifference();
+        this.preferenceDeviation = calculatePreferenceDeviation();
+        calculateMainFoodPreference(pair1, pair2, pair3);
+        this.sexDeviation = calculateSexDeviation();
+        this.course = course;
+    }
+
     public JsonObject toJson(){
         JsonObject groupJson = new JsonObject();
         groupJson.put("course",course.toString());
@@ -112,10 +126,16 @@ public class Group {
 
     @Override
     public boolean equals(Object o) {
+        boolean pairing1 = false;
+        boolean pairing2 = false;
+        boolean pairing3 = false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return pair1.equals(group.pair1) && pair2.equals(group.pair2) && pair3.equals(group.pair3);
+        pairing1 = pair1.equals(group.pair1) || pair1.equals(group.pair2) || pair1.equals(group.pair3);
+        pairing2 = pair2.equals(group.pair1) || pair2.equals(group.pair2) || pair2.equals(group.pair3);
+        pairing3 = pair3.equals(group.pair1) || pair3.equals(group.pair2) || pair3.equals(group.pair3);
+        return pairing1 & pairing2 & pairing3;
     }
 
     @Override
@@ -224,6 +244,46 @@ public class Group {
         Course course3 = pair3.getCourse() != null ? pair3.getCourse() : null;
         builder.append("Pair1: " + pair1.isHaveCooked() + " , when?: " + course1 + ", Pair2: " + pair2.isHaveCooked() + " , when?: " + course2 + ", Pair3: " + pair3.isHaveCooked() + " , when?: " + course3);
         System.out.println(builder);
+    }
+
+    public static void main(String[] args) {
+        List<Participant> temp = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            temp.add(new Participant(Integer.toString(i), "peter", 2.0, HasKitchen.no, FoodPreference.vegan, Sex.female, null ));
+        }
+        Pair pair1 = new Pair(temp.get(0), temp.get(1), true);
+        Pair pair2 = new Pair(temp.get(2), temp.get(3), true);
+        Pair pair3 = new Pair(temp.get(4), temp.get(5), true);
+        Pair pair4 = new Pair(temp.get(1), temp.get(5), true);
+        Group group1 = new Group(pair1, pair2, pair3, Course.main);
+        Group group2 = new Group(pair2, pair1, pair3, Course.main);
+
+        Group group3 = new Group(pair2, pair1, pair4, Course.main);
+        Integer temp1 = (Integer) group1.hashCode();
+        Integer temp2 = (Integer) group2.hashCode();
+        System.out.println(temp1.equals(temp2));
+
+
+        //System.out.println(group1.equals(group2));
+        //System.out.println(group1.equals(group3));
+    }
+
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
+    }
+
+    public double getFitness(){
+        return this.fitness;
+    }
+
+    @Override
+    public int compareTo(Group o) {
+        if (this.getFitness() < o.getFitness()) {
+            return  1;
+        } else if (this.getFitness() > o.getFitness()) {
+            return -1;
+        }
+        return 0;
     }
 }
 

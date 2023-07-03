@@ -14,10 +14,8 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Vector;
 
-import static model.CSVFileReader.getCSV_Pairs;
-import static model.CSVFileReader.getParticipants;
-import static model.CSVFileReader.*;
-import static model.PairGenerator.generateInitialPopulation;
+import static model.ParticipantManager.getCSV_Pairs;
+import static model.ParticipantManager.getParticipants;
 
 public class GeneratedGroupsFrame extends JFrame {
     private JTextField textField;
@@ -29,8 +27,10 @@ public class GeneratedGroupsFrame extends JFrame {
     private JTable first;
 
     private PairGenerator pairGenerator;
+    private ParticipantManager participantManager;
 
-    final int[] num = {4,5,1,3,4};
+
+    final int[] num = {4, 5, 1, 3, 4};
 
     public GeneratedGroupsFrame() {
         setTitle("Generated Groups");
@@ -42,6 +42,13 @@ public class GeneratedGroupsFrame extends JFrame {
         CSVFileReader fileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
+
+        java.util.List<Pair> initialPair = pairGenerator.generateInitialPopulation(CSVFileReader.getParticipants(),num);
+        List<Pair> csvPairs = CSVFileReader.getCSV_Pairs();
+        List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair, csvPairs);
+        List<Participant> succssesorsList = ParticipantManager.getPairSuccessors();
+        List<Group> starter = ParticipantManager.getGeneratedGroupsInStarter();
+
 
         JPanel groupsPanel = new JPanel();
         groupsPanel.setLayout(new BorderLayout());
@@ -76,37 +83,50 @@ public class GeneratedGroupsFrame extends JFrame {
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ParticipantManager participantManager = new ParticipantManager();
-                List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),num);
+               // ParticipantManager participantManager = new ParticipantManager();
+                try {
+                    fileReader.readCSVFile("spinfood/teilnehmerliste.csv");
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+                java.util.List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(), num);
                 List<Pair> csvPairs = getCSV_Pairs();
                 List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair, csvPairs);
+                List<Participant> successorsList = participantManager.getPairSuccessors();
                 List<Group> firstGroup = groupGenerator.makeStarterGroups(concatenatedlist, num);
+                List<Group> starter = ParticipantManager.getGeneratedGroupsInStarter();
                 JFrame popup = new JFrame();
                 JPanel tablesPanel = new JPanel();
                 tablesPanel.setLayout(new GridLayout(2, 1));
 
-                DefaultTableModel starterTableModal = new DefaultTableModel();
-                JTable starterTable = new JTable(starterTableModal);
+                DefaultTableModel starterTableModel = new DefaultTableModel();
+                JTable starterTable = new JTable(starterTableModel);
                 JScrollPane starterScrollPane = new JScrollPane(starterTable);
                 tablesPanel.add(starterScrollPane);
 
                 Vector<Vector<Object>> starterData = new Vector<>();
-                for (Group group : firstGroup) {
+                for (Group group : starter) {
                     Vector<Object> starterRow = new Vector<>();
                     starterRow.add(group.getPair1());
                     starterRow.add(group.getPair2());
                     starterRow.add(group.getPair3());
-                    //starterRow.add(groupGenerator.makeIndicatorForGroupList(firstGroup));
+                    //  starterRow.add(groupGenerator.makeIndicatorForGroupList(firstGroup));
+
                     starterData.add(starterRow);
                 }
+
                 Vector<String> starterColumnNames = new Vector<>();
-
                 starterColumnNames.add("Pair 1");
-                starterColumnNames.add("Participant 2");
-                starterColumnNames.add("Matching Score");
-                starterTableModal.setDataVector(starterData, starterColumnNames);
+                starterColumnNames.add("Pair 2");
+                starterColumnNames.add("Pair 3");
 
+                starterTableModel.setDataVector(starterData, starterColumnNames);
 
+                popup.setContentPane(tablesPanel);
+                popup.setTitle("Generated Groups");
+                popup.setSize(800, 600);
+                popup.setLocationRelativeTo(null);
+                popup.setVisible(true);
             }
         });
 
@@ -179,7 +199,6 @@ public class GeneratedGroupsFrame extends JFrame {
             public void run() {
                 GeneratedGroupsFrame frame = new GeneratedGroupsFrame();
                 frame.setVisible(true);
-
             }
         });
     }

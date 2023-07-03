@@ -9,12 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
-import static model.CSVFileReader.*;
+import static model.CSVFileReader.getCSV_Pairs;
+import static model.CSVFileReader.getParticipants;
 
-public class MainFrame extends JFrame {
+public class MainFrame1 extends JFrame {
+    public static List<Pair> concatenatedlist;
     private ParticipantManager participantModel;
     private CSVFileReader fileReader;
     private JTable participantsTable;
@@ -23,9 +24,9 @@ public class MainFrame extends JFrame {
     private DefaultTableModel pairTableModel;
     private JPanel buttonPanel; // Button panel for action buttons
 
-    final int[] num = {4,5,1,3,4};
+    final int[] num = {4,5,1,3,7};
 
-    public MainFrame() {
+    public MainFrame1() {
         participantModel = new ParticipantManager();
         fileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
@@ -61,13 +62,13 @@ public class MainFrame extends JFrame {
                 if (!searchId.isEmpty() || !searchName.isEmpty()) {
                     Participant participant = participantModel.getParticipantById(searchId);
                     if (participant != null) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame1.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         participant = participantModel.getParticipantByName(searchName);
                         if (participant != null) {
-                            JOptionPane.showMessageDialog(MainFrame.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame1.this, "Participant found:\n" + participant.toString(), "Search Result", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(MainFrame.this, "Participant not found", "Search Result", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame1.this, "Participant not found", "Search Result", JOptionPane.WARNING_MESSAGE);
                         }
                     }
                 }
@@ -93,14 +94,14 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(MainFrame.this);
+                int result = fileChooser.showOpenDialog(MainFrame1.this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     String fileName = fileChooser.getSelectedFile().getAbsolutePath();
                     try {
                         fileReader.readCSVFile(fileName);
                         displayParticipants();
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "File not found", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame1.this, "File not found", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -119,7 +120,7 @@ public class MainFrame extends JFrame {
                     Participant participant = participantModel.getParticipantById(participantId);
                     if (participant != null) {
                         // Open a dialog to edit the participant
-                        EditParticipantDialog dialog = new EditParticipantDialog(MainFrame.this, participant);
+                        EditParticipantDialog1 dialog = new EditParticipantDialog1(MainFrame1.this, participant);
                         dialog.setVisible(true);
 
                         // Update the participant information in the table
@@ -128,7 +129,7 @@ public class MainFrame extends JFrame {
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this, "Please select a participant to edit", "Edit Participant", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame1.this, "Please select a participant to edit", "Edit Participant", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -141,13 +142,13 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = participantsTable.getSelectedRow();
                 if (selectedRow != -1) {
-                    int confirm = JOptionPane.showConfirmDialog(MainFrame.this, "Are you sure you want to delete this participant?", "Delete Participant", JOptionPane.YES_NO_OPTION);
+                    int confirm = JOptionPane.showConfirmDialog(MainFrame1.this, "Are you sure you want to delete this participant?", "Delete Participant", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
                         String participantId = (String) participantsTable.getValueAt(selectedRow, 0);
                         deleteParticipant(participantId);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.this, "Please select a participant to delete", "Delete Participant", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame1.this, "Please select a participant to delete", "Delete Participant", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -172,18 +173,18 @@ public class MainFrame extends JFrame {
                         Participant participant1 = getParticipantFromSelectedRow(selectedRows[0]);
                         Participant participant2 = getParticipantFromSelectedRow(selectedRows[1]);
                         if (participant1 != null && participant2 != null) {
-                            CompareParticipantsDialog dialog = new CompareParticipantsDialog(MainFrame.this, participant1, participant2);
+                            CompareParticipantsDialog1 dialog = new CompareParticipantsDialog1(MainFrame1.this, participant1, participant2);
                             dialog.setVisible(true);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.this, "Please select exactly two participants to compare", "Compare Participants", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame1.this, "Please select exactly two participants to compare", "Compare Participants", JOptionPane.WARNING_MESSAGE);
                     }
                 } else if (selectedTable == pairTable) {
                     int[] selectedRows = participantsTable.getSelectedRows();
                     Pair pair1 = getPairFromSelectedRow(selectedRows[0]);
                     Pair pair2 = getPairFromSelectedRow(selectedRows[1]);
                     if (pair1 != null && pair2 != null){
-                        ComparePairsDialog dialog = new ComparePairsDialog(MainFrame.this, pair1, pair2);
+                        ComparePairsDialouge dialog = new ComparePairsDialouge(MainFrame1.this, pair1, pair2);
                         dialog.setVisible(true);
                     }
                 }
@@ -216,8 +217,8 @@ public class MainFrame extends JFrame {
                 Vector<Vector<Object>> pairsData = new Vector<>();
                 for (Pair pair : concatenatedlist) {
                     Vector<Object> pairRow = new Vector<>();
-                    pairRow.add(pair.getPerson1());
-                    pairRow.add(pair.getPerson2());
+                    pairRow.add(pair.getPerson1().toString());
+                    pairRow.add(pair.getPerson2().toString());
                     pairRow.add(pairGenerator.makeIndicatorForPairsList(concatenatedlist));
                     pairsData.add(pairRow);
                 }
@@ -351,7 +352,7 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MainFrame gui = new MainFrame();
+                MainFrame1 gui = new MainFrame1();
                 gui.setVisible(true);
             }
         });

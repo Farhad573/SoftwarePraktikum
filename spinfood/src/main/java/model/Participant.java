@@ -235,29 +235,29 @@ public class Participant {
      */
     public String toString() {
         if (this.kitchen == null) {
-            return "Person : " + "\n" +
-                    "id=" + id + "\n" +
+            return //"Person : " + "\n" +
+                    //"id=" + id + "\n" +
                     ", name=" + name + "\n" +
                     ", age=" + age + "\n" +
-                    ", ageRange=" + ageRange + "\n" +
+                    //", ageRange=" + ageRange + "\n" +
                     ", hasKitchen=" + hasKitchen + "\n" +
                     ", foodPreference=" + foodPreference + "\n" +
-                    ", sex=" + sex + "\n" +
-                    "Kitchen_Null" + "\n" +
-                    ", kitchenCount=" + kitchenCount + "\n" +
-                    "******************";
+                    ", sex=" + sex + "\n";
+                    //"Kitchen_Null" + "\n" +
+                    //", kitchenCount=" + kitchenCount + "\n" +
+                    //"******************";
         } else {
-            return "Person : " + "\n" +
-                    "id=" + id + "\n" +
+            return //"Person : " + "\n" +
+                    //"id=" + id + "\n" +
                     ", name=" + name + "\n" +
                     ", age=" + age + "\n" +
-                    ", ageRange=" + ageRange + "\n" +
+                    //", ageRange=" + ageRange + "\n" +
                     ", hasKitchen=" + hasKitchen + "\n" +
                     ", foodPreference=" + foodPreference + "\n" +
-                    ", sex=" + sex + "\n" +
-                    kitchen.toString() + "\n" +
-                    ", kitchenCount=" + kitchenCount + "\n" +
-                    "******************";
+                    ", sex=" + sex + "\n";
+                    //kitchen.toString() + "\n" +
+                    //", kitchenCount=" + kitchenCount + "\n" +
+                    //"******************";
         }
 
 
