@@ -3,6 +3,7 @@ import model.*;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static model.CSVFileReader.*;
@@ -91,7 +92,7 @@ public class Main {
         //List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
        //List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
         int[] numbers = {1,3,4,2,5};
-        groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
+      //  groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
 
@@ -99,23 +100,51 @@ public class Main {
         //System.out.println("Group Kenzahl is -> " + GroupGenerator.makeIndicatorForGroupList(getGeneratedGroups()));
         //jsonMaker.makeJsonObject();
 
-/**
+
         Map<Pair, List<Group>> map = groupGenerator.makePairGroups(concatenatedlist, numbers);
-        System.out.println(map.size());
+     /**   System.out.println(map.size());
         int counter = 0;
         for(List<Group> l: map.values()) {
             counter++;
             System.out.println(l.size());
         }
 
+      */
 
-*/
+        GroupGenerator.UniqueGroupsResult starter = groupGenerator.findUniqueStarterGroups(map);
+        System.out.println(starter.getUniqueStarterGroups().size());
+      //  for (Group g : starter.getUniqueStarterGroups()) {
+      //      System.out.println(g.getPairsInGroup());
+      //  }
+        System.out.println("****************");
+        System.out.println("****************");
+        System.out.println("****************");
+        System.out.println("****************");
 
+        System.out.println(starter.getUniqueMainGroups().size());
+      //  for (Group g : starter.getUniqueMainGroups()) {
+        //    System.out.println(g.getPairsInGroup());
+      //  }
 
+        System.out.println("****************");
+        System.out.println("****************");
+        System.out.println("****************");
+        System.out.println("****************");
 
+        System.out.println(starter.getUniqueDessertGroups().size());
+      //  for (Group g : starter.getUniqueDessertGroups()) {
+        //    System.out.println(g.getPairsInGroup());
+     //   }
 
+        System.out.println("****************");
+        System.out.println("****************");
+        System.out.println("****************");
+        System.out.println("****************");
 
-
+        System.out.println(starter.getSuccessors().size());
+       // for (Pair g : starter.getSuccessors()) {
+       //     System.out.println(g);
+       // }
 
 
     }

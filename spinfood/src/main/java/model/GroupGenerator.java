@@ -18,6 +18,36 @@ public class GroupGenerator extends ParticipantManager {
     Set<Pair> hashSetInDessert = new HashSet<>();
 
 
+    public static class UniqueGroupsResult {
+        private List<Group> uniqueStarterGroups;
+        private List<Group> uniqueMainGroups;
+        private List<Group> uniqueDessertGroups;
+        private List<Pair> successors;
+
+        public UniqueGroupsResult(List<Group> uniqueStarterGroups, List<Group> uniqueMainGroups, List<Group> uniqueDessertGroups,
+                                  List<Pair> successors) {
+            this.uniqueStarterGroups = uniqueStarterGroups;
+            this.uniqueMainGroups = uniqueMainGroups;
+            this.uniqueDessertGroups = uniqueDessertGroups;
+            this.successors = successors;
+
+        }
+
+        public List<Group> getUniqueStarterGroups() {
+            return uniqueStarterGroups;
+        }
+
+        public List<Group> getUniqueMainGroups() {
+            return uniqueMainGroups;
+        }
+        public List<Group> getUniqueDessertGroups() {
+            return uniqueDessertGroups;
+        }
+        public List<Pair> getSuccessors() {
+            return successors;
+        }
+    }
+
     /**
      * Generates groups by calling specific methods for generating starter, main dish, and dessert groups.
      *
@@ -92,7 +122,7 @@ public class GroupGenerator extends ParticipantManager {
                     .collect(Collectors.toCollection(ArrayList::new));
 //            pairsSortedBasedOnDistance(newPairs);
             callGroupsGenerator(newPairs,numbers,location);
-    }
+        }
     }
     /**
      * Generates groups for the starter course based on the given pairs and radius.
@@ -110,7 +140,7 @@ public class GroupGenerator extends ParticipantManager {
                 Pair pair2 = pairs.get(j);
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
-                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
+                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeatNone(pair1,pair2,pair3)
                              //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
@@ -139,10 +169,7 @@ public class GroupGenerator extends ParticipantManager {
             }
             listOfGroups.get(p).stream().sorted().collect(Collectors.toList());
 
-
         }
-
-
 
 
         for (Group group : list) {
@@ -177,7 +204,7 @@ public class GroupGenerator extends ParticipantManager {
                 Pair pair2 = pairs.get(j);
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
-                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
+                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeatNone(pair1,pair2,pair3)
                         //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
@@ -188,7 +215,7 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 10.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 15.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
 
         Map<Pair, List<Group>> listOfGroups = new HashMap<>();
         Set<Pair> pairsUnique = list.stream()
@@ -206,18 +233,126 @@ public class GroupGenerator extends ParticipantManager {
         return listOfGroups;
     }
 
+    public UniqueGroupsResult findUniqueStarterGroups(Map<Pair, List<Group>> allVariations) {
+        List<Group> uniqueStarterGroups = new ArrayList<>();
+        List<Group> uniqueMainGroups = new ArrayList<>();
+        List<Group> uniqueDessertGroups = new ArrayList<>();
+        List<Pair> successors = new ArrayList<>();
+        Set<Pair> visitedPairs = new HashSet<>();
+        Set<Pair> allPairs = new HashSet<>();
+
+        for (List<Group> groupList : allVariations.values()) {
+            for (Group group : groupList) {
+                boolean isUnique = true;
+                for (Pair pair : group.getPairsInGroup()) {
+                    if (visitedPairs.contains(pair)) {
+                        isUnique = false;
+                        break;
+                    }
+                    allPairs.add(pair); // Add all pairs to allPairs set
+                }
+                if (isUnique) {
+                    findWhichPairToCookInStarter(group, pairs);
+                    uniqueStarterGroups.add(group);
+                    visitedPairs.addAll(group.getPairsInGroup());
+                }
+            }
+        }
+
+        visitedPairs.clear(); // Reset the visited pairs set
+
+        for (List<Group> groupList : allVariations.values()) {
+            for (Group group : groupList) {
+                boolean isUnique = true;
+                for (Pair pair : group.getPairsInGroup()) {
+                    if (visitedPairs.contains(pair)) {
+                        isUnique = false;
+                        break;
+                    }
+                    allPairs.add(pair); // Add all pairs to allPairs set
+                }
+                if (isUnique && !uniqueStarterGroups.contains(group.getPairsInGroup()) && !uniqueMainGroups.contains(group)) {
+                    findWhichPairToCookInMainDish(group,pairs);
+                    uniqueMainGroups.add(group);
+                    visitedPairs.addAll(group.getPairsInGroup());
+                }
+            }
+        }
+
+        visitedPairs.clear(); // Reset the visited pairs set
+
+        for (List<Group> groupList : allVariations.values()) {
+            for (Group group : groupList) {
+                boolean isUnique = true;
+                for (Pair pair : group.getPairsInGroup()) {
+                    if (visitedPairs.contains(pair)) {
+                        isUnique = false;
+                        break;
+                    }
+                    allPairs.add(pair); // Add all pairs to allPairs set
+                }
+                if (isUnique && !uniqueStarterGroups.contains(group.getPairsInGroup()) &&
+                        !uniqueMainGroups.contains(group.getPairsInGroup()) && !uniqueDessertGroups.contains(group)) {
+                    findWhichPairToCookInDessert(group,pairs);
+                    uniqueDessertGroups.add(group);
+                    visitedPairs.addAll(group.getPairsInGroup());
+                }
+            }
+        }
+
+        // Remove visited pairs and pairs present in unique groups from allPairs
+        allPairs.removeAll(visitedPairs);
+        for (Group group : uniqueStarterGroups) {
+            allPairs.removeAll(group.getPairsInGroup());
+        }
+        for (Group group : uniqueMainGroups) {
+            allPairs.removeAll(group.getPairsInGroup());
+        }
+        for (Group group : uniqueDessertGroups) {
+            allPairs.removeAll(group.getPairsInGroup());
+        }
+
+        successors.addAll(allPairs); // Add remaining unique pairs to successors list
+
+        return new UniqueGroupsResult(uniqueStarterGroups, uniqueMainGroups, uniqueDessertGroups, successors);
+    }
+
+
+
+    private static void assignCookingPairs(List<Group> groups) {
+        for (Group group : groups) {
+            List<Pair> pairs = group.getPairsInGroup();
+            Pair cookingPair = pairs.get(0); // Assign the first pair as the cooking pair
+            group.setCookingPair(cookingPair);
+        }
+    }
+
+
+
+/**
+
+
     public List<Group> getGroups(Map<Pair, List<Group>> pairGroups) {
+        // pairGroups = Map mit Pair als Key und Liste von Gruppen (alle möglichen Kombinationen, sortiert nach Fitness, erstellt in makePairGroups)
         List<Group> resultingGroups = new ArrayList<>();
-        List<Map<Pair, List<Group>>> tempPairing = new ArrayList<>();
+        Map<Pair, List<Group>> tempMap = new HashMap<>(); // hier soll für jedes Paar
         for(Pair p: pairGroups.keySet()) {
-            Map<Pair, List<Group>> tempMap = new HashMap<>();
             tempMap.put(p, new ArrayList<Group>());
-            tempPairing.add(tempMap);
-            while(tempMap.get(p).size() < 3) {
+            while(tempMap.get(p).size() < 3) { // kann raus
                 List<Group> groups = pairGroups.get(p);
                 for (Group tempG: groups) {
                     if(tempMap.get(p).isEmpty() || checkGroupingBefore(tempMap.get(p), tempG, p)) {
                         tempMap.get(p).add(tempG);
+                        List<Pair> keep = tempMap.get(p).stream()
+                                .flatMap(group -> Stream.of(group.getPair1(), group.getPair2(), group.getPair3())).collect(Collectors.toList());
+                        keep.remove(p);
+                        for(Pair pairOt: keep) {
+                            if(tempMap.containsKey(pairOt)) {
+                                tempMap.get(pairOt).add(tempG)
+                            }
+                            tempMap.put(pairOt, )
+                        }
+                        tempMap.put()
                         // added für die anderen zwei in der Gruppe zu tempMap die anderen zwei Pairs
                         if (tempMap.get(p).size() > 3) {
                             break;
@@ -262,7 +397,7 @@ public class GroupGenerator extends ParticipantManager {
     }
 
 
-
+*/
 
 
 
@@ -289,7 +424,7 @@ public class GroupGenerator extends ParticipantManager {
                     Pair pair3 = pairs.get(k);
                     if (checkGroupFoodPreference(pair1, pair2, pair3)
                             && checkIfOneOfPairsHaveCooked(pair1, pair2, pair3)
-                            && checkNotTwoMeetNone(pair1,pair2,pair3)
+                            && checkNotTwoMeatNone(pair1,pair2,pair3)
 //                            && !usedPairs.contains(pair1)
 //                            && !usedPairs.contains(pair2)
 //                            && !usedPairs.contains(pair3)
@@ -349,7 +484,7 @@ public class GroupGenerator extends ParticipantManager {
                 for (int k = j + 1; k < pairs.size(); k++) {
                     Pair pair3 = pairs.get(k);
                     if (checkGroupFoodPreference(pair1, pair2, pair3)
-                            && checkNotTwoMeetNone(pair1,pair2,pair3)
+                            && checkNotTwoMeatNone(pair1,pair2,pair3)
 //                            && checkIfTwoOfPairsHaveCooked(pair1, pair2, pair3)
 //                            && !usedPairs.contains(pair1)
 //                            && !usedPairs.contains(pair2)
@@ -506,7 +641,7 @@ public class GroupGenerator extends ParticipantManager {
 
         return !(hasMeat && hasVeggieOrVegan);
     }
-    public boolean checkNotTwoMeetNone(Pair pair1,Pair pair2,Pair pair3){
+    public boolean checkNotTwoMeatNone(Pair pair1, Pair pair2, Pair pair3){
         FoodPreference pref1 = pair1.getMainFoodPreference();
         FoodPreference pref2 = pair2.getMainFoodPreference();
         FoodPreference pref3 = pair3.getMainFoodPreference();
@@ -529,7 +664,7 @@ public class GroupGenerator extends ParticipantManager {
      * @param pairs The list of pairs.
      */
 
-    private void findWhichPairToCookInStarter(Group group, List<Pair> pairs){
+    private  void findWhichPairToCookInStarter(Group group, List<Pair> pairs){
         Pair pair1 = group.pair1;
         Pair pair2 = group.pair2;
         Pair pair3 = group.pair3;

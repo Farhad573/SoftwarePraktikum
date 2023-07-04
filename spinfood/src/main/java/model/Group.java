@@ -285,5 +285,13 @@ public class Group implements Comparable<Group> {
         }
         return 0;
     }
+
+    public void setCookingPair(Pair cookingPair) {
+        this.cookingPair = cookingPair;
+    }
+
+    public Pair getCookingPair() {
+        return cookingPair;
+    }
 }
 
