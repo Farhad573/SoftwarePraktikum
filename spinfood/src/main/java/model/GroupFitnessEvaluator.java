@@ -19,15 +19,11 @@ public class GroupFitnessEvaluator {
         double ageDifferenceWeight = calculateWeight(numbers[1]);
         double genderDiversityWeight = calculateWeight(numbers[2]);
         double shortestPathWeight = calculateWeight(numbers[3]);
-        double minimumSuccessor = 5 - calculateWeight(numbers[4]);
+        double minimumSuccessor = calculateWeight(numbers[4]);
         double fitness = 0.0;
         fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
         fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
         fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight;
-
-        //fitness += calculateLengthPathFitnessForMainDish(map,)
-        fitness += minimumSuccessor;
-
         return fitness;
     }
     public static double calculateGenderDiversityFitness(Group group){
@@ -53,16 +49,15 @@ public class GroupFitnessEvaluator {
         double ageDifferenceWeight = calculateWeight(numbers[1]);
         double genderDiversityWeight = calculateWeight(numbers[2]);
         double shortestPathWeight = calculateWeight(numbers[3]);
-        double minimumSuccessor = 3 - calculateWeight(numbers[4]);
+        double minimumSuccessor = calculateWeight(numbers[4]);
         double fitness = 0.0;
-   //     fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
-    //    fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
-    //    fitness += checkIfOneOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
+        fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
+        fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
+        fitness += checkIfOneOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
         fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
         fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight ;
         fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
         fitness += calculateLengthPathFitnessForMainDish(group,map,pairs,location) * shortestPathWeight;
-        fitness += minimumSuccessor;
         return fitness;
     }
     public static double calculateLengthPathFitnessForMainDish(Group group, Map<Pair,Location> map, List<Pair> pairs, Location partyLocation){

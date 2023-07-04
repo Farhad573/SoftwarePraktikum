@@ -13,7 +13,7 @@ public class JsonMaker {
     public JsonObject rootObject;
     public String jsonString;
 
-    public JsonObject makeJsonObject() {
+    public JsonObject makeJsonObject(String pathToSaveFile) {
         JsonObject root = new JsonObject();
         JsonArray groupsJsonArray = new JsonArray();
         for (Group group:ParticipantManager.generatedGroups
@@ -41,7 +41,7 @@ public class JsonMaker {
         root.put("successorParticipants",successorParticipantsJsonArray);
         this.rootObject = root;
         this.jsonString = Jsoner.serialize(root);
-        try (FileWriter writer = new FileWriter("C:\\Users\\tonyk\\Desktop\\SWT-Praktikum\\SP23_Gruppe4_sajjadi_salekim_emamideh_Kassisa")) {
+        try (FileWriter writer = new FileWriter(pathToSaveFile)) {
             writer.write(jsonString);
         } catch (IOException e) {
             e.printStackTrace();
