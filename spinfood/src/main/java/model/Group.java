@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Group {
+public class Group implements Comparable<Group> {
     Pair pair1;
     Pair pair2;
     Pair pair3;
@@ -31,6 +31,15 @@ public class Group {
         calculateMainFoodPreference(pair1, pair2, pair3);
         this.sexDeviation = calculateSexDeviation();
         this.course = course;
+    }
+    public Group(Pair pair1, Pair pair2, Pair pair3) {
+        this.pair1 = pair1;
+        this.pair2 = pair2;
+        this.pair3 = pair3;
+        this.ageDifference = calculateAgeDifference();
+        this.preferenceDeviation = calculatePreferenceDeviation();
+        calculateMainFoodPreference(pair1, pair2, pair3);
+        this.sexDeviation = calculateSexDeviation();
     }
     public JsonObject toJson(){
         JsonObject groupJson = new JsonObject();
@@ -233,6 +242,19 @@ public class Group {
 
     public void setFitness(double fitness) {
         this.fitness = fitness;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+    @Override
+    public int compareTo(Group o) {
+        if (this.getFitness() < o.getFitness()) {
+            return  1;
+        } else if (this.getFitness() > o.getFitness()) {
+            return -1;
+        }
+        return 0;
     }
 }
 

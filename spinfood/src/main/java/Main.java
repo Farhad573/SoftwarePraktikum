@@ -16,40 +16,13 @@ import java.util.stream.Stream;
 import static model.CSVFileReader.*;
 
 public class Main {
-    public static boolean checkDuplicatesinAllSteps(List<Group> starter,List<Group> main,List<Group> dessert){
-        List<Pair> pairsWhoCookInStarter = starter.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Set<Pair> hashsetForStarter = new HashSet<>(pairsWhoCookInStarter);
-        //System.out.println("check if we dont have duplicates in list of pairs who cook in starter");
-        Boolean starterChecker = pairsWhoCookInStarter.size() == hashsetForStarter.size();
-        System.out.println(" number of pairs who cook in starter -> " + pairsWhoCookInStarter.size());
 
-        List<Pair> pairsWhoCookInMain = main.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Set<Pair> hashsetForMain = new HashSet<>(pairsWhoCookInMain);
-        //System.out.println("check if we dont have duplicates in list of pairs who cook in Main");
-        Boolean mainChecker = pairsWhoCookInMain.size() == hashsetForMain.size();
-        System.out.println(" number of pairs who cook in main -> " + pairsWhoCookInMain.size());
-
-        List<Pair> pairsWhoCookInDessert = dessert.stream()
-                .flatMap(x -> x.getPairsInGroup().stream())
-                .filter(Pair::isHaveCooked).toList();
-        Set<Pair> hashsetForDessert = new HashSet<>(pairsWhoCookInDessert);
-        //System.out.println("check if we dont have duplicates in list of pairs who cook in Dessert");
-        Boolean dessertChecker = pairsWhoCookInDessert.size() == hashsetForDessert.size();
-        System.out.println(" number of pairs who cook in dessert -> " + pairsWhoCookInDessert.size());
-        return starterChecker && mainChecker && dessertChecker;
-
-    }
     public static void main(String[] args) throws FileNotFoundException {
        CSVFileReader CSVFileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
         Cancellation cancellation = new Cancellation();
-        JsonMaker jsonMaker = new JsonMaker();
         List<Pair> csvPairs = getCSV_Pairs();
         try {
             CSVFileReader.readCSVFile("teilnehmerliste.csv");
@@ -104,7 +77,7 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        groupGenerator.callGroupsGenerator(concatenatedlist,numbers3,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
+        //groupGenerator.callGroupsGenerator(concatenatedlist,numbers3,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
         System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());

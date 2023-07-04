@@ -1,3 +1,4 @@
+
 package model;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
@@ -12,21 +13,26 @@ import java.io.IOException;
 public class JsonMaker {
     public JsonObject rootObject;
     public String jsonString;
+    public GroupGenerator.UniqueGroupsResult groupGenerator;
+
+    public JsonMaker(GroupGenerator.UniqueGroupsResult groupGenerator) {
+        this.groupGenerator = groupGenerator;
+    }
 
     public JsonObject makeJsonObject() {
         JsonObject root = new JsonObject();
         JsonArray groupsJsonArray = new JsonArray();
-        for (Group group:ParticipantManager.generatedGroups
-             ) {
+        for (Group group: groupGenerator.getAllGroups()
+        ) {
             groupsJsonArray.add(group.toJson());
         }
         JsonArray pairsJsonArray = new JsonArray();
         for (Pair pair: ParticipantManager.pairs
-             ) {
+        ) {
             pairsJsonArray.add(pair.toJson());
         }
         JsonArray successorPairsJsonArray = new JsonArray();
-        for (Pair pair: ParticipantManager.starterSuccessors
+        for (Pair pair: groupGenerator.getSuccessors()
         ) {
             successorPairsJsonArray.add(pair.toJson());
         }
@@ -41,7 +47,7 @@ public class JsonMaker {
         root.put("successorParticipants",successorParticipantsJsonArray);
         this.rootObject = root;
         this.jsonString = Jsoner.serialize(root);
-        try (FileWriter writer = new FileWriter("D:\\Uni_Marburrg\\4th-semester\\Software Praktikum\\Repo\\data_test20.json")) {
+        try (FileWriter writer = new FileWriter("D:\\\\Uni_Marburrg\\\\4th-semester\\\\Software Praktikum\\\\Repo\\\\data_test30.json")) {
             writer.write(jsonString);
         } catch (IOException e) {
             e.printStackTrace();

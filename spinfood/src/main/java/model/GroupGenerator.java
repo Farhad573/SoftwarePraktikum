@@ -98,6 +98,169 @@ public class GroupGenerator extends ParticipantManager {
             callGroupsGenerator(newPairs,numbers,location);
     }
     }
+
+    public static class UniqueGroupsResult {
+        private List<Group> uniqueStarterGroups;
+        private List<Group> uniqueMainGroups;
+        private List<Group> uniqueDessertGroups;
+        private List<Pair> successors;
+        private List<Group> allGroups;
+
+        public UniqueGroupsResult(List<Group> uniqueStarterGroups, List<Group> uniqueMainGroups, List<Group> uniqueDessertGroups,
+                                  List<Pair> successors) {
+            this.uniqueStarterGroups = uniqueStarterGroups;
+            this.uniqueMainGroups = uniqueMainGroups;
+            this.uniqueDessertGroups = uniqueDessertGroups;
+            this.successors = successors;
+            this.allGroups = new ArrayList<>();
+            allGroups.addAll(uniqueStarterGroups);
+            allGroups.addAll(uniqueMainGroups);
+            allGroups.addAll(uniqueDessertGroups);
+
+        }
+
+        public List<Group> getUniqueStarterGroups() {
+            return uniqueStarterGroups;
+        }
+
+        public List<Group> getUniqueMainGroups() {
+            return uniqueMainGroups;
+        }
+        public List<Group> getUniqueDessertGroups() {
+            return uniqueDessertGroups;
+        }
+        public List<Pair> getSuccessors() {
+            return successors;
+        }
+
+        public List<Group> getAllGroups() {
+            return allGroups;
+        }
+    }
+    public Map<Pair, List<Group>> makePairGroups(List<Pair> pairs,int[] numbers) {
+        Map<Group,Double> map = new HashMap<>();
+        for (int i = 0; i < pairs.size(); i++) {
+            Pair pair1 = pairs.get(i);
+            for (int j = i + 1; j < pairs.size(); j++) {
+                Pair pair2 = pairs.get(j);
+                for (int k = j + 1; k < pairs.size(); k++) {
+                    Pair pair3 = pairs.get(k);
+                    if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeetNone(pair1,pair2,pair3)
+                        //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
+                    ) {
+                        Group group = new Group(pair1, pair2, pair3);
+                        double fitness = GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers);
+                        group.setFitness(fitness);
+                        map.put(group, fitness);
+                    }
+                }
+            }
+        }
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 6.5).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+
+        Map<Pair, List<Group>> listOfGroups = new HashMap<>();
+        Set<Pair> pairsUnique = list.stream()
+                .flatMap(group -> Stream.of(group.getPair1(), group.getPair2(), group.getPair3()))
+                .collect(Collectors.toSet());
+        for(Pair p: pairsUnique) {
+            listOfGroups.put(p, new ArrayList<Group>());
+            for(Group g: list) {
+                if (p.equals(g.getPair1()) || p.equals(g.getPair2()) || p.equals(g.getPair3())) {
+                    listOfGroups.get(p).add(g);
+                }
+            }
+            listOfGroups.get(p).stream().sorted().collect(Collectors.toList());
+        }
+        return listOfGroups;
+    }
+
+    public UniqueGroupsResult findUniqueStarterGroups(Map<Pair, List<Group>> allVariations) {
+        List<Group> uniqueStarterGroups = new ArrayList<>();
+        List<Group> uniqueMainGroups = new ArrayList<>();
+        List<Group> uniqueDessertGroups = new ArrayList<>();
+        List<Pair> successors = new ArrayList<>();
+        Set<Pair> visitedPairs = new HashSet<>();
+        Set<Pair> allPairs = new HashSet<>();
+
+        for (List<Group> groupList : allVariations.values()) {
+            for (Group group : groupList) {
+                boolean isUnique = true;
+                for (Pair pair : group.getPairsInGroup()) {
+                    if (visitedPairs.contains(pair)) {
+                        isUnique = false;
+                        break;
+                    }
+                    allPairs.add(pair); // Add all pairs to allPairs set
+                }
+                if (isUnique) {
+                    findWhichPairToCookInStarter(group, pairs);
+                    group.setCourse(Course.first);
+                    uniqueStarterGroups.add(group);
+                    visitedPairs.addAll(group.getPairsInGroup());
+                }
+            }
+        }
+
+        visitedPairs.clear(); // Reset the visited pairs set
+
+        for (List<Group> groupList : allVariations.values()) {
+            for (Group group : groupList) {
+                boolean isUnique = true;
+                for (Pair pair : group.getPairsInGroup()) {
+                    if (visitedPairs.contains(pair)) {
+                        isUnique = false;
+                        break;
+                    }
+                    allPairs.add(pair); // Add all pairs to allPairs set
+                }
+                if (isUnique && !uniqueStarterGroups.contains(group.getPairsInGroup()) && !uniqueMainGroups.contains(group)) {
+                    findWhichPairToCookInMainDish(group,pairs);
+                    group.setCourse(Course.main);
+                    uniqueMainGroups.add(group);
+                    visitedPairs.addAll(group.getPairsInGroup());
+                }
+            }
+        }
+
+        visitedPairs.clear(); // Reset the visited pairs set
+
+        for (List<Group> groupList : allVariations.values()) {
+            for (Group group : groupList) {
+                boolean isUnique = true;
+                for (Pair pair : group.getPairsInGroup()) {
+                    if (visitedPairs.contains(pair)) {
+                        isUnique = false;
+                        break;
+                    }
+                    allPairs.add(pair); // Add all pairs to allPairs set
+                }
+                if (isUnique && !uniqueStarterGroups.contains(group.getPairsInGroup()) &&
+                        !uniqueMainGroups.contains(group.getPairsInGroup()) && !uniqueDessertGroups.contains(group)) {
+                    findWhichPairToCookInDessert(group,pairs);
+                    group.setCourse(Course.dessert);
+                    uniqueDessertGroups.add(group);
+                    visitedPairs.addAll(group.getPairsInGroup());
+                }
+            }
+        }
+
+        // Remove visited pairs and pairs present in unique groups from allPairs
+        allPairs.removeAll(visitedPairs);
+        for (Group group : uniqueStarterGroups) {
+            allPairs.removeAll(group.getPairsInGroup());
+        }
+        for (Group group : uniqueMainGroups) {
+            allPairs.removeAll(group.getPairsInGroup());
+        }
+        for (Group group : uniqueDessertGroups) {
+            allPairs.removeAll(group.getPairsInGroup());
+        }
+
+        successors.addAll(allPairs); // Add remaining unique pairs to successors list
+
+        return new UniqueGroupsResult(uniqueStarterGroups, uniqueMainGroups, uniqueDessertGroups, successors);
+    }
+
     /**
      * Generates groups for the starter course based on the given pairs and radius.
      *
