@@ -12,15 +12,22 @@ public class GroupFitnessEvaluator {
 
     public static double evaluateFitnessForStarter(Group group, int[] numbers) {
         // Calculate fitness based on different criteria
+
+
+
         double foodPreferenceDeviationWeight = calculateWeight(numbers[0]);
         double ageDifferenceWeight = calculateWeight(numbers[1]);
         double genderDiversityWeight = calculateWeight(numbers[2]);
         double shortestPathWeight = calculateWeight(numbers[3]);
-        double minimumSuccessor = calculateWeight(numbers[4]);
+        double minimumSuccessor = 5 - calculateWeight(numbers[4]);
         double fitness = 0.0;
         fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
         fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
         fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight;
+
+        //fitness += calculateLengthPathFitnessForMainDish(map,)
+        fitness += minimumSuccessor;
+
         return fitness;
     }
     public static double calculateGenderDiversityFitness(Group group){
@@ -46,15 +53,16 @@ public class GroupFitnessEvaluator {
         double ageDifferenceWeight = calculateWeight(numbers[1]);
         double genderDiversityWeight = calculateWeight(numbers[2]);
         double shortestPathWeight = calculateWeight(numbers[3]);
-        double minimumSuccessor = calculateWeight(numbers[4]);
+        double minimumSuccessor = 3 - calculateWeight(numbers[4]);
         double fitness = 0.0;
-        fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
-        fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
-        fitness += checkIfOneOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
+   //     fitness += didPairsMeet(group.pair1, group.pair2, group.pair3);
+    //    fitness += checkIfAllPairsDidntCook(group.pair1, group.pair2, group.pair3);
+    //    fitness += checkIfOneOfPairsHaveCooked(group.pair1, group.pair2, group.pair3);
         fitness += calculateAgeDifferenceFitness(group) * ageDifferenceWeight ;
         fitness += calculateGenderDiversityFitness(group) * genderDiversityWeight ;
         fitness += calculatePreferenceDeviationFitness(group) * foodPreferenceDeviationWeight ;
-        fitness += calculateLengthPathFitnessForMainDish(group,map,pairs,location) * shortestPathWeight ;
+        fitness += calculateLengthPathFitnessForMainDish(group,map,pairs,location) * shortestPathWeight;
+        fitness += minimumSuccessor;
         return fitness;
     }
     public static double calculateLengthPathFitnessForMainDish(Group group, Map<Pair,Location> map, List<Pair> pairs, Location partyLocation){
@@ -144,11 +152,11 @@ public class GroupFitnessEvaluator {
     }
     public static double calculateWeight(int num){
         switch (num){
-            case 1: return 10;
-            case 2: return 8;
-            case 3: return 6;
-            case 4: return 4;
-            default:return 0;
+            case 1: return 2;
+            case 2: return 1.75;
+            case 3: return 1.5;
+            case 4: return 1.25;
+            default:return 1;
         }
     }
 
@@ -304,7 +312,7 @@ public class GroupFitnessEvaluator {
         int preferenceDeviation = (group.pair1.getMainFoodPreference().getValue() + group.pair2.getMainFoodPreference().getValue() + group.pair3.getMainFoodPreference().getValue()) / 3;
 
         if (preferenceDeviation == 2.0) {
-            return 2.0;
+            return 1.5;
         } else if (preferenceDeviation == 4.0/3.0) {
             return 4.0/3.0;
         } else if (preferenceDeviation == 1) {

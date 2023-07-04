@@ -207,7 +207,7 @@ public class GroupGenerator extends ParticipantManager {
                     if (checkGroupFoodPreference(pair1, pair2, pair3) && checkNotTwoMeatNone(pair1,pair2,pair3)
                         //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
-                        Group group = new Group(pair1, pair2, pair3,Course.first);
+                        Group group = new Group(pair1, pair2, pair3);
                         double fitness = GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers);
                         group.setFitness(fitness);
                         map.put(group, fitness);
@@ -215,7 +215,7 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 15.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 6.5).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
 
         Map<Pair, List<Group>> listOfGroups = new HashMap<>();
         Set<Pair> pairsUnique = list.stream()
@@ -317,7 +317,7 @@ public class GroupGenerator extends ParticipantManager {
         return new UniqueGroupsResult(uniqueStarterGroups, uniqueMainGroups, uniqueDessertGroups, successors);
     }
 
-
+/**
 
     private static void assignCookingPairs(List<Group> groups) {
         for (Group group : groups) {
@@ -329,7 +329,7 @@ public class GroupGenerator extends ParticipantManager {
 
 
 
-/**
+
 
 
     public List<Group> getGroups(Map<Pair, List<Group>> pairGroups) {

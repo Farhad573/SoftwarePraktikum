@@ -37,7 +37,7 @@ public class Main {
 
     }
     public static void main(String[] args) throws FileNotFoundException {
-       CSVFileReader CSVFileReader = new CSVFileReader();
+        CSVFileReader CSVFileReader = new CSVFileReader();
         PairGenerator pairGenerator = new PairGenerator();
         GroupGenerator groupGenerator = new GroupGenerator();
         PartyLocation partyLocation = new PartyLocation();
@@ -47,7 +47,7 @@ public class Main {
         try {
             CSVFileReader.readCSVFile("spinfood/teilnehmerliste.csv");
             partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
-            System.out.println(partyLocation.toString());
+            System.out.println(partyLocation);
             //System.out.println(CSVFileReader.toStringParticipants());
             //System.out.println(CSVFileReader.toStringPairs());
         } catch (FileNotFoundException e) {
@@ -91,7 +91,7 @@ public class Main {
        // System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
         //List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
        //List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        int[] numbers = {1,3,4,2,5};
+        int[] numbers = {1,2,3,4,1};
       //  groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
