@@ -20,6 +20,7 @@ public class Group {
     private double sexDeviation;
     private Course course;
     private Kitchen kitchen;
+    private double fitness;
 
     public Group(Pair pair1, Pair pair2, Pair pair3,Course course) {
         this.pair1 = pair1;
@@ -224,6 +225,14 @@ public class Group {
         Course course3 = pair3.getCourse() != null ? pair3.getCourse() : null;
         builder.append("Pair1: " + pair1.isHaveCooked() + " , when?: " + course1 + ", Pair2: " + pair2.isHaveCooked() + " , when?: " + course2 + ", Pair3: " + pair3.isHaveCooked() + " , when?: " + course3);
         System.out.println(builder);
+    }
+
+    public double getFitness() {
+        return fitness;
+    }
+
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
     }
 }
 

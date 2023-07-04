@@ -28,6 +28,7 @@ public class Pair {
     double sexDeviation;
 
     public double pathLength;
+    private double fitness;
 
 
     /**
@@ -224,6 +225,21 @@ public class Pair {
      * @param obj the object to compare with
      * @return true if the objects are equal, false otherwise
      */
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//            //they are considered equal.
+//        }
+//        if (obj == null || getClass() != obj.getClass()) {
+//            return false;
+//            //classes are different, they are not considered equal.
+//        }
+//        Pair otherPair = (Pair) obj;
+//        Boolean check1 = person1.equals(otherPair.person1) || person1.equals(otherPair.person2);
+//        Boolean check2 = person2.equals(otherPair.person1) || person2.equals(otherPair.person2);
+//        return check1 && check2;
+//    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -312,5 +328,13 @@ public class Pair {
 
     public void setPerson2(Participant person2) {
         this.person2 = person2;
+    }
+
+    public double getFitness() {
+        return fitness;
+    }
+
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
     }
 }

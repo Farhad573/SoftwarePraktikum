@@ -76,9 +76,15 @@ public class Main {
         System.out.println("the count of all members : " + count);
 
         System.out.println("###############################################");
-
+//        a) 5 > 8 > 6 > 7 > 9
+//        b) 9 > 5 > 8 > 7 > 6
+//        c) 7 > 6 > 5 > 8 > 9
+        int[] numbers = {1,1,1,1,1};
+        int[] numbers1 = {1,3,4,2,5};
+        int[] numbers2 = {2,5,4,3,1};
+        int[] numbers3 = {3,2,1,4,5};
         System.out.println("###############################################");
-        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),new int[4]);
+        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),numbers);
         System.out.println("number of generated Pairs is " + getGeneratedPairs().size());
         System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
@@ -98,7 +104,6 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        int[] numbers = {1,1,1,1,1};
         groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 

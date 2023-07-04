@@ -148,7 +148,7 @@ public class GroupFitnessEvaluator {
             case 2: return 8;
             case 3: return 6;
             case 4: return 4;
-            default:return 0;
+            default:return 2;
         }
     }
 

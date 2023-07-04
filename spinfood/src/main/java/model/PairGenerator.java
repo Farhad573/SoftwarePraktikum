@@ -1,9 +1,7 @@
 package model;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +38,6 @@ public class PairGenerator extends ParticipantManager {
                 }
             }
         }
-
         pairSuccessors = participants.stream().filter(x -> !usedParticipants.contains(x)).collect(Collectors.toList());
         return generatedPairs;
     }

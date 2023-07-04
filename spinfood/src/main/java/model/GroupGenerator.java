@@ -119,12 +119,15 @@ public class GroupGenerator extends ParticipantManager {
                              //&& checkTwoKitchenWithin(pair1.getKitchen(), pair2.getKitchen(), pair3.getKitchen(), radius)
                     ) {
                         Group group = new Group(pair1, pair2, pair3,Course.first);
-                        map.put(group, GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers));
+                        double fitness = GroupFitnessEvaluator.evaluateFitnessForStarter(group,numbers);
+                        group.setFitness(fitness);
+                        map.put(group, fitness);
                     }
                 }
             }
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 2.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        list.sort(Comparator.comparingDouble(Group::getFitness).reversed());
         //Collections.shuffle(list);
 
 
@@ -179,6 +182,7 @@ public class GroupGenerator extends ParticipantManager {
                     ) { // kitchen check to after party
                         Group group = new Group(pair1, pair2, pair3,Course.main);
                         double fitness = GroupFitnessEvaluator.evaluateFitnessForMainDish(group,numbers,kitchenLocationsInStarter,pairs,location);
+                        group.setFitness(fitness);
                         map.put(group,fitness);
 //                        if (fitness > 0) {
 //                            findWhichPairToCookInMainDish(group, pairs);
@@ -193,6 +197,7 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 5.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        list.sort(Comparator.comparingDouble(Group::getFitness).reversed());
         //Collections.shuffle(list);
 
         for (Group group : list) {
@@ -242,6 +247,7 @@ public class GroupGenerator extends ParticipantManager {
                     ) { // kitchen check to after party
                         Group group = new Group(pair1, pair2, pair3,Course.dessert);
                         double fitness = GroupFitnessEvaluator.evaluateFitnessForDessert(group,numbers,kitchenLocationsInMainDish,pairs,location);
+                        group.setFitness(fitness);
                         map.put(group,fitness);
 //                        if (fitness > 0) {
 //                            findWhichPairToCookInDessert(group, pairs);
@@ -256,6 +262,7 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 5.0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        list.sort(Comparator.comparingDouble(Group::getFitness).reversed());
         //Collections.shuffle(list);
 
         for (Group group : list) {
