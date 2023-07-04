@@ -84,7 +84,7 @@ public class Main {
         int[] numbers2 = {2,5,4,3,1};
         int[] numbers3 = {3,2,1,4,5};
         System.out.println("###############################################");
-        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),numbers);
+        List<Pair> initialPair = pairGenerator.generateInitialPopulation(getParticipants(),numbers3);
         System.out.println("number of generated Pairs is " + getGeneratedPairs().size());
         System.out.println("number of successor is " + model.CSVFileReader.getSuccessor().size());
         System.out.println("###############################################");
@@ -104,7 +104,7 @@ public class Main {
 //        System.out.println(pairsInStarter.stream().filter(x-> x.getMetPairsInStarter().size() == 2).count());
 //        List<Group> mainDishGroup = groupGenerator.makeMainDishGroups(pairsInStarter, 4);
 //        List<Group> desertGroups = groupGenerator.makeDessertGroups(pairsInStarter);
-        groupGenerator.callGroupsGenerator(concatenatedlist,numbers,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
+        groupGenerator.callGroupsGenerator(concatenatedlist,numbers3,new Location(partyLocation.getLongitude(),partyLocation.getLatitude()));
 
 
         System.out.println("Number of generated groups in starter is " + getGeneratedGroupsinStarter().size());

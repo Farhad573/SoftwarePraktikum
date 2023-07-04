@@ -16,64 +16,64 @@ public class PairGenerator extends ParticipantManager {
      * @param participants The list of participants from which to generate the initial population.
      * @return The list of pairs representing the initial population.
      */
-//    public static List<Pair> generateInitialPopulation(List<Participant> participants,int[] numbers) {
-//        HashSet<Participant> usedParticipants = new HashSet<>();
-//        calculateWGCount();
-//        for (int i = 0; i < participants.size(); i++) {
-//            Participant participant1 = participants.get(i);
-//
-//            for (int j = i + 1; j < participants.size(); j++) {
-//                Participant participant2 = participants.get(j);
-//
-//                if (!usedParticipants.contains(participant1) &&
-//                        !usedParticipants.contains(participant2)) {
-//                    Pair pair = new Pair(participant1, participant2, false);
-//
-//                    double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap,numbers);
-//                    if (fitness > 5.0) {
-//                        generatedPairs.add(pair);
-//                        usedParticipants.add(participant1);
-//                        usedParticipants.add(participant2);
-//                    }
-//                }
-//            }
-//        }
-//        pairSuccessors = participants.stream().filter(x -> !usedParticipants.contains(x)).collect(Collectors.toList());
-//        return generatedPairs;
-//    }
     public static List<Pair> generateInitialPopulation(List<Participant> participants,int[] numbers) {
         HashSet<Participant> usedParticipants = new HashSet<>();
-        generatedPairs = new ArrayList<>();
         calculateWGCount();
-        List<Pair> tmpList = new ArrayList<>();
         for (int i = 0; i < participants.size(); i++) {
             Participant participant1 = participants.get(i);
 
             for (int j = i + 1; j < participants.size(); j++) {
                 Participant participant2 = participants.get(j);
 
-                Pair pair = new Pair(participant1, participant2, false);
+                if (!usedParticipants.contains(participant1) &&
+                        !usedParticipants.contains(participant2)) {
+                    Pair pair = new Pair(participant1, participant2, false);
 
-                double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap,numbers);
-                pair.setFitness(fitness);
-                tmpList.add(pair);
-            }
-        }
-        tmpList = tmpList.stream().filter(x-> x.getFitness() > 0).collect(Collectors.toCollection(ArrayList::new));
-        tmpList.sort(Comparator.comparingDouble(Pair::getFitness).reversed());
-        List<Pair> resList = new ArrayList<>();
-        for (Pair pair: tmpList
-        ) {
-            if (!usedParticipants.contains(pair.getPerson1()) && !usedParticipants.contains(pair.getPerson2())){
-                resList.add(pair);
-                usedParticipants.add(pair.getPerson1());
-                usedParticipants.add(pair.getPerson2());
+                    double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap,numbers);
+                    if (fitness > 5.0) {
+                        generatedPairs.add(pair);
+                        usedParticipants.add(participant1);
+                        usedParticipants.add(participant2);
+                    }
+                }
             }
         }
         pairSuccessors = participants.stream().filter(x -> !usedParticipants.contains(x)).collect(Collectors.toList());
-        generatedPairs.addAll(resList);
-        return resList;
+        return generatedPairs;
     }
+//    public static List<Pair> generateInitialPopulation(List<Participant> participants,int[] numbers) {
+//        HashSet<Participant> usedParticipants = new HashSet<>();
+//        generatedPairs = new ArrayList<>();
+//        calculateWGCount();
+//        List<Pair> tmpList = new ArrayList<>();
+//        for (int i = 0; i < participants.size(); i++) {
+//            Participant participant1 = participants.get(i);
+//
+//            for (int j = i + 1; j < participants.size(); j++) {
+//                Participant participant2 = participants.get(j);
+//
+//                Pair pair = new Pair(participant1, participant2, false);
+//
+//                double fitness = PairFitnessEvaluator.evaluateFitness(pair,kitchenMap,numbers);
+//                pair.setFitness(fitness);
+//                tmpList.add(pair);
+//            }
+//        }
+//        tmpList = tmpList.stream().filter(x-> x.getFitness() > 0).collect(Collectors.toCollection(ArrayList::new));
+//        tmpList.sort(Comparator.comparingDouble(Pair::getFitness).reversed());
+//        List<Pair> resList = new ArrayList<>();
+//        for (Pair pair: tmpList
+//        ) {
+//            if (!usedParticipants.contains(pair.getPerson1()) && !usedParticipants.contains(pair.getPerson2())){
+//                resList.add(pair);
+//                usedParticipants.add(pair.getPerson1());
+//                usedParticipants.add(pair.getPerson2());
+//            }
+//        }
+//        pairSuccessors = participants.stream().filter(x -> !usedParticipants.contains(x)).collect(Collectors.toList());
+//        generatedPairs.addAll(resList);
+//        return resList;
+//    }
 
 
     /**
