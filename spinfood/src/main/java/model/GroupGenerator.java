@@ -26,6 +26,7 @@ public class GroupGenerator extends ParticipantManager {
         private List<Group> uniqueMainGroups;
         private List<Group> uniqueDessertGroups;
         private List<Pair> successors;
+        private List<Group> allGroups;
 
         public UniqueGroupsResult(List<Group> uniqueStarterGroups, List<Group> uniqueMainGroups, List<Group> uniqueDessertGroups,
                                   List<Pair> successors) {
@@ -33,6 +34,10 @@ public class GroupGenerator extends ParticipantManager {
             this.uniqueMainGroups = uniqueMainGroups;
             this.uniqueDessertGroups = uniqueDessertGroups;
             this.successors = successors;
+            this.allGroups = new ArrayList<>();
+            this.allGroups.addAll(uniqueStarterGroups);
+            this.allGroups.addAll(uniqueMainGroups);
+            this.allGroups.addAll(uniqueDessertGroups);
 
         }
 
@@ -48,6 +53,10 @@ public class GroupGenerator extends ParticipantManager {
         }
         public List<Pair> getSuccessors() {
             return successors;
+        }
+
+        public List<Group> getAllGroups() {
+            return allGroups;
         }
     }
 
