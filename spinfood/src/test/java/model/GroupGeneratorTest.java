@@ -50,16 +50,16 @@ public class GroupGeneratorTest {
         partyLocation = new Location(party.getLongitude(), party.getLatitude());
         List<Pair> population = PairGenerator.generateInitialPopulation(getParticipants(), new int[4]);
         List<Pair> concat = pairGenerator.makeAllPairsTogether(population, model.CSVFileReader.getCSV_Pairs());
-        Map<Pair, List<Group>> map = groupGenerator.makePairGroups(concat, num);
-        GroupGenerator.UniqueGroupsResult starter = groupGenerator.findUniqueStarterGroups(map);
-        result = starter;
-        //groupGenerator.callGroupsGenerator(concat, num, partyLocation);
+        //Map<Pair, List<Group>> map = groupGenerator.makePairGroups(concat, num);
+        //GroupGenerator.UniqueGroupsResult starter = groupGenerator.findUniqueStarterGroups(map);
+       // result = starter;
+        groupGenerator.callGroupsGenerator(concat, num, partyLocation);
     }
 
 
     @Test
     void StarterGroupDuplicateTest() throws FileNotFoundException {
-        for (Group group : result.getUniqueStarterGroups()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInStarter()) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
@@ -77,7 +77,7 @@ public class GroupGeneratorTest {
 
     @Test
     void checkMeatWithVeganOderVeggieInStarter() throws FileNotFoundException {
-        for (Group group : result.getUniqueStarterGroups()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInStarter()) {
             if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
                 Assertions.fail("Fleichi && Veggie/vegan Pair found.");
             }
@@ -87,7 +87,7 @@ public class GroupGeneratorTest {
 
     @Test
     void MainDishDuplicateTest() throws FileNotFoundException {
-        for (Group group : result.getUniqueMainGroups()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInMainDish()) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
@@ -106,7 +106,7 @@ public class GroupGeneratorTest {
 
     @Test
     void checkVeggieVegganFleichiInMainDishGroup() throws FileNotFoundException {
-        for (Group group : result.getUniqueMainGroups()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInMainDish()) {
             if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
                 Assertions.fail("More than one Fleichi/Egali Pair in Group Found.");
             }
@@ -116,7 +116,7 @@ public class GroupGeneratorTest {
 
     @Test
     void DessertGroupDuplicateTest() throws FileNotFoundException {
-        for (Group group : result.getUniqueDessertGroups()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInDessert()) {
             Pair pair1 = group.pair1;
             Pair pair2 = group.pair2;
             Pair pair3 = group.pair3;
@@ -135,7 +135,7 @@ public class GroupGeneratorTest {
 
     @Test
     void checkVeggieVegganFleichiInDessertGroup() throws FileNotFoundException {
-        for (Group group : result.getUniqueDessertGroups()) {
+        for (Group group : ParticipantManager.getGeneratedGroupsInDessert()) {
             if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
                 Assertions.fail("More than one Fleichi/Egali Pair in Group Found.");
             }
@@ -145,7 +145,7 @@ public class GroupGeneratorTest {
     @Test
     void checkIfPairCooksOnce() throws FileNotFoundException {
         Set<Pair> cookingPairsSet = new HashSet<>();
-        for (Group group : result.getAllGroups()
+        for (Group group : ParticipantManager.getGeneratedGroups()
         ) {
             if (cookingPairsSet.contains(group.cookingPair)) {
                 Assertions.fail("Duplicate Cooking Pair found in generated Groups.");
