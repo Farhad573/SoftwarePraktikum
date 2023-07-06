@@ -21,7 +21,7 @@ public class GroupGenerator extends ParticipantManager {
     Set<Pair> hashSetInDessert = new HashSet<>();
 
 
-    public static class UniqueGroupsResult {
+    public  class UniqueGroupsResult {
         private List<Group> uniqueStarterGroups;
         private List<Group> uniqueMainGroups;
         private List<Group> uniqueDessertGroups;
@@ -705,6 +705,7 @@ public class GroupGenerator extends ParticipantManager {
             pair3.setCourse(course);
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInStarter,location3);
         }
+
     }
     private void addPairToKitchenLocationMap(Pair pair1,Pair pair2,Pair pair3,Map<Pair,Location> map,Location location){
         map.put(pair1,location);

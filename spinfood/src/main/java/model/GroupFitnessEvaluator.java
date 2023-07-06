@@ -243,7 +243,7 @@ public class GroupFitnessEvaluator {
      * @return The fitness score based on the age difference.
      */
     private static double calculateAgeDifferenceFitness(Group pair) {
-        double ageDiff = (pair.pair1.getAgeDifference() + pair.pair2.getAgeDifference() + pair.pair3.getAgeDifference()) / 3;
+        double ageDiff = (double) (pair.pair1.getAgeDifference() + pair.pair2.getAgeDifference() + pair.pair3.getAgeDifference()) / 3;
         return 1.0 - ageDiff / 100.0; // Normalize age difference to a value between 0 and 1
     }
 

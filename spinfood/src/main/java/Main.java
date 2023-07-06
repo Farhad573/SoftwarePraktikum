@@ -19,8 +19,8 @@ public class Main {
         JsonMaker jsonMaker = new JsonMaker();
         List<Pair> csvPairs = getCSV_Pairs();
         try {
-            CSVFileReader.readCSVFile("src/main/resources/teilnehmerlisteNew.csv");
-            partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
+            CSVFileReader.readCSVFile("spinfood/teilnehmerliste.csv");
+            partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
             System.out.println(partyLocation);
             //System.out.println(CSVFileReader.toStringParticipants());
             //System.out.println(CSVFileReader.toStringPairs());

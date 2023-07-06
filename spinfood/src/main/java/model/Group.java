@@ -249,7 +249,7 @@ public class Group implements Comparable<Group> {
     public static void main(String[] args) {
         List<Participant> temp = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            temp.add(new Participant(Integer.toString(i), "peter", 2.0, HasKitchen.no, FoodPreference.vegan, Sex.female, null ));
+            temp.add(new Participant(Integer.toString(i), "peter", 2, HasKitchen.no, FoodPreference.vegan, Sex.female, null ));
         }
         Pair pair1 = new Pair(temp.get(0), temp.get(1), true);
         Pair pair2 = new Pair(temp.get(2), temp.get(3), true);

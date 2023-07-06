@@ -15,7 +15,7 @@ public class Participant {
     private String id;
     private String name;
 
-    private double age;
+    private int age;
     private int ageRange;
     private HasKitchen hasKitchen;
     private FoodPreference foodPreference;
@@ -35,7 +35,7 @@ public class Participant {
      * @param sex            the participant's sex
      * @param kitchen        the participant's kitchen
      */
-    public Participant(String id, String name, double age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
+    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex, Kitchen kitchen) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -46,7 +46,7 @@ public class Participant {
        this.ageRange = calculateAgeRange(age);
     }
 
-    public Participant(String id, String name, double age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
+    public Participant(String id, String name, int age, HasKitchen hasKitchen, FoodPreference foodPreference, Sex sex) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -60,7 +60,7 @@ public class Participant {
         this.foodPreference = foodPreference;
     }
 
-    public Participant(double age) {
+    public Participant(int age) {
         this.age = age;
         //this.ageRange = calculateAgeRange(age);
     }
@@ -237,24 +237,24 @@ public class Participant {
         if (this.kitchen == null) {
             return //"Person : " + "\n" +
                     //"id=" + id + "\n" +
-                    ", name=" + name + "\n" +
+                     name + "\n" +
                     ", age=" + age + "\n" +
                     //", ageRange=" + ageRange + "\n" +
                     ", hasKitchen=" + hasKitchen + "\n" +
-                    ", foodPreference=" + foodPreference + "\n" +
-                    ", sex=" + sex + "\n";
+                            foodPreference + "\n" +
+                     sex + "\n";
                     //"Kitchen_Null" + "\n" +
                     //", kitchenCount=" + kitchenCount + "\n" +
                     //"******************";
         } else {
             return //"Person : " + "\n" +
-                    //"id=" + id + "\n" +
-                    ", name=" + name + "\n" +
-                    ", age=" + age + "\n" +
+                    //"id=" + id + "\n"
+                     name + "\n" +
+                     age + "\n" +
                     //", ageRange=" + ageRange + "\n" +
                     ", hasKitchen=" + hasKitchen + "\n" +
-                    ", foodPreference=" + foodPreference + "\n" +
-                    ", sex=" + sex + "\n";
+                     foodPreference + "\n" +
+                     sex + "\n";
                     //kitchen.toString() + "\n" +
                     //", kitchenCount=" + kitchenCount + "\n" +
                     //"******************";

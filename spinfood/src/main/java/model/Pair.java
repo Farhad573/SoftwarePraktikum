@@ -208,14 +208,20 @@ public class Pair {
     @Override
     public String toString() {
         return "Pair {"  + "have cooked: " + this.haveCooked + ", " +
-                "person1=" + "Id : " + person1.getId() + ", Name : " + person1.getName() + ", Age : " + person1.getAge() + ", AgeRange : "+ person1.getAgeRange() +
-                ", Food Preference : " + person1.getFoodPreference() + ", Sex : " + person1.getSex() +
-                ", has kitchen : " + person1.getHasKitchen() +
-                ", kitchen : " + person1.getKitchen() +
-                ", kitchenCount=" + person1.getKitchenCount() +
-                ", person2=" + "Id : " + person2.getId() + ", Name : " + person2.getName() + ", Age : " + person2.getAge() + ", AgeRange : "+ person2.getAgeRange() +
-                ", Food Preference : " + person2.getFoodPreference() + ", Sex : " + person2.getSex() +
-                ", has kitchen : " + person2.getHasKitchen() +
+               // "person1=" + "Id : " + person1.getId() +
+                 person1.getName() + " " + person1.getAge() +
+                //", AgeRange : "+ person1.getAgeRange() +
+                //", Food Preference : " +
+                person1.getFoodPreference() + " " + person1.getSex() +
+                ", has kitchen :" + person1.getHasKitchen() + " " +
+                //", kitchen : " + person1.getKitchen() +
+             //   ", kitchenCount=" + person1.getKitchenCount() +
+              //  ", person2=" + "Id : " + person2.getId() + ", Name : " +
+                person2.getName() + " " + person2.getAge() +" " +
+                //", AgeRange : "+ person2.getAgeRange() +
+                 person2.getFoodPreference() + " " +
+                person2.getSex() +
+              // ", has kitchen : " + person2.getHasKitchen() +
                 '}';
     }
 
@@ -281,7 +287,7 @@ public class Pair {
         Location location2 = GroupGenerator.kitchenLocationsInMainDish.get(pair);
         Location location3 = GroupGenerator.kitchenLocationsInDessert.get(pair);
         PartyLocation partyLocation = new PartyLocation();
-        partyLocation.readCSVFilePartyLocation("src/main/resources/partylocation.csv");
+        partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
         double partyLat = partyLocation.getLatitude();
         double partyLon = partyLocation.getLongitude();
         double distance1 = Distance.newCalculateDistance(location1.getLatitude(),location1.getLongitude(),location2.getLatitude(),location2.getLongitude());
