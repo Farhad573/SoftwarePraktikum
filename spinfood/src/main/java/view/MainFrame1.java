@@ -219,14 +219,14 @@ public class MainFrame1 extends JFrame {
                     Vector<Object> pairRow = new Vector<>();
                     pairRow.add(pair.getPerson1().toString());
                     pairRow.add(pair.getPerson2().toString());
-                    pairRow.add(pairGenerator.makeIndicatorForPairsList(concatenatedlist));
+
                     pairsData.add(pairRow);
                 }
                 Vector<String> pairsColumnNames = new Vector<>();
 
                 pairsColumnNames.add("Participant 1");
                 pairsColumnNames.add("Participant 2");
-                pairsColumnNames.add("Matching Score");
+
                 pairsTableModel.setDataVector(pairsData, pairsColumnNames);
 
                 // Create a table model and table for the pair successors

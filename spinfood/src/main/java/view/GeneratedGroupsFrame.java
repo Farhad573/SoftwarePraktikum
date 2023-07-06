@@ -14,12 +14,11 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Vector;
 
-import static model.ParticipantManager.getCSV_Pairs;
-import static model.ParticipantManager.getParticipants;
+import static model.ParticipantManager.*;
 
 
 public class GeneratedGroupsFrame extends JFrame {
-    private JTextField textField;
+
     private JButton generateButton;
     private JButton resetButton;
     private DefaultListModel<String> optionsModel;
@@ -57,10 +56,6 @@ public class GeneratedGroupsFrame extends JFrame {
         groupsPanel.setLayout(new BorderLayout());
 
 
-
-        textField = new JTextField();
-        groupsPanel.add(textField, BorderLayout.NORTH);
-
         optionsModel = new DefaultListModel<>();
         optionsModel.addElement("Food Preference");
         optionValues[0] = 1;
@@ -95,8 +90,8 @@ public class GeneratedGroupsFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                // ParticipantManager participantManager = new ParticipantManager();
                 try {
-                    fileReader.readCSVFile("teilnehmerliste.csv");
-                    partyLocation.readCSVFilePartyLocation("partylocation.csv");
+                    fileReader.readCSVFile("spinfood/teilnehmerliste.csv");
+                    partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -105,16 +100,12 @@ public class GeneratedGroupsFrame extends JFrame {
                 List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair, csvPairs);
                // List<Participant> successorsList = participantManager.getPairSuccessors();
                 List<Group> firstGroup = groupGenerator.makeStarterGroups(concatenatedlist, optionValues);
-                try {
-                    groupGenerator.callGroupsGenerator(concatenatedlist,optionValues, location);
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
+
              //   List<Group> mainGroup= participantManager.getGeneratedGroupsInMainDish();
 
                 List<Group> mainGroup = groupGenerator.makeMainDishGroups(concatenatedlist, optionValues,location);
                 List<Group> dessertGroup = groupGenerator.makeDessertGroups(concatenatedlist, optionValues,location);
-
+                List<Pair> succList = getStarterSuccessors();
 
 
 
@@ -198,10 +189,29 @@ public class GeneratedGroupsFrame extends JFrame {
                 dessertColumnNames.add("Pair 2");
                 dessertColumnNames.add("Pair 3");
 
-                mainTableModel.setDataVector(dessertData, dessertColumnNames);
+                dessertTableModel.setDataVector(dessertData, dessertColumnNames);
 
                 tablesPanel.add(dessertScrollPane);
 
+
+                DefaultTableModel succTableModel = new DefaultTableModel();
+                JTable succTable = new JTable(succTableModel);
+                JScrollPane succScrollPane = new JScrollPane(succTable);
+                tablesPanel.add(succScrollPane);
+
+                // Update the table model with the pairs and matching scores
+                Vector<Vector<Object>> succData = new Vector<>();
+                for (Pair pair : succList) {
+                    Vector<Object> pairRow = new Vector<>();
+                    pairRow.add(pair.getPerson1().toString());
+                    pairRow.add(pair.getPerson2().toString());
+                    succData.add(pairRow);
+                }
+                Vector<String> pairsColumnNames = new Vector<>();
+
+                pairsColumnNames.add("Participant 1");
+                pairsColumnNames.add("Participant 2");
+                succTableModel.setDataVector(succData, pairsColumnNames);
 
 
 

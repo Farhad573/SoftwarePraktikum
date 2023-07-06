@@ -207,9 +207,9 @@ public class Pair {
      */
     @Override
     public String toString() {
-        return "Pair {"  + "have cooked: " + this.haveCooked + ", " +
+        return "have cooked: " + this.haveCooked + ", " +
                // "person1=" + "Id : " + person1.getId() +
-                 person1.getName() + " " + person1.getAge() +
+                 person1.getName() + " " + person1.getAge() + " " +
                 //", AgeRange : "+ person1.getAgeRange() +
                 //", Food Preference : " +
                 person1.getFoodPreference() + " " + person1.getSex() +
