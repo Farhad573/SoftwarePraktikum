@@ -95,8 +95,8 @@ public class GeneratedGroupsFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                // ParticipantManager participantManager = new ParticipantManager();
                 try {
-                    fileReader.readCSVFile("spinfood/teilnehmerliste.csv");
-                    partyLocation.readCSVFilePartyLocation("spinfood/partylocation.csv");
+                    fileReader.readCSVFile("teilnehmerliste.csv");
+                    partyLocation.readCSVFilePartyLocation("partylocation.csv");
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }

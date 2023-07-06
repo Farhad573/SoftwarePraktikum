@@ -60,7 +60,7 @@ public class GroupFitnessEvaluator {
         fitness += calculateLengthPathFitnessForMainDish(group,map,pairs,location) * shortestPathWeight;
         return fitness;
     }
-    public static double calculateLengthPathFitnessForMainDish(Group group, Map<Pair,Location> map, List<Pair> pairs, Location partyLocation){
+    public static double calculateLengthPathFitnessForMainDish(Group group, Map<Pair,Location> map, List<Pair> pairs, Location partyLocation) {
         Pair pair1 = group.pair1;
         Pair pair2 = group.pair2;
         Pair pair3 = group.pair3;
@@ -73,20 +73,24 @@ public class GroupFitnessEvaluator {
         Pair pairWhoDidntCook2 = pairsWhoDidntCook.get(1);
         Location newKitchen1 = pairWhoDidntCook1.getKitchen().getKitchen_location();
         Location newKitchen2 = pairWhoDidntCook2.getKitchen().getKitchen_location();
+        if (location1 != null && location2 != null && location3 != null && newKitchen1 != null && newKitchen2 != null) {
 
-        double distance1 = Distance.calculateDistance(location1.getLatitude(),location1.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
-        double distance2 = Distance.calculateDistance(location2.getLatitude(),location2.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
-        double distance3 = Distance.calculateDistance(location3.getLatitude(),location3.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
-        double distance4 = Distance.calculateDistance(newKitchen1.getLatitude(),newKitchen1.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
-        double distance5 = Distance.calculateDistance(newKitchen2.getLatitude(),newKitchen2.getLongitude(),partyLocation.getLatitude(),partyLocation.getLongitude());
+            double distance1 = Distance.calculateDistance(location1.getLatitude(), location1.getLongitude(), partyLocation.getLatitude(), partyLocation.getLongitude());
+            double distance2 = Distance.calculateDistance(location2.getLatitude(), location2.getLongitude(), partyLocation.getLatitude(), partyLocation.getLongitude());
+            double distance3 = Distance.calculateDistance(location3.getLatitude(), location3.getLongitude(), partyLocation.getLatitude(), partyLocation.getLongitude());
+            double distance4 = Distance.calculateDistance(newKitchen1.getLatitude(), newKitchen1.getLongitude(), partyLocation.getLatitude(), partyLocation.getLongitude());
+            double distance5 = Distance.calculateDistance(newKitchen2.getLatitude(), newKitchen2.getLongitude(), partyLocation.getLatitude(), partyLocation.getLongitude());
 
-        boolean isKitchen1Nearer = (distance4 < distance1) && (distance4 < distance2) && (distance4 < distance3);
-        boolean isKitchen2Nearer = (distance5 < distance1) && (distance5 < distance2) && (distance5 < distance3);
-        if(isKitchen1Nearer && isKitchen2Nearer) {
-            return 1.0;
+            boolean isKitchen1Nearer = (distance4 < distance1) && (distance4 < distance2) && (distance4 < distance3);
+            boolean isKitchen2Nearer = (distance5 < distance1) && (distance5 < distance2) && (distance5 < distance3);
+            if (isKitchen1Nearer && isKitchen2Nearer) {
+                return 1.0;
+            }
+            return 0.5;
         }
         return 0.5;
     }
+
 
 
     /**
