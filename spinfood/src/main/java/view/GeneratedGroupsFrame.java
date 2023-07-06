@@ -114,6 +114,15 @@ public class GeneratedGroupsFrame extends JFrame {
                 JPanel tablesPanel = new JPanel();
                 tablesPanel.setLayout(new GridLayout(2, 2));
 
+                JButton compareButton = new JButton("Compare Groups");
+                compareButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        compareGroups();
+                    }
+                });
+
+
                 DefaultTableModel starterTableModel = new DefaultTableModel();
                 JTable starterTable = new JTable(starterTableModel);
                 JScrollPane starterScrollPane = new JScrollPane(starterTable);
@@ -237,6 +246,29 @@ public class GeneratedGroupsFrame extends JFrame {
         groupsPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
         setContentPane(groupsPanel);
+    }
+
+    private void compareGroups() {
+        JFrame comparisonFrame = new JFrame();
+        comparisonFrame.setTitle("Group Comparison");
+        comparisonFrame.setSize(800, 600);
+        comparisonFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        comparisonFrame.setLocationRelativeTo(null);
+
+
+
+        // Create a JTable and its model to display the comparison data
+        DefaultTableModel comparisonTableModel = new DefaultTableModel();
+        JTable comparisonTable = new JTable(comparisonTableModel);
+        JScrollPane comparisonScrollPane = new JScrollPane(comparisonTable);
+        comparisonScrollPane.setBorder(BorderFactory.createTitledBorder("Group Comparison Table"));
+        JTable selectedTable;
+
+        // Add the comparison table to the comparison frame
+        comparisonFrame.getContentPane().add(comparisonScrollPane);
+
+        // Set the comparison frame visible
+        comparisonFrame.setVisible(true);
     }
 
     private class ListTransferHandler extends TransferHandler {
