@@ -79,7 +79,7 @@ public class GroupGeneratorTest {
     void checkMeatWithVeganOderVeggieInStarter() throws FileNotFoundException {
         for (Group group : ParticipantManager.getGeneratedGroupsInStarter()) {
             if (!groupGenerator.checkGroupFoodPreference(group.pair1, group.pair2, group.pair3)) {
-                Assertions.fail("Fleichi && Veggie/vegan Pair found.");
+                Assertions.fail("FMore than one Fleichi/Egali Pair in Group Found.");
             }
         }
     }

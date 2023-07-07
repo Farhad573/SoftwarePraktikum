@@ -57,7 +57,7 @@ public class Main {
         List<Pair> concatenatedlist = pairGenerator.makeAllPairsTogether(initialPair,csvPairs);
         System.out.println("pair kenZahl is -> " + pairGenerator.makeIndicatorForPairsList(concatenatedlist));
 
-        //groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
+        groupGenerator.pairsSortedBasedOnDistance(concatenatedlist);
         System.out.println("number of all Pairs (1ka3) is " + concatenatedlist.size());
         //List<Group> starterGroups = groupGenerator.makeStarterGroups(concatenatedlist,new int[]{1,2,5,3,4});
         //List<Pair> pairsInStarter = starterGroups.stream().flatMap(x -> x.getPairsInGroup().stream()).collect(Collectors.toCollection(ArrayList::new));

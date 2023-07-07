@@ -165,7 +165,7 @@ public class GroupGenerator extends ParticipantManager {
             }
         }
         List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
-        list.sort(Comparator.comparingDouble(Group::getFitness).reversed());
+        list.sort(Comparator.comparingDouble(Group::getFitness));
         //Collections.shuffle(list);
 
 
@@ -446,8 +446,8 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
-        list.sort(Comparator.comparingDouble(Group::getFitness).reversed());
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 5).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        list.sort(Comparator.comparingDouble(Group::getFitness));
         //Collections.shuffle(list);
 
         for (Group group : list) {
@@ -511,8 +511,8 @@ public class GroupGenerator extends ParticipantManager {
                 }
             }
         }
-        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 0).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
-        list.sort(Comparator.comparingDouble(Group::getFitness).reversed());
+        List<Group> list = map.entrySet().stream().filter(x -> x.getValue() > 5).map(Map.Entry::getKey).collect(Collectors.toCollection(ArrayList::new));
+        list.sort(Comparator.comparingDouble(Group::getFitness));
         //Collections.shuffle(list);
 
         for (Group group : list) {
@@ -680,19 +680,19 @@ public class GroupGenerator extends ParticipantManager {
         Location location2 = pair2.getKitchen().getKitchen_location();
         Location location3 = pair3.getKitchen().getKitchen_location();
         Course course = Course.first;
-//        int index1 = pairs.indexOf(group.pair1);
-//        int index2 = pairs.indexOf(group.pair2);
-//        int index3 = pairs.indexOf(group.pair3);
-       // int minIndex = Math.min(index1, Math.min(index2, index3));
+        int index1 = pairs.indexOf(group.pair1);
+        int index2 = pairs.indexOf(group.pair2);
+        int index3 = pairs.indexOf(group.pair3);
+        int minIndex = Math.min(index1, Math.min(index2, index3));
         //minIndex == index1
 //        minIndex == index2
-        if (!pair1.isHaveCooked()) {
+        if (minIndex == index1) {
             group.cookingPair = pair1;
             pair1.setHaveCooked(true);
             pair1.setCourse(course);
             group.setKitchen(pair1.getKitchen());
             addPairToKitchenLocationMap(pair1,pair2,pair3,kitchenLocationsInStarter,location1);
-        } else if (!pair2.isHaveCooked()) {
+        } else if (minIndex == index2) {
             group.cookingPair = pair2;
             group.pair2.setHaveCooked(true);
             group.setKitchen(pair2.getKitchen());
@@ -822,7 +822,7 @@ public class GroupGenerator extends ParticipantManager {
         ageDifference = ageDifference / groupSize;
         preferenceDeviation = preferenceDeviation / groupSize;
 
-        DecimalFormat df = new DecimalFormat("#.####");
+        DecimalFormat df = new DecimalFormat("#.########");
         return indicator + groupSize + " _ "  + successorSize + " _ " + df.format(sexDeviation)+ " _ " + df.format(ageDifference) + " _ " + df.format(preferenceDeviation) + " _ " + df.format(pathLength);
     }
 

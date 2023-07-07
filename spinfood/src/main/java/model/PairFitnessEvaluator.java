@@ -13,9 +13,9 @@ public class PairFitnessEvaluator {
         double minimumSuccessor = calculateWeight(numbers[3]);
         double fitness = 0.0;
 
-        fitness += calculateFoodPreferenceFitness(pair) ;
-        fitness += calculateAgeDifferenceFitness(pair) ;
-        fitness += calculateGenderDiversityFitness(pair)  ;
+        fitness += calculateFoodPreferenceFitness(pair) * foodPreferenceDeviationWeight ;
+        fitness += calculateAgeDifferenceFitness(pair) * ageDifferenceWeight ;
+        fitness += calculateGenderDiversityFitness(pair) * genderDiversityWeight  ;
         fitness += calculateKitchenFitness(pair);
         fitness += calculatePreferenceDeviationFitness(pair);
 //        fitness += pair.getSexDeviation();
@@ -25,18 +25,18 @@ public class PairFitnessEvaluator {
     }
     public static double calculateWeight(int num){
         switch (num){
-            case 1: return 1.4;
-            case 2: return 1.3;
-            case 3: return 1.2;
-            case 4: return 1.1;
-            default:return 0;
+            case 1: return 2.0;
+            case 2: return 1.75;
+            case 3: return 1.5;
+            case 4: return 1.25;
+            default:return 1.0;
         }
     }
     private static double calculateWGCountFitness(Pair pair,Map<Kitchen, List<Pair>> map){
         Kitchen kitchen = pair.getKitchen();
         int kitchenCount = map.getOrDefault(kitchen,new ArrayList<>()).size();
-        if(kitchenCount >= 3){
-            return - 8.0;
+        if(kitchenCount >= 4){
+            return - 1000.0;
         }else
             return 1.0;
     }
@@ -51,21 +51,21 @@ public class PairFitnessEvaluator {
         } else if ((pref1 == FoodPreference.meat && pref2 == FoodPreference.none) ||
                 (pref2 == FoodPreference.meat && pref1 == FoodPreference.none)) {
             // meat && none
-            return 1.0;
+            return 0.8;
         } else if ((pref1 == FoodPreference.veggie && pref2 == FoodPreference.vegan) ||
                 (pref2 == FoodPreference.veggie && pref1 == FoodPreference.vegan)) {
             // veggie & vegan
-            return 1.0;
+            return 0.9;
         } else if (((pref1 == FoodPreference.veggie ||
                 pref1 == FoodPreference.vegan) &&
                 (pref2 == FoodPreference.none)) ||
                 ((pref2 == FoodPreference.veggie ||
                         pref2 == FoodPreference.vegan) && (pref1 == FoodPreference.none))) {
             // none & veggie | vegan
-            return 0.8;
+            return 0.7;
         } else {
             // meat & veggie | vegan
-            return -8.0;
+            return -1000.0;
         }
     }
 
@@ -97,7 +97,7 @@ public class PairFitnessEvaluator {
 
     private static double calculateAgeDifferenceFitness(Pair pair) {
         double ageDiff = Math.abs(pair.getPerson1().getAgeRange() - pair.getPerson2().getAgeRange());
-        return 1.0 - ageDiff / 100.0; // Normalize age difference to a value between 0 and 1
+        return 1.0 - ageDiff / 8.0; // Normalize age difference to a value between 0 and 1
     }
 
     private static double calculateGenderDiversityFitness(Pair pair) {
@@ -118,7 +118,7 @@ public class PairFitnessEvaluator {
             return 0.5;
         } else {
 
-            return -8.0;
+            return -1000.0;
         }
     }
 

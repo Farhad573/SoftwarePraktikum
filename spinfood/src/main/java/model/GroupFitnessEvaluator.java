@@ -243,8 +243,8 @@ public class GroupFitnessEvaluator {
      * @return The fitness score based on the age difference.
      */
     private static double calculateAgeDifferenceFitness(Group pair) {
-        double ageDiff = (pair.pair1.getAgeDifference() + pair.pair2.getAgeDifference() + pair.pair3.getAgeDifference()) / 3;
-        return 1.0 - ageDiff / 100.0; // Normalize age difference to a value between 0 and 1
+        double ageDiff = (pair.pair1.getAgeDifference() + pair.pair2.getAgeDifference() + pair.pair3.getAgeDifference()) / 3.0;
+        return 1.0 - ageDiff / 8.0; // Normalize age difference to a value between 0 and 1
     }
 
     /**
@@ -308,6 +308,8 @@ public class GroupFitnessEvaluator {
 
         if (preferenceDeviation == 2.0) {
             return 1.5;
+//        } else if (preferenceDeviation == 5.0 / 3.0) {
+//            return 5.0 / 3.0;
         } else if (preferenceDeviation == 4.0/3.0) {
             return 4.0/3.0;
         } else if (preferenceDeviation == 1) {

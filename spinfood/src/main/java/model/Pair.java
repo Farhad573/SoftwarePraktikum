@@ -236,7 +236,9 @@ public class Pair {
             //classes are different, they are not considered equal.
         }
         Pair otherPair = (Pair) obj;
-        return person1.equals(otherPair.person1) && person2.equals(otherPair.person2);
+        Boolean check1 = person1.equals(otherPair.getPerson1()) ||  person1.equals(otherPair.getPerson2());
+        Boolean check2 = person2.equals(otherPair.getPerson1()) ||  person2.equals(otherPair.getPerson2());
+        return check1 && check2;
     }
 
     @Override
